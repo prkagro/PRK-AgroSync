@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="hu" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRK AgroSync</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full flex flex-col md:flex-row overflow-hidden font-sans">
+
+  <!-- MOBIL NAVIGÁCIÓS FEJLÉC -->
+  <header class="md:hidden flex items-center justify-between bg-slate-900 px-4 py-3 border-b border-slate-800 z-30">
+    <div class="flex items-center space-x-3">
+      <div class="bg-brand-600 p-2 rounded-lg text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <span class="font-bold text-lg tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></span>
+    </div>
+    <div class="flex items-center space-x-3">
+      <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+      <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- OLDALSÁV (SIDEBAR) -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out z-40 w-66 bg-slate-900 border-r border-slate-800 flex flex-col justify-between h-full">
+    <div>
+      <div class="p-6 border-b border-slate-800 hidden md:flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div>
+            <h1 class="font-bold text-md leading-tight tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></h1>
+          </div>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-green-500 shadow-lg shadow-green-900/40"></div>
+      </div>
+
+      <nav class="px-4 py-6 space-y-1">
+        <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition bg-slate-800 text-white border-l-4 border-green-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z"></path></svg>
+          <span>Műszerfal</span>
+        </a>
+        <a href="#" onclick="switchTab('inventory')" id="nav-inventory" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+          <span>Input Anyagok</span>
+        </a>
+        <a href="#" onclick="switchTab('fields')" id="nav-fields" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+          <span>Táblák & Kultúrák</span>
+        </a>
+        <a href="#" onclick="switchTab('transactions')" id="nav-transactions" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+          <span>Készlet Mozgatás</span>
+        </a>
+        <a href="#" onclick="switchTab('harvest')" id="nav-harvest" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span class="text-amber-300">Betakarítás & Szárító</span>
+        </a>
+        <a href="#" onclick="switchTab('bookkeeping')" id="nav-bookkeeping" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <span>Könyvelés & Riport</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-green-900/50 border border-green-500/30 flex items-center justify-center text-green-400 font-bold text-sm">PRK</div>
+        <div>
+          <p class="text-sm font-semibold text-slate-200">Tangazdaság Vezető</p>
+          <div class="flex items-center space-x-1">
+            <span class="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
+            <span class="text-[10px] text-slate-400 font-mono">Helyi Tároló</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- FŐ TARTALOMTERÜLET -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-950">
+    <header class="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+      <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Műszerfal & Áttekintés</h2>
+      <span class="text-xs text-slate-300 font-mono bg-slate-850 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center space-x-2">
+        <span class="h-2 w-2 rounded-full bg-green-500"></span>
+        <span>PRK AgroSync — Aktív</span>
+      </span>
+    </header>
+
+    <div class="p-6 flex-1 max-w-7xl w-full mx-auto space-y-6">
+
+      <!-- ==================== TAB 1: DASHBOARD ==================== -->
+      <section id="tab-dashboard" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <p class="text-sm font-semibold text-slate-400">Összes Termőterület</p>
+            <h3 id="stat-total-hectares" class="text-3xl font-bold mt-2 text-green-400">0.00 ha</h3>
+            <span id="stat-total-fields" class="text-xs text-slate-500 block mt-1">0 db tábla</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 border-l-4 border-l-amber-500">
+            <p class="text-sm font-semibold text-slate-400">Összes Tárolt Termény</p>
+            <h3 id="stat-total-grain" class="text-3xl font-bold mt-2 text-amber-400">0 kg</h3>
+            <span class="text-xs text-slate-400 block mt-1">Aktuális magtári szint</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <p class="text-sm font-semibold text-slate-400">Regisztrált Input Anyagok</p>
+            <h3 id="stat-total-products" class="text-3xl font-bold mt-2 text-blue-400">0 db</h3>
+            <span class="text-xs text-slate-500 block mt-1">különböző tétel a raktárban</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col">
+            <h4 class="font-bold text-lg text-white flex items-center mb-4">Vetésterv területi megoszlása</h4>
+            <div id="dashboard-culture-list" class="space-y-3"></div>
+            <div id="no-cultures-msg" class="hidden text-center py-6 text-slate-500 text-sm">Nincsenek aktív kultúrák.</div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col">
+            <h4 class="font-bold text-lg text-white flex items-center mb-4">Magtári Készlet (Tényleges)</h4>
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="text-xs uppercase bg-slate-950/50 text-slate-400">
+                <tr>
+                  <th class="p-3">Termény</th>
+                  <th class="p-3 text-center">Mennyiség</th>
+                  <th class="p-3 text-right">Státusz</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-grain-stock-body" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: INVENTORY ==================== -->
+      <section id="tab-inventory" class="hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <input type="text" id="inventory-search" oninput="filterInventory()" placeholder="Keresés az input anyagok között..." class="w-full sm:w-1/3 bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+          <button onclick="openAddProductModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">Új Input Anyag Bevételezése</button>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="text-xs uppercase bg-slate-950/80 text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="p-4">Megnevezés</th>
+                <th class="p-4">Kategória</th>
+                <th class="p-4 text-center">Aktuális Készlet</th>
+                <th class="p-4 text-center">Műveletek</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body" class="divide-y divide-slate-800"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK ==================== -->
+      <section id="tab-fields" class="hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <h3 class="font-bold text-lg text-white">Gazdasági Táblák és Vetésterv</h3>
+          <button onclick="openAddFieldModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">Új Tábla Rögzítése</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="fields-grid"></div>
+      </section>
+
+      <!-- ==================== TAB 4: KÉSZLET MOZGATÁS ==================== -->
+      <section id="tab-transactions" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 lg:col-span-2 space-y-6">
+          <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Készlettranzakció</h3>
+
+          <div>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="setTransactionType('BEVÉTEL')" id="btn-tx-in" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-green-950/40 border-green-500 text-green-400">INPUT BEVÉTEL</button>
+              <button type="button" onclick="setTransactionType('KIADÁS')" id="btn-tx-out" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">KIJUTTATÁS (KIADÁS)</button>
+              <button type="button" onclick="setTransactionType('ELADÁS')" id="btn-tx-sale" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">TERMÉNY ELADÁS</button>
+            </div>
+          </div>
+
+          <div id="tx-standard-panel" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="tx-product-select" class="block text-xs font-semibold text-slate-400 mb-2">Input Anyag</label>
+                <select id="tx-product-select" onchange="calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
+              </div>
+              <div>
+                <label id="tx-qty-label" for="tx-qty" class="block text-xs font-semibold text-slate-400 mb-2">Mennyiség</label>
+                <input type="number" id="tx-qty" value="10" oninput="calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <div id="tx-sale-panel" class="hidden bg-slate-950 p-5 rounded-2xl border border-blue-900/30 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label for="tx-grain-select" class="block text-xs font-semibold text-slate-400 mb-2">Termény</label>
+                <select id="tx-grain-select" class="w-full bg-slate-900 border border-slate-700/50 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none">
+                  <option value="Szója">Szója</option>
+                  <option value="Őszi búza">Őszi búza</option>
+                  <option value="Kukorica">Kukorica</option>
+                  <option value="Cirok">Cirok</option>
+                  <option value="Napraforgó">Napraforgó</option>
+                  <option value="Árpa">Árpa</option>
+                </select>
+              </div>
+              <div>
+                <label for="tx-sale-qty" class="block text-xs font-semibold text-slate-400 mb-2">Eladott súly (kg)</label>
+                <input type="number" id="tx-sale-qty" placeholder="pl. 25000" class="w-full bg-slate-900 border border-slate-700/50 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+              </div>
+              <div>
+                <label for="tx-buyer-name" class="block text-xs font-semibold text-slate-400 mb-2">Vevő neve</label>
+                <input type="text" id="tx-buyer-name" placeholder="Vevő Kft." class="w-full bg-slate-900 border border-slate-700/50 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <div id="tx-application-panel" class="hidden p-5 bg-slate-950 rounded-2xl border border-green-900/30 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="tx-field-select" class="block text-xs font-semibold text-slate-400 mb-2">Cél Tábla *</label>
+                <select id="tx-field-select" onchange="onTxFieldSelectChange()" class="w-full bg-slate-900 border border-slate-700/50 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
+              </div>
+              <div>
+                <label for="tx-hectares" class="block text-xs font-semibold text-slate-400 mb-2">Kezelt terület (ha)</label>
+                <input type="number" step="0.01" id="tx-hectares" oninput="calculateApplicationRate()" class="w-full bg-slate-900 border border-slate-700/50 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none">
+              </div>
+            </div>
+            <div id="tx-rate-preview" class="hidden text-xs bg-green-950/30 border border-green-900/40 rounded-xl p-3 text-slate-300">
+              Kiszámított dózis: <strong class="text-green-400" id="tx-calc-rate">0</strong> <span id="tx-calc-unit">kg/ha</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="tx-reason" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Megjegyzés</label>
+            <input type="text" id="tx-reason" placeholder="Opcionális megjegyzés a naplóba" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none">
+          </div>
+
+          <button onclick="executeTransaction()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition">Tranzakció Végrehajtása</button>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 5: BETAKARÍTÁS ==================== -->
+      <section id="tab-harvest" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 lg:col-span-2 space-y-6">
+          <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Betakarítási Mérlegjegy</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="harvest-field-select" class="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Betakarítás Helye (Tábla) *</label>
+              <select id="harvest-field-select" onchange="onHarvestFieldChange()" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none">
+                <option value="">-- Válassz táblát --</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Észlelt Növénykultúra</label>
+              <div id="harvest-detected-culture" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-400 font-bold italic">Válassz táblát...</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="harvest-raw-weight" class="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Beszállított Nyers Súly (kg) *</label>
+              <input type="number" id="harvest-raw-weight" oninput="calculateNetWeight()" placeholder="pl. 12000" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+            </div>
+            <div>
+              <label for="harvest-moisture" class="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Mért Nedvességtartalom (%)</label>
+              <input type="number" step="0.1" id="harvest-moisture" placeholder="pl. 14.2" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+            </div>
+          </div>
+
+          <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-semibold text-amber-400">Szárítási Levonás</h4>
+                <p class="text-xs text-slate-500">Mérlegjegyi levonás érvényesítése?</p>
+              </div>
+              <input type="checkbox" id="harvest-need-drying" onchange="toggleDryingPanel()" class="w-5 h-5 accent-green-500 rounded">
+            </div>
+
+            <div id="harvest-drying-panel" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800">
+              <div>
+                <label for="harvest-deduction-rate" class="block text-xs font-semibold text-slate-400 mb-1">Levonási veszteség százalék (%)</label>
+                <input type="number" step="0.01" id="harvest-deduction-rate" oninput="calculateNetWeight()" value="0.00" class="w-full bg-slate-900 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+              </div>
+              <div class="flex flex-col justify-center">
+                <span class="text-xs text-slate-400">Kalkulált nettó súly:</span>
+                <span id="harvest-net-display" class="text-lg font-mono font-bold text-green-400">0 kg</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="executeHarvest()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition">Betakarítás Mentése</button>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 6: KÖNYVELÉS NYOMTATÁSSAL ==================== -->
+      <section id="tab-bookkeeping" class="space-y-6 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-center non-printable">
+          <h3 class="font-bold text-sm text-slate-400 uppercase">Könyvelési Napló és Tranzakciók</h3>
+          <div class="flex space-x-2 w-full sm:w-auto">
+            <button onclick="window.print()" class="w-full sm:w-auto bg-green-700 hover:bg-green-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-green-900/20">
+              <span>Nyomtatás / Mentés PDF-ként</span>
+            </button>
+            <button onclick="exportBookkeepingToCSV()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm px-5 py-2.5 rounded-xl transition">CSV Letöltés</button>
+          </div>
+        </div>
+
+        <!-- LETISZTULT EGYSZERŰ NYOMTATÁSI ARCHITEKTÚRA -->
+        <div id="printable-report-area" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 overflow-hidden">
+          
+          <div class="printable-header hidden">
+            <div class="flex items-center justify-between border-b border-slate-300 pb-4 mb-4">
+              <div class="flex items-center space-x-3">
+                <!-- PRK Madár logó -->
+                <svg class="w-10 h-10 text-green-600" viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M50,15 C45,25 35,32 20,35 C38,40 45,50 48,75 C50,55 58,42 80,38 C62,35 55,25 50,15 Z M48,75 C45,82 40,88 30,90 C42,86 46,80 48,75 Z" />
+                </svg>
+                <div>
+                  <h1 class="text-xl font-bold tracking-wider text-slate-900 uppercase">PRK <span class="text-green-600">AGROSYNC</span></h1>
+                  <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Mezőgazdasági Főkönyvi Kivonat</p>
+                </div>
+              </div>
+              <div class="text-right text-xs text-slate-500 font-mono">
+                <div>Dátum: <span id="pdf-date-field" class="text-slate-900 font-semibold"></span></div>
+                <div>Rendszer: <span class="text-green-600 font-semibold">Offline Secure DB</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300 id-report-table">
+              <thead class="text-xs uppercase bg-slate-950/80 text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="p-4">Dátum</th>
+                  <th class="p-4">Típus</th>
+                  <th class="p-4">Helyszín / Vevő</th>
+                  <th class="p-4">Input / Termény</th>
+                  <th class="p-4 text-center">Mennyiség</th>
+                  <th class="p-4 text-right">Megjegyzés / Dózis</th>
+                </tr>
+              </thead>
+              <tbody id="bookkeeping-table-body" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: ÚJ TÁBLA -->
+  <div id="field-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
+      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+        <h3 class="text-lg font-bold text-white">Új Tábla Felvétele</h3>
+        <button onclick="closeFieldModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <input type="text" id="field-modal-name" placeholder="Tábla megnevezése (pl. Kovács-dűlő)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        <div class="grid grid-cols-2 gap-4">
+          <input type="text" id="field-modal-number" placeholder="Sorszám (pl. T-01)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="text" id="field-modal-block" placeholder="Blokk ID (MePAR)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <input type="number" step="0.01" id="field-modal-size" placeholder="Terület (ha)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <select id="field-modal-culture" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+            <option value="Ugar / Nincs">Ugar / Nincs</option>
+            <option value="Szója">Szója</option>
+            <option value="Őszi búza">Őszi búza</option>
+            <option value="Kukorica">Kukorica</option>
+            <option value="Cirok">Cirok</option>
+            <option value="Napraforgó">Napraforgó</option>
+            <option value="Árpa">Árpa</option>
+          </select>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+        <button onclick="closeFieldModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm">Mégsem</button>
+        <button onclick="saveField()" class="px-5 py-2 bg-brand-600 text-white rounded-xl text-sm font-semibold">Mentés</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ÚJ INPUT ANYAG -->
+  <div id="product-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
+      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+        <h3 id="product-modal-title" class="text-lg font-bold text-white">Új Input Anyag Bevételezése</h3>
+        <button onclick="closeProductModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <input type="hidden" id="modal-product-id">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Kategória</label>
+            <select id="modal-category" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+              <option value="Műtrágya">Műtrágya</option>
+              <option value="Gombaölő szer">Gombaölő szer</option>
+              <option value="Gyomirtó szer">Gyomirtó szer</option>
+              <option value="Rovarölő szer">Rovarölő szer</option>
+              <option value="Vetőmag">Vetőmag</option>
+              <option value="Üzemanyag">Üzemanyag</option>
+              <option value="Egyéb">Egyéb</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Mértékegység</label>
+            <select id="modal-unit" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+              <option value="kg">kg</option>
+              <option value="liter">liter</option>
+              <option value="db">db</option>
+              <option value="csomag">csomag</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Anyag / Készítmény megnevezése</label>
+          <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP / Prémium Diesel" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        </div>
+        <div id="modal-qty-wrapper">
+          <label class="block text-xs text-slate-400 mb-1">Bevételezett mennyiség</label>
+          <input type="number" id="modal-qty" value="0" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+        <button onclick="closeProductModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm">Mégsem</button>
+        <button onclick="saveProduct()" class="px-5 py-2 bg-brand-600 text-white rounded-xl text-sm font-semibold">Mentés</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM MODAL -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+      <h3 id="confirm-modal-title" class="text-lg font-bold text-white">Megerősítés</h3>
+      <p id="confirm-modal-text" class="text-sm text-slate-300"></p>
+      <div class="flex justify-end space-x-3">
+        <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-semibold">Mégsem</button>
+        <button id="confirm-ok-btn" class="px-5 py-2 bg-red-600 text-white rounded-xl text-sm font-semibold">Végrehajtás</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-3">
+    <div id="toast-icon-wrapper" class="p-2 rounded-xl text-white"></div>
+    <p id="toast-message" class="text-sm font-medium text-slate-200"></p>
+  </div>
+
+  <!-- NYOMTATÁSI STÍLUSOK (TISZTA, LETISZTULT FEHÉR ALAPÚ PAPÍRBARÁT MEGJELENÉS) -->
+  <style>
+    @media print {
+      body { 
+        background: white !important; 
+        color: #0f172a !important; 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      .non-printable, aside, header, button, select, input { 
+        display: none !important; 
+      }
+      main { 
+        width: 100% !important; 
+        padding: 0 !important; 
+        overflow: visible !important; 
+      }
+      .printable-header { 
+        display: block !important; 
+        border-bottom: 2px solid #e2e8f0 !important;
+        margin-bottom: 24px !important;
+      }
+      #printable-report-area { 
+        background: white !important; 
+        border: none !important; 
+        padding: 0 !important; 
+      }
+      .id-report-table { 
+        color: #1e293b !important; 
+        width: 100% !important; 
+        background: white !important; 
+        border-collapse: collapse !important;
+      }
+      .id-report-table th { 
+        background-color: #f8fafc !important; 
+        color: #0f172a !important; 
+        border-bottom: 2px solid #cbd5e1 !important; 
+        padding: 10px 12px !important; 
+        font-weight: 700 !important;
+      }
+      .id-report-table td { 
+        border-bottom: 1px solid #e2e8f0 !important; 
+        color: #334155 !important; 
+        padding: 10px 12px !important; 
+      }
+      /* Speciális, kontrasztos nyomtatási címkék */
+      .badge-print-bevetel { background: #dcfce7 !important; color: #166534 !important; border: 1px solid #bbf7d0 !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+      .badge-print-kiadas { background: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fecaca !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+      .badge-print-aratas { background: #fef3c7 !important; color: #92400e !important; border: 1px solid #fde68a !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+      .badge-print-eladas { background: #dbeafe !important; color: #1e40af !important; border: 1px solid #bfdbfe !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+    }
+  </style>
+
+  <!-- OFFLINE ENGINE -->
+  <script>
+    let state = {
+      products: [
+        { id: "p1", name: "Pledge 50 WP", category: "Gyomirtó szer", unit: "kg", quantity: 150 },
+        { id: "p2", name: "Prémium Diesel", category: "Üzemanyag", unit: "liter", quantity: 3200 },
+        { id: "p3", name: "YaraMila Complex NPK", category: "Műtrágya", unit: "kg", quantity: 4500 }
+      ],
+      fields: [
+        { id: "f1", name: "Kovács-dűlő", number: "T-01", blockId: "MePAR-4432", size: 45.2, culture: "Szója" },
+        { id: "f2", name: "Északi-tábla", number: "T-02", blockId: "MePAR-9812", size: 18.7, culture: "Őszi búza" }
+      ],
+      grainStock: { "Szója": 145000, "Őszi búza": 220000, "Kukorica": 0, "Cirok": 35000, "Napraforgó": 0, "Árpa": 92000 },
+      logs: [
+        { timestamp: "2026. 05. 24. 14:32:11", type: "BEVÉTEL", productName: "Prémium Diesel", unit: "liter", qty: 3000, reason: "Mol kamion beszállítás" },
+        { timestamp: "2026. 05. 25. 08:15:22", type: "KIADÁS", productName: "Pledge 50 WP", unit: "kg", qty: -20, targetField: "Kovács-dűlő", appliedHectares: 45.2, reason: "Gyomirtózás indítás" }
+      ]
+    };
+
+    let activeTxType = 'BEVÉTEL';
+
+    function initLocalApp() {
+      const dateStr = new Date().toLocaleString('hu-HU');
+      const dateField = document.getElementById('pdf-date-field');
+      if (dateField) dateField.innerText = dateStr;
+      renderAll();
+    }
+
+    function renderAll() {
+      renderDashboard(); renderInventoryTable(); renderFieldsGrid(); renderBookkeeping();
+      populateTxProductSelect(); populateTxFieldSelect(); populateHarvestFieldSelect();
+    }
+
+    function renderDashboard() {
+      const totalHectares = state.fields.reduce((s, f) => s + parseFloat(f.size || 0), 0).toFixed(2);
+      const totalGrainWeight = Object.values(state.grainStock).reduce((s, v) => s + v, 0);
+      document.getElementById('stat-total-hectares').innerText = `${totalHectares} ha`;
+      document.getElementById('stat-total-grain').innerText = `${totalGrainWeight.toLocaleString('hu-HU')} kg`;
+      document.getElementById('stat-total-products').innerText = `${state.products.length} db`;
+
+      const cultList = document.getElementById('dashboard-culture-list'); cultList.innerHTML = '';
+      let cultMap = {}; state.fields.forEach(f => { const c = f.culture || 'Ugar / Nincs'; cultMap[c] = (cultMap[c] || 0) + parseFloat(f.size || 0); });
+      for (const [cult, size] of Object.entries(cultMap)) {
+        cultList.innerHTML += `<div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800"><span>${cult}</span><span class="font-mono text-green-400 font-bold">${size.toFixed(2)} ha</span></div>`;
+      }
+
+      const grainBody = document.getElementById('dashboard-grain-stock-body'); grainBody.innerHTML = '';
+      for (const [grain, qty] of Object.entries(state.grainStock)) {
+        let badge = qty < 0 ? '<span class="text-amber-400 text-xs">Leltári Többlet</span>' : (qty > 0 ? '<span class="text-green-400 text-xs">&checkmark; Készleten</span>' : '<span class="text-slate-600 text-xs">Üres</span>');
+        grainBody.innerHTML += `<tr class="hover:bg-slate-800/20"><td class="p-3 font-bold">${grain}</td><td class="p-3 text-center text-amber-400 font-mono font-bold">${qty.toLocaleString('hu-HU')} kg</td><td class="p-3 text-right">${badge}</td></tr>`;
+      }
+    }
+
+    function renderInventoryTable() {
+      const b = document.getElementById('inventory-table-body'); b.innerHTML = '';
+      state.products.forEach(p => {
+        b.innerHTML += `<tr class="hover:bg-slate-800/30"><td class="p-4 font-semibold">${p.name}</td><td class="p-4 text-slate-400 text-xs">${p.category}</td><td class="p-4 text-center font-bold">${p.quantity} ${p.unit}</td><td class="p-4 text-center space-x-2"><button onclick="openEditProductModal('${p.id}')" class="text-xs bg-slate-800 hover:bg-slate-700 px-2 py-1 rounded-md">Szerkesztés</button><button onclick="deleteProduct('${p.id}')" class="text-xs bg-red-950/40 text-red-400 px-2 py-1 rounded-md">Törlés</button></td></tr>`;
+      });
+    }
+
+    function renderFieldsGrid() {
+      const g = document.getElementById('fields-grid'); g.innerHTML = '';
+      state.fields.forEach(f => {
+        g.innerHTML += `<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between"><div><div class="flex justify-between items-center"><span class="text-xs bg-green-950 text-green-400 px-2 py-0.5 rounded font-mono font-bold">${f.number}</span><button onclick="deleteField('${f.id}')" class="text-slate-500 hover:text-red-400">&times;</button></div><h4 class="text-lg font-bold text-white mt-2">${f.name}</h4><div class="mt-4 p-3 bg-slate-950 rounded-xl"><span class="text-sm font-bold text-amber-400">${f.culture}</span></div><p class="text-sm font-bold text-green-400 mt-3">${f.size} ha</p></div><div class="pt-4 mt-4 border-t border-slate-800 flex justify-end"><button onclick="startTxOnField('${f.id}')" class="text-xs text-green-400 hover:underline font-semibold">Kijuttatás indítása &rarr;</button></div></div>`;
+      });
+    }
+
+    window.filterInventory = function() {
+      const s = document.getElementById('inventory-search').value.toLowerCase();
+      const rows = document.getElementById('inventory-table-body').getElementsByTagName('tr');
+      for (let r of rows) { r.style.display = r.innerText.toLowerCase().includes(s) ? '' : 'none'; }
+    }
+
+    function populateTxProductSelect() {
+      const s = document.getElementById('tx-product-select'); if(!s) return; s.innerHTML = '';
+      state.products.forEach(p => { s.innerHTML += `<option value="${p.id}">${p.name} (${p.quantity} ${p.unit})</option>`; });
+      updateTxQtyLabel();
+    }
+
+    function populateTxFieldSelect() {
+      const s = document.getElementById('tx-field-select'); if(!s) return; s.innerHTML = '<option value="">-- Válassz táblát --</option>';
+      state.fields.forEach(f => { s.innerHTML += `<option value="${f.id}">${f.name} (${f.size} ha)</option>`; });
+    }
+
+    function populateHarvestFieldSelect() {
+      const s = document.getElementById('harvest-field-select'); if(!s) return; s.innerHTML = '<option value="">-- Válassz táblát --</option>';
+      state.fields.forEach(f => { s.innerHTML += `<option value="${f.id}">${f.name} (${f.culture})</option>`; });
+    }
+
+    window.setTransactionType = function(type) {
+      activeTxType = type;
+      document.getElementById('btn-tx-in').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
+      document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
+      document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
+
+      const stdPanel = document.getElementById('tx-standard-panel');
+      const salePanel = document.getElementById('tx-sale-panel');
+      const appPanel = document.getElementById('tx-application-panel');
+
+      if (type === 'BEVÉTEL') {
+        document.getElementById('btn-tx-in').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-green-950/40 border-green-500 text-green-400";
+        stdPanel.classList.remove('hidden'); salePanel.classList.add('hidden'); appPanel.classList.add('hidden');
+      } else if (type === 'KIADÁS') {
+        document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-red-950/40 border-red-500 text-red-400";
+        stdPanel.classList.remove('hidden'); salePanel.classList.add('hidden'); appPanel.classList.remove('hidden');
+      } else {
+        document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-blue-950/40 border-blue-500 text-blue-400";
+        stdPanel.classList.add('hidden'); salePanel.classList.remove('hidden'); appPanel.classList.add('hidden');
+      }
+      updateTxQtyLabel();
+    }
+
+    function updateTxQtyLabel() {
+      const pId = document.getElementById('tx-product-select').value;
+      const label = document.getElementById('tx-qty-label');
+      if(pId && label) { const p = state.products.find(prod => prod.id === pId); if(p) label.innerText = `Mennyiség (${p.unit})`; }
+    }
+
+    window.onTxFieldSelectChange = function() {
+      const id = document.getElementById('tx-field-select').value;
+      const f = state.fields.find(field => field.id === id);
+      if(f) document.getElementById('tx-hectares').value = f.size;
+      calculateApplicationRate();
+    }
+
+    window.calculateApplicationRate = function() {
+      const pId = document.getElementById('tx-product-select').value;
+      const ha = parseFloat(document.getElementById('tx-hectares').value) || 0;
+      const qty = parseFloat(document.getElementById('tx-qty').value) || 0;
+      const preview = document.getElementById('tx-rate-preview');
+
+      if (activeTxType === 'KIADÁS' && pId && ha > 0 && qty > 0) {
+        const p = state.products.find(prod => prod.id === pId);
+        preview.classList.remove('hidden');
+        document.getElementById('tx-calc-rate').innerText = (qty / ha).toFixed(2);
+        document.getElementById('tx-calc-unit').innerText = `${p.unit}/ha`;
+      } else { preview.classList.add('hidden'); }
+    }
+
+    window.executeTransaction = function() {
+      if (activeTxType === 'ELADÁS') {
+        const grain = document.getElementById('tx-grain-select').value;
+        const qty = parseFloat(document.getElementById('tx-sale-qty').value) || 0;
+        const buyer = document.getElementById('tx-buyer-name').value.trim() || 'Ismeretlen vevő';
+        if (qty <= 0) return;
+
+        state.grainStock[grain] = (state.grainStock[grain] || 0) - qty;
+        state.logs.push({ timestamp: new Date().toLocaleString('hu-HU'), type: "TERMÉNY ELADÁS", targetField: buyer, productName: grain, qty: -qty, unit: "kg", reason: document.getElementById('tx-reason').value || "Értékesítés raktárból" });
+        showToast("Eladás rögzítve!"); switchTab('dashboard'); return;
+      }
+
+      const pId = document.getElementById('tx-product-select').value;
+      const qty = parseFloat(document.getElementById('tx-qty').value) || 0;
+      if (!pId || qty <= 0) return;
+      const p = state.products.find(prod => prod.id === pId);
+
+      let logData = { timestamp: new Date().toLocaleString('hu-HU'), type: activeTxType, productName: p.name, unit: p.unit, qty: activeTxType === 'KIADÁS' ? -qty : qty, reason: document.getElementById('tx-reason').value || "Tranzakció" };
+
+      if (activeTxType === 'KIADÁS') {
+        const fId = document.getElementById('tx-field-select').value;
+        if (p.quantity - qty < 0) { showToast("Nincs elég raktárkészlet!", "error"); return; }
+        const f = state.fields.find(field => field.id === fId);
+        logData.targetField = f.name; logData.appliedHectares = f.size;
+        p.quantity -= qty;
+      } else { p.quantity += qty; }
+
+      state.logs.push(logData); showToast("Készlet frissítve!"); switchTab('dashboard');
+    }
+
+    window.onHarvestFieldChange = function() {
+      const id = document.getElementById('harvest-field-select').value;
+      const f = state.fields.find(field => field.id === id);
+      document.getElementById('harvest-detected-culture').innerText = f ? f.culture : 'Válassz táblát...';
+      calculateNetWeight();
+    }
+
+    window.toggleDryingPanel = function() {
+      document.getElementById('harvest-drying-panel').classList.toggle('hidden', !document.getElementById('harvest-need-drying').checked);
+      calculateNetWeight();
+    }
+
+    window.calculateNetWeight = function() {
+      const raw = parseFloat(document.getElementById('harvest-raw-weight').value) || 0;
+      const rate = parseFloat(document.getElementById('harvest-deduction-rate').value) || 0;
+      let net = document.getElementById('harvest-need-drying').checked ? raw * (1 - (rate / 100)) : raw;
+      document.getElementById('harvest-net-display').innerText = `${Math.round(net).toLocaleString('hu-HU')} kg`;
+      return Math.round(net);
+    }
+
+    window.executeHarvest = function() {
+      const fId = document.getElementById('harvest-field-select').value;
+      const raw = parseFloat(document.getElementById('harvest-raw-weight').value) || 0;
+      if (!fId || raw <= 0) return;
+      const f = state.fields.find(field => field.id === fId);
+      const netWeight = calculateNetWeight();
+
+      state.grainStock[f.culture] = (state.grainStock[f.culture] || 0) + netWeight;
+      state.logs.push({ timestamp: new Date().toLocaleString('hu-HU'), type: "BETAKARÍTÁS", targetField: f.name, productName: f.culture, qty: netWeight, unit: "kg", reason: `Aratás. Nyers: ${raw} kg.` });
+      showToast("Aratási bizonylat mentve!"); switchTab('dashboard');
+    }
+
+    window.openAddFieldModal = function() { document.getElementById('field-modal').classList.remove('hidden'); }
+    window.closeFieldModal = function() { document.getElementById('field-modal').classList.add('hidden'); }
+    window.saveField = function() {
+      const name = document.getElementById('field-modal-name').value.trim();
+      const number = document.getElementById('field-modal-number').value.trim();
+      const blockId = document.getElementById('field-modal-block').value.trim();
+      const size = parseFloat(document.getElementById('field-modal-size').value) || 0;
+      const culture = document.getElementById('field-modal-culture').value;
+      if(!name || !number || size <= 0) return;
+      state.fields.push({ id: "f_" + Math.random().toString(36).substr(2, 5), name, number, blockId, size, culture });
+      closeFieldModal(); renderAll();
+    }
+
+    window.deleteField = function(id) { state.fields = state.fields.filter(f => f.id !== id); renderAll(); }
+
+    window.startTxOnField = function(id) {
+      const f = state.fields.find(field => field.id === id);
+      switchTab('transactions'); setTransactionType('KIADÁS');
+      setTimeout(() => { document.getElementById('tx-field-select').value = f.id; document.getElementById('tx-hectares').value = f.size; calculateApplicationRate(); }, 50);
+    }
+
+    window.openAddProductModal = function() {
+      document.getElementById('product-modal-title').innerText = "Új Input Anyag Bevételezése";
+      document.getElementById('modal-product-id').value = '';
+      document.getElementById('modal-name').value = '';
+      document.getElementById('modal-qty').value = '0';
+      document.getElementById('modal-qty-wrapper').classList.remove('hidden');
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    window.openEditProductModal = function(id) {
+      const p = state.products.find(prod => prod.id === id);
+      document.getElementById('product-modal-title').innerText = "Input Anyag Módosítása";
+      document.getElementById('modal-product-id').value = p.id;
+      document.getElementById('modal-name').value = p.name;
+      document.getElementById('modal-category').value = p.category;
+      document.getElementById('modal-unit').value = p.unit;
+      document.getElementById('modal-qty-wrapper').classList.add('hidden');
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    window.closeProductModal = function() { document.getElementById('product-modal').classList.add('hidden'); }
+    window.saveProduct = function() {
+      const id = document.getElementById('modal-product-id').value;
+      const name = document.getElementById('modal-name').value.trim();
+      const category = document.getElementById('modal-category').value;
+      const unit = document.getElementById('modal-unit').value;
+      if(!name) return;
+
+      if (id) {
+        const p = state.products.find(prod => prod.id === id); p.name = name; p.category = category; p.unit = unit;
+      } else {
+        const qty = parseFloat(document.getElementById('modal-qty').value) || 0;
+        state.products.push({ id: "p_" + Math.random().toString(36).substr(2, 5), name, category, unit, quantity: qty });
+        if (qty > 0) { state.logs.push({ timestamp: new Date().toLocaleString('hu-HU'), type: "BEVÉTEL", productName: name, unit: unit, qty: qty, reason: "Kezdő bevételezés" }); }
+      }
+      closeProductModal(); renderAll();
+    }
+
+    window.deleteProduct = function(id) { state.products = state.products.filter(p => p.id !== id); renderAll(); }
+
+    function renderBookkeeping() {
+      const body = document.getElementById('bookkeeping-table-body'); body.innerHTML = '';
+      const sorted = state.logs.slice().sort((a,b) => b.timestamp.localeCompare(a.timestamp));
+      sorted.forEach(l => {
+        // Nyomtatásra is optimalizált, egyszerűsített CSS osztályok
+        let badgeClass = "px-2 py-0.5 rounded text-xs font-bold bg-slate-800 text-slate-300";
+        let printBadgeClass = "badge-print-standard";
+        
+        if(l.type === 'BEVÉTEL') {
+          badgeClass = "bg-green-950/80 text-green-400 border border-green-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-bevetel";
+        }
+        if(l.type === 'KIADÁS') {
+          badgeClass = "bg-red-950/80 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-kiadas";
+        }
+        if(l.type === 'BETAKARÍTÁS') {
+          badgeClass = "bg-amber-950/80 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-aratas";
+        }
+        if(l.type === 'TERMÉNY ELADÁS') {
+          badgeClass = "bg-blue-950/80 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-eladas";
+        }
+
+        let note = l.reason || '-';
+        if(l.type === 'KIADÁS' && l.appliedHectares) { note = `<span class="text-blue-400 font-mono font-bold">${(Math.abs(l.qty)/l.appliedHectares).toFixed(2)} ${l.unit}/ha</span>`; }
+        body.innerHTML += `
+          <tr class="hover:bg-slate-800/20 text-xs">
+            <td class="p-4 text-slate-500 whitespace-nowrap">${l.timestamp.slice(0, 16)}</td>
+            <td class="p-4">
+              <span class="${badgeClass} non-printable">${l.type}</span>
+              <span class="hidden printable-inline ${printBadgeClass}">${l.type}</span>
+            </td>
+            <td class="p-4 font-bold text-slate-200">${l.targetField || 'Központi Raktár'}</td>
+            <td class="p-4 text-white font-bold">${l.productName}</td>
+            <td class="p-4 text-center font-bold ${l.qty < 0 ? 'text-red-400':'text-green-400'}">${l.qty > 0 ? '+':''}${l.qty.toLocaleString('hu-HU')} ${l.unit}</td>
+            <td class="p-4 text-right text-slate-400 italic">${note}</td>
+          </tr>`;
+      });
+    }
+
+    window.exportBookkeepingToCSV = function() {
+      if(state.logs.length === 0) return;
+      let csv = "data:text/csv;charset=utf-8,\uFEFFDátum,Típus,Helyszín_Vevő,Anyag_Termény,Mennyiség,Egység,Megjegyzés\r\n";
+      state.logs.forEach(l => { csv += `"${l.timestamp}","${l.type}","${l.targetField || ''}","${l.productName}",${l.qty},"${l.unit}","${l.reason || ''}"\r\n`; });
+      const link = document.createElement("a"); link.setAttribute("href", encodeURI(csv)); link.setAttribute("download", `PRK_AgroSync_riport.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    }
+
+    window.switchTab = function(tabId) {
+      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'bookkeeping'].forEach(id => {
+        document.getElementById('tab-' + id).classList.add('hidden');
+        document.getElementById('nav-' + id).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent";
+      });
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      document.getElementById('nav-' + tabId).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium bg-slate-800 text-white border-l-4 border-green-500";
+      if (tabId === 'dashboard') renderDashboard();
+      if (tabId === 'inventory') renderInventoryTable();
+      if (tabId === 'fields') renderFieldsGrid();
+      if (tabId === 'bookkeeping') renderBookkeeping();
+    }
+
+    window.toggleMobileMenu = function(forceClose = false) {
+      const s = document.getElementById('sidebar');
+      if (forceClose || !s.classList.contains('-translate-x-full')) { s.classList.add('-translate-x-full'); } else { s.classList.remove('-translate-x-full'); }
+    }
+
+    window.showToast = function(message, type = "success") {
+      const t = document.getElementById('toast'); const w = document.getElementById('toast-icon-wrapper');
+      document.getElementById('toast-message').innerText = message;
+      w.className = type === "success" ? "p-2 rounded-xl bg-green-500" : "p-2 rounded-xl bg-red-500";
+      w.innerHTML = type === "success" ? `&checkmark;` : `!`;
+      t.classList.remove('translate-y-20', 'opacity-0'); t.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => { t.classList.add('translate-y-20', 'opacity-0'); t.classList.remove('translate-y-0', 'opacity-100'); }, 4000);
+    }
+
+    let customConfirm = function(title, message, onConfirm) {
+      const modal = document.getElementById('confirm-modal');
+      document.getElementById('confirm-modal-title').innerText = title;
+      document.getElementById('confirm-modal-text').innerText = message;
+      modal.classList.remove('hidden');
+      document.getElementById('confirm-ok-btn').onclick = () => { modal.classList.add('hidden'); onConfirm(); };
+      document.getElementById('confirm-cancel-btn').onclick = () => { modal.classList.add('hidden'); };
+    }
+
+    window.onload = initLocalApp;
+  </script>
+</body>
+</html>
