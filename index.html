@@ -358,6 +358,7 @@
                   <th class="p-4">Input / Termény</th>
                   <th class="p-4 text-center">Mennyiség</th>
                   <th class="p-4 text-right">Megjegyzés / Dózis</th>
+                  <th class="p-4 text-center non-printable w-20">Művelet</th>
                 </tr>
               </thead>
               <tbody id="bookkeeping-table-body" class="divide-y divide-slate-800"></tbody>
@@ -1088,6 +1089,23 @@
       });
     }
 
+    // ==================== KÖNYVELÉSI TÉTEL TÖRLÉSE ====================
+    window.deleteLog = function(id) {
+      customConfirm(
+        "Könyvelési bizonylat törlése", 
+        "Biztosan törölni szeretnéd ezt a bejegyzést a főkönyvi naplóból? (Ez a törlés magát a bizonylatot és a bejegyzést törli a listából, a raktár- és magtárkészletek fizikai értékét nem módosítja automatikusan vissza.)", 
+        async () => {
+          try {
+            await deleteDoc(doc(db, `artifacts/${currentAppId}/public/data/logs`, id));
+            showToast("Könyvelési bejegyzés törölve a felhőből.");
+          } catch(e) {
+            console.error("Hiba a bizonylat törlésekor: ", e);
+            showToast("Hiba történt a törlés során!", "error");
+          }
+        }
+      );
+    }
+
     // ==================== KÖNYVELÉSI LISTA GENERÁLÁSA ====================
     function renderBookkeeping() {
       const body = document.getElementById('bookkeeping-table-body'); if (!body) return;
@@ -1127,6 +1145,9 @@
             <td class="p-4 text-white font-bold">${l.productName}</td>
             <td class="p-4 text-center font-bold ${l.qty < 0 ? 'text-red-400':'text-green-400'}">${l.qty > 0 ? '+':''}${l.qty.toLocaleString('hu-HU')} ${l.unit}</td>
             <td class="p-4 text-right text-slate-400 italic">${note}</td>
+            <td class="p-4 text-center non-printable">
+              <button onclick="deleteLog('${l.id}')" class="text-xs bg-red-950/40 hover:bg-red-900/60 text-red-400 font-bold px-2 py-1 rounded transition">Törlés</button>
+            </td>
           </tr>`;
       });
     }
@@ -1145,10 +1166,10 @@
       });
       document.getElementById('tab-' + tabId).classList.remove('hidden');
       document.getElementById('nav-' + tabId).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium bg-slate-800 text-white border-l-4 border-green-500";
-      
-      const titles = { 'dashboard': 'PRK AgroSync - Műszerfal', 'inventory': 'Input Anyagok Készletszintje', 'fields': 'Táblák & Vetésterv', 'transactions': 'Készlet Mozgások', 'harvest': 'Betakarítás & Mérlegjegyek', 'bookkeeping': 'Könyvelési Napló és PDF Riport' };
-      document.getElementById('view-title').innerText = titles[tabId];
-      renderAll();
+      if (tabId === 'dashboard') renderDashboard();
+      if (tabId === 'inventory') renderInventoryTable();
+      if (tabId === 'fields') renderFieldsGrid();
+      if (tabId === 'bookkeeping') renderBookkeeping();
     }
 
     window.toggleMobileMenu = function(forceClose = false) {
