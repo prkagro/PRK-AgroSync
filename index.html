@@ -190,15 +190,15 @@
 
       <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK ==================== -->
       <section id="tab-fields" class="hidden space-y-6">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>
             <h3 class="font-bold text-lg text-white">Gazdasági Táblák és Vetésterv</h3>
-            <p class="text-xs text-slate-400 mt-1">Kompakt dűlő és vetés-nyilvántartás</p>
+            <p class="text-xs text-slate-400 mt-1">Saját dűlő és vetés-nyilvántartás</p>
           </div>
           <button onclick="openAddFieldModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-green-900/20">Új Tábla Rögzítése</button>
         </div>
-        <!-- High-density dynamic grid with tight columns -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3" id="fields-grid"></div>
+        <!-- High-density spacious dynamic grid exactly like the original screenshot -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="fields-grid"></div>
       </section>
 
       <!-- ==================== TAB 4: KÉSZLET MOZGATÁS ==================== -->
@@ -385,31 +385,47 @@
     </div>
   </main>
 
-  <!-- MODAL: ÚJ TÁBLA -->
+  <!-- MODAL: TÁBLA HOZZÁADÁS / SZERKESZTÉS -->
   <div id="field-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-white">Új Tábla Felvétele</h3>
+        <h3 id="field-modal-title" class="text-lg font-bold text-white">Új Tábla Felvétele</h3>
         <button onclick="closeFieldModal()" class="text-slate-400 hover:text-white">&times;</button>
       </div>
       <div class="p-6 space-y-4">
-        <input type="text" id="field-modal-name" placeholder="Tábla megnevezése (pl. Kovács-dűlő)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
-        <div class="grid grid-cols-2 gap-4">
-          <input type="text" id="field-modal-number" placeholder="Sorszám (pl. T-01)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
-          <input type="text" id="field-modal-block" placeholder="Blokk ID (MePAR)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        <input type="hidden" id="modal-field-id">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Tábla Megnevezése</label>
+          <input type="text" id="field-modal-name" placeholder="pl. Kovács-dűlő / K8" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <input type="number" step="0.01" id="field-modal-size" placeholder="Terület (ha)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
-          <select id="field-modal-culture" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none font-semibold">
-            <option value="Ugar / Nincs">Ugar / Nincs</option>
-            <option value="Szója">Szója</option>
-            <option value="Őszi búza">Őszi búza</option>
-            <option value="Kukorica">Kukorica</option>
-            <option value="Cirok">Cirok</option>
-            <option value="Napraforgó">Napraforgó</option>
-            <option value="Árpa">Árpa</option>
-            <option value="Gyep">Gyep</option>
-          </select>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Sorszám (pl. T-01 vagy 13)</label>
+            <input type="text" id="field-modal-number" placeholder="pl. 13" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Blokk ID (MePAR)</label>
+            <input type="text" id="field-modal-block" placeholder="pl. CV8EJQ24" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Terület (ha)</label>
+            <input type="number" step="0.0001" id="field-modal-size" placeholder="pl. 6.1488" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Növénykultúra</label>
+            <select id="field-modal-culture" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-green-500 font-semibold">
+              <option value="Ugar / Nincs">Ugar / Nincs</option>
+              <option value="Szója">Szója</option>
+              <option value="Őszi búza">Őszi búza</option>
+              <option value="Kukorica">Kukorica</option>
+              <option value="Cirok">Cirok</option>
+              <option value="Napraforgó">Napraforgó</option>
+              <option value="Árpa">Árpa</option>
+              <option value="Gyep">Gyep (Széna)</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
@@ -485,58 +501,6 @@
     <p id="toast-message" class="text-sm font-medium text-slate-200"></p>
   </div>
 
-  <!-- LETISZTULT FEHÉR ALAPÚ, PAPÍRBARÁT NYOMTATÁSI STYLING -->
-  <style>
-    @media print {
-      body { 
-        background: white !important; 
-        color: #0f172a !important; 
-        -webkit-print-color-adjust: exact; 
-        print-color-adjust: exact; 
-      }
-      .non-printable, aside, header, button, select, input { 
-        display: none !important; 
-      }
-      main { 
-        width: 100% !important; 
-        padding: 0 !important; 
-        overflow: visible !important; 
-      }
-      .printable-header { 
-        display: block !important; 
-        border-bottom: 2px solid #e2e8f0 !important;
-        margin-bottom: 24px !important;
-      }
-      #printable-report-area { 
-        background: white !important; 
-        border: none !important; 
-        padding: 0 !important; 
-      }
-      .id-report-table { 
-        color: #1e293b !important; 
-        width: 100% !important; 
-        background: white !important; 
-        border-collapse: collapse !important;
-      }
-      .id-report-table th { 
-        background-color: #f8fafc !important; 
-        color: #0f172a !important; 
-        border-bottom: 2px solid #cbd5e1 !important; 
-        padding: 10px 12px !important; 
-        font-weight: 700 !important;
-      }
-      .id-report-table td { 
-        border-bottom: 1px solid #e2e8f0 !important; 
-        color: #334155 !important; 
-        padding: 10px 12px !important; 
-      }
-      .badge-print-bevetel { background: #dcfce7 !important; color: #166534 !important; border: 1px solid #bbf7d0 !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
-      .badge-print-kiadas { background: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fecaca !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
-      .badge-print-aratas { background: #fef3c7 !important; color: #92400e !important; border: 1px solid #fde68a !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
-      .badge-print-eladas { background: #dbeafe !important; color: #1e40af !important; border: 1px solid #bfdbfe !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
-    }
-  </style>
-
   <!-- FIREBASE ÉS ERP KÓD -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -553,7 +517,6 @@
       appId: "1:711509190038:web:ea6ea17555ec9a3761a9b7"
     };
 
-    // Dinamikus konfiguráció beolvasása, ha elérhető a futtatókörnyezetben
     let firebaseConfig = defaultFirebaseConfig;
     if (typeof __firebase_config !== 'undefined' && __firebase_config) {
       try {
@@ -565,7 +528,6 @@
 
     const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'prkraktar';
 
-    // Firebase Inicializálása
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -580,6 +542,7 @@
 
     let activeTxType = 'BEVÉTEL';
 
+    // Cloud status UI segéd
     function setCloudStatus(status, text = "") {
       const dotDesktop = document.getElementById('status-dot-desktop');
       const dotMobile = document.getElementById('status-dot-mobile');
@@ -637,10 +600,10 @@
       });
     }
 
+    // Valós idejű adatbázis szinkron (onSnapshot)
     function startRealtimeSync(user) {
       const publicPath = `artifacts/${currentAppId}/public/data`;
 
-      // 1. Input Anyagok betöltése
       onSnapshot(collection(db, publicPath, 'products'), (snap) => {
         state.products = [];
         snap.forEach(d => state.products.push({ id: d.id, ...d.data() }));
@@ -651,7 +614,6 @@
         setCloudStatus('disconnected', 'Termék szinkron hiba');
       });
 
-      // 2. Táblák betöltése
       onSnapshot(collection(db, publicPath, 'fields'), (snap) => {
         state.fields = [];
         snap.forEach(d => state.fields.push({ id: d.id, ...d.data() }));
@@ -660,7 +622,6 @@
         console.error("Hiba a táblák betöltésekor:", err);
       });
 
-      // 3. Tranzakciós napló betöltése
       onSnapshot(collection(db, publicPath, 'logs'), (snap) => {
         state.logs = [];
         snap.forEach(d => state.logs.push({ id: d.id, ...d.data() }));
@@ -669,7 +630,6 @@
         console.error("Hiba a napló betöltésekor:", err);
       });
 
-      // 4. Magtári készlet betöltése / létrehozása
       onSnapshot(doc(db, publicPath, 'grainWarehouse', 'inventory'), (docSnap) => {
         if (docSnap.exists()) {
           state.grainStock = docSnap.data();
@@ -694,6 +654,7 @@
       populateHarvestFieldSelect();
     }
 
+    // ==================== DASHBOARD RENDERING ====================
     function renderDashboard() {
       const totalHectares = state.fields.reduce((s, f) => s + parseFloat(f.size || 0), 0).toFixed(2);
       const totalGrainWeight = Object.values(state.grainStock).reduce((s, v) => s + v, 0);
@@ -733,6 +694,7 @@
       }
     }
 
+    // ==================== INVENTORY RENDERING ====================
     function renderInventoryTable() {
       const b = document.getElementById('inventory-table-body'); if (!b) return;
       b.innerHTML = '';
@@ -748,7 +710,7 @@
             </td>
           </tr>`;
       });
-      filterInventory(); // Apply filter automatically after refresh
+      filterInventory();
     }
 
     window.filterInventory = function() {
@@ -770,43 +732,46 @@
       }
     }
 
+    // ==================== FIELDS RENDERING (ORIGINAL PRESTIGE DESIGN) ====================
     function renderFieldsGrid() {
       const g = document.getElementById('fields-grid'); if (!g) return;
       g.innerHTML = '';
       
-      // Sorszám alapú rendezés, hogy szépen, sorban jelenjenek meg
       const sortedFields = state.fields.slice().sort((a, b) => {
         return (a.number || '').localeCompare(b.number || '', undefined, {numeric: true, sensitivity: 'base'});
       });
 
       sortedFields.forEach(f => {
         g.innerHTML += `
-          <div class="bg-slate-900/95 border border-slate-800 hover:border-slate-700/80 rounded-xl p-3 flex flex-col justify-between transition duration-150">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between transition duration-150">
             <div>
-              <!-- Kártya fejléc: Kicsi sorszám és törlés gomb -->
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-[9px] bg-green-950/80 text-green-400 border border-green-800/40 px-1.5 py-0.5 rounded font-mono font-bold">${f.number}</span>
-                <button onclick="deleteField('${f.id}')" class="text-slate-500 hover:text-red-400 transition text-sm leading-none">&times;</button>
+              <!-- Kártya fejléc: Eredeti sorszám és Műveletek (Szerkesztés & Törlés) -->
+              <div class="flex justify-between items-start">
+                <span class="bg-green-950/85 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-lg font-mono font-bold text-sm tracking-wide shadow-inner">${f.number}</span>
+                <div class="flex items-center space-x-2.5">
+                  <button onclick="openEditFieldModal('${f.id}')" class="text-slate-500 hover:text-green-400 transition" title="Módosítás">
+                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                  </button>
+                  <button onclick="deleteField('${f.id}')" class="text-slate-500 hover:text-red-400 font-bold text-xl leading-none transition">&times;</button>
+                </div>
               </div>
               
-              <!-- Tábla név MePAR-ral -->
-              <h4 class="text-sm font-bold text-white truncate" title="${f.name}">${f.name}</h4>
-              <p class="text-[9px] text-slate-400 font-mono mt-0.5 truncate">MePAR: ${f.blockId || '-'}</p>
+              <!-- Tábla név és MePAR -->
+              <h4 class="text-2xl font-bold text-white mt-4 truncate" title="${f.name}">${f.name}</h4>
+              <p class="text-xs text-slate-500 mt-1 font-mono">MePAR: ${f.blockId || '-'}</p>
               
-              <!-- Kompakt kultúra visszajelző sáv -->
-              <div class="mt-2 px-2 py-1 bg-slate-950/60 rounded border border-slate-850 flex flex-col">
-                <span class="text-[7px] uppercase tracking-wider text-slate-500 font-semibold">Kultúra</span>
-                <span class="text-xs font-bold text-amber-400 truncate">${f.culture || 'Ugar / Nincs'}</span>
+              <!-- Eredeti sötét kultúra doboz -->
+              <div class="mt-4 p-4 bg-slate-950/80 rounded-xl border border-slate-900">
+                <span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">Kultúra</span>
+                <span class="text-base font-bold text-amber-400 block mt-1">${f.culture || 'Ugar / Nincs'}</span>
               </div>
-              
-              <!-- Területméret -->
-              <p class="text-xs font-bold text-green-400 mt-2">${f.size} ha</p>
             </div>
             
-            <!-- Kijuttatás indító gomb az alján -->
-            <div class="pt-1.5 mt-2 border-t border-slate-850 flex justify-end">
-              <button onclick="startTxOnField('${f.id}')" class="text-[10px] text-green-400 hover:text-green-300 transition font-bold flex items-center space-x-0.5">
-                <span>Kijuttatás</span>
+            <!-- Alsó sáv: Területméret és Kijuttatás link -->
+            <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-800/40">
+              <span class="text-lg font-bold text-green-400 font-mono">${f.size} ha</span>
+              <button onclick="startTxOnField('${f.id}')" class="text-xs text-green-400 hover:text-green-300 transition font-bold flex items-center space-x-1">
+                <span>Kijuttatás indítása</span>
                 <span>&rarr;</span>
               </button>
             </div>
@@ -987,7 +952,7 @@
     window.executeHarvest = async function() {
       const fId = document.getElementById('harvest-field-select').value;
       const raw = parseFloat(document.getElementById('harvest-raw-weight').value) || 0;
-      if (!fId || raw <= 0) { showToast("Kérjük válaszz táblát és adj meg súlyt!", "error"); return; }
+      if (!fId || raw <= 0) { showToast("Kérjük válassz táblát és adj meg súlyt!", "error"); return; }
       
       const f = state.fields.find(field => field.id === fId);
       const cult = f.culture || 'Egyéb';
@@ -1022,9 +987,34 @@
     }
 
     // ==================== TÁBLA MODAL MŰVELETEK ====================
-    window.openAddFieldModal = function() { document.getElementById('field-modal').classList.remove('hidden'); }
+    window.openAddFieldModal = function() {
+      document.getElementById('field-modal-title').innerText = "Új Tábla Felvétele";
+      document.getElementById('modal-field-id').value = '';
+      document.getElementById('field-modal-name').value = '';
+      document.getElementById('field-modal-number').value = '';
+      document.getElementById('field-modal-block').value = '';
+      document.getElementById('field-modal-size').value = '';
+      document.getElementById('field-modal-culture').value = 'Ugar / Nincs';
+      document.getElementById('field-modal').classList.remove('hidden');
+    }
+
+    window.openEditFieldModal = function(id) {
+      const f = state.fields.find(field => field.id === id);
+      if (!f) return;
+      document.getElementById('field-modal-title').innerText = "Tábla Adatainak Módosítása";
+      document.getElementById('modal-field-id').value = f.id;
+      document.getElementById('field-modal-name').value = f.name;
+      document.getElementById('field-modal-number').value = f.number;
+      document.getElementById('field-modal-block').value = f.blockId || '';
+      document.getElementById('field-modal-size').value = f.size;
+      document.getElementById('field-modal-culture').value = f.culture || 'Ugar / Nincs';
+      document.getElementById('field-modal').classList.remove('hidden');
+    }
+
     window.closeFieldModal = function() { document.getElementById('field-modal').classList.add('hidden'); }
+    
     window.saveField = async function() {
+      const id = document.getElementById('modal-field-id').value;
       const name = document.getElementById('field-modal-name').value.trim();
       const number = document.getElementById('field-modal-number').value.trim();
       const blockId = document.getElementById('field-modal-block').value.trim();
@@ -1033,11 +1023,15 @@
       
       if(!name || !number || size <= 0) { showToast("Minden mezőt tölts ki helyesen!", "error"); return; }
       
+      const path = `artifacts/${currentAppId}/public/data/fields`;
       try {
-        await addDoc(collection(db, `artifacts/${currentAppId}/public/data/fields`), {
-          name, number, blockId, size, culture
-        });
-        showToast(`A(z) ${name} tábla sikeresen rögzítve lett!`);
+        if (id) {
+          await updateDoc(doc(db, path, id), { name, number, blockId, size, culture });
+          showToast(`A(z) ${name} tábla sikeresen módosítva!`);
+        } else {
+          await addDoc(collection(db, path), { name, number, blockId, size, culture });
+          showToast(`A(z) ${name} tábla sikeresen rögzítve lett!`);
+        }
         closeFieldModal();
       } catch(e) {
         console.error(e);
