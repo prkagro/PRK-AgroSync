@@ -35,7 +35,7 @@
       <span class="font-bold text-lg tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></span>
     </div>
     <div class="flex items-center space-x-3">
-      <div id="status-dot-mobile" class="w-2.5 h-2.5 rounded-full bg-yellow-500 animate-pulse"></div>
+      <div id="status-dot-mobile" class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
       <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white focus:outline-none">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
@@ -54,7 +54,7 @@
             <h1 class="font-bold text-md leading-tight tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></h1>
           </div>
         </div>
-        <div id="status-dot-desktop" class="w-3 h-3 rounded-full bg-yellow-500 animate-pulse"></div>
+        <div id="status-dot-desktop" class="w-3 h-3 rounded-full bg-green-500 shadow-lg shadow-green-900/40"></div>
       </div>
 
       <nav class="px-4 py-6 space-y-1">
@@ -82,20 +82,31 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           <span>Könyvelés & Riport</span>
         </a>
+
+        <!-- ✨ AI AGRONÓMUS -->
+        <a href="#" onclick="switchTab('ai-assistant')" id="nav-ai-assistant" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-purple-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <svg class="w-5 h-5 text-purple-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+          <span class="text-purple-300 font-bold">✨ AI Agronómus</span>
+        </a>
       </nav>
     </div>
 
-    <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+    <div class="p-4 border-t border-slate-800 bg-slate-950/40 space-y-3">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-full bg-green-900/50 border border-green-500/30 flex items-center justify-center text-green-400 font-bold text-sm">PRK</div>
         <div>
           <p class="text-sm font-semibold text-slate-200">Tangazdaság Vezető</p>
           <div class="flex items-center space-x-1">
             <span class="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
-            <span id="user-display-id" class="text-[10px] text-slate-400 font-mono">Belépés...</span>
+            <span id="user-display-id" class="text-[10px] text-slate-400 font-mono">Helyi Tároló</span>
           </div>
         </div>
       </div>
+      
+      <button onclick="resetDatabase()" class="w-full text-left px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded-xl transition border border-red-900/20 flex items-center justify-center space-x-1.5 font-semibold">
+        <span>🗑️</span>
+        <span>Rendszer kiürítése (Élesítés)</span>
+      </button>
     </div>
   </aside>
 
@@ -104,8 +115,8 @@
     <header class="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
       <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Műszerfal & Áttekintés</h2>
       <span class="text-xs text-slate-300 font-mono bg-slate-850 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center space-x-2">
-        <span id="status-dot" class="h-2 w-2 rounded-full bg-yellow-500 animate-pulse"></span>
-        <span id="status-text">Csatlakozás a felhőhöz...</span>
+        <span id="status-dot" class="h-2 w-2 rounded-full bg-green-500"></span>
+        <span id="status-text">Rendszer aktív</span>
       </span>
     </header>
 
@@ -113,6 +124,18 @@
 
       <!-- ==================== TAB 1: DASHBOARD ==================== -->
       <section id="tab-dashboard" class="space-y-6">
+        
+        <!-- ÜRES RENDSZER ÜDVÖZLŐ BANNER (Csak akkor látszik, ha nincs adat) -->
+        <div id="empty-state-welcome" class="hidden bg-gradient-to-r from-green-950/30 to-slate-900 border border-green-500/20 rounded-2xl p-6 text-center space-y-4 shadow-xl">
+          <span class="text-4xl">🌱</span>
+          <h3 class="text-lg font-bold text-white">Üdvözöljük a PRK AgroSync rendszerben!</h3>
+          <p class="text-xs text-slate-300 max-w-md mx-auto">A rendszer jelenleg teljesen üres, készen áll a saját dűlőid és anyagaid biztonságos fogadására. Ha csak tesztelni szeretnéd a funkciókat, egyetlen kattintással betölthetsz mintaadatokat.</p>
+          <div class="flex justify-center space-x-3">
+            <button onclick="switchTab('fields'); openAddFieldModal();" class="bg-green-600 hover:bg-green-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-lg shadow-green-900/20">Saját tábla felvétele</button>
+            <button onclick="loadDemoData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition">Mintaadatok betöltése</button>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
             <p class="text-sm font-semibold text-slate-400">Összes Termőterület</p>
@@ -157,35 +180,37 @@
       <!-- ==================== TAB 2: INVENTORY ==================== -->
       <section id="tab-inventory" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-2/3">
-            <input type="text" id="inventory-search" oninput="filterInventory()" placeholder="Keresés az input anyagok között..." class="w-full sm:w-1/2 bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-green-500">
-            <select id="inventory-category-filter" onchange="filterInventory()" class="w-full sm:w-1/2 bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2 text-sm text-slate-300 focus:outline-none focus:border-green-500">
-              <option value="">-- Összes kategória --</option>
-              <option value="Műtrágya">Műtrágya</option>
-              <option value="Gombaölő szer">Gombaölő szer</option>
-              <option value="Gyomirtó szer">Gyomirtó szer</option>
-              <option value="Rovarölő szer">Rovarölő szer</option>
-              <option value="Növénykondicionáló szer">Növénykondicionáló szer</option>
-              <option value="Vetőmag">Vetőmag</option>
-              <option value="Üzemanyag">Üzemanyag</option>
-              <option value="Egyéb">Egyéb</option>
-            </select>
-          </div>
+          <div class="text-sm font-medium text-slate-400">Anyagraktár Kategóriák és Készletszintek</div>
           <button onclick="openAddProductModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-green-900/20">Új Input Anyag Bevételezése</button>
         </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-          <table class="w-full text-left text-sm text-slate-300">
-            <thead class="text-xs uppercase bg-slate-950/80 text-slate-400 border-b border-slate-800">
-              <tr>
-                <th class="p-4">Megnevezés</th>
-                <th class="p-4">Kategória</th>
-                <th class="p-4 text-center">Aktuális Készlet</th>
-                <th class="p-4 text-center">Műveletek</th>
-              </tr>
-            </thead>
-            <tbody id="inventory-table-body" class="divide-y divide-slate-800"></tbody>
-          </table>
+        <!-- 1. LÉPCSŐ: KATEGÓRIA KÁRTYÁK -->
+        <div id="inventory-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dinamikusan épül fel a JS-ből -->
+        </div>
+
+        <!-- 2. LÉPCSŐ: KIVÁLASZTOTT KATEGÓRIA RÉSZLETES LISTÁJA -->
+        <div id="inventory-details-panel" class="hidden bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-4 gap-3">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+              <button onclick="closeInventoryDetails()" class="bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">&larr; Vissza a kategóriákhoz</button>
+              <h3 id="inventory-details-title" class="font-bold text-lg text-white"></h3>
+            </div>
+            <input type="text" id="inventory-search" oninput="filterInventoryList()" placeholder="Keresés a listában..." class="bg-slate-950 border border-slate-700/50 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-green-500 w-full sm:w-64">
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="text-xs uppercase bg-slate-950/80 text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="p-4">Megnevezés</th>
+                  <th class="p-4 text-center">Aktuális Készlet</th>
+                  <th class="p-4 text-center w-40">Műveletek</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -328,6 +353,75 @@
         </div>
       </section>
 
+      <!-- ==================== TAB: ✨ AI AGRONÓMUS ==================== -->
+      <section id="tab-ai-assistant" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- AI Chatbot Panel -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 lg:col-span-2 flex flex-col h-[600px] justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="text-2xl">✨</span>
+                <div>
+                  <h3 class="font-bold text-lg text-white">AI Mezőgazdasági Tanácsadó</h3>
+                  <p class="text-xs text-slate-400">Kérdezz bármit a növényvédelemről, vetésforgóról vagy dózisokról!</p>
+                </div>
+              </div>
+              <span class="text-[10px] bg-purple-950 text-purple-300 font-bold px-2 py-1 rounded border border-purple-800">Gemini 3.1 Flash</span>
+            </div>
+
+            <!-- Chat Area -->
+            <div id="ai-chat-messages" class="space-y-4 overflow-y-auto h-[380px] pr-2 scrollbar-thin scrollbar-thumb-slate-800">
+              <div class="bg-slate-950 p-4 rounded-xl border border-slate-850/60 max-w-[85%] text-sm">
+                <p class="text-xs font-bold text-purple-400 mb-1">✨ AI Agronómus</p>
+                <p class="text-slate-300">Üdvözlöm! Én vagyok a PRK Tangazdaság mesterséges intelligencia alapú szaktanácsadója. Ismerem az összes tábláját, vetéstervét és a raktáron lévő input anyagokat. Miben segíthetek ma?</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Area -->
+          <div class="border-t border-slate-800 pt-4 mt-4 flex items-center space-x-2">
+            <input type="text" id="ai-user-input" onkeydown="if(event.key === 'Enter') sendAIChatMessage()" placeholder="Írd be a kérdésed (pl. Hogyan védekezzek paréj ellen?)..." class="flex-1 bg-slate-950 border border-slate-800 focus:border-purple-600 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none transition">
+            <button onclick="sendAIChatMessage()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-3 rounded-xl transition shadow-lg shadow-purple-900/35">Küldés</button>
+          </div>
+        </div>
+
+        <!-- AI Intelligent Diagnostics / Report Area -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between h-[600px]">
+          <div class="space-y-4">
+            <div class="border-b border-slate-800 pb-3">
+              <h3 class="font-bold text-lg text-white flex items-center space-x-1.5">
+                <span>📊</span>
+                <span>AI Gazdasági Diagnosztika</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">Automata agrár-audít és javaslatok a valós adatok elemzésével.</p>
+            </div>
+
+            <!-- Report Status Box -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 text-xs text-slate-400 space-y-2">
+              <div class="flex justify-between"><span>Elemzett parcellák száma:</span><strong class="text-green-400" id="ai-stat-fields">...</strong></div>
+              <div class="flex justify-between"><span>Raktári tételek ellenőrzése:</span><strong class="text-blue-400" id="ai-stat-inventory">...</strong></div>
+              <div class="flex justify-between"><span>Könyvelési bejegyzések:</span><strong class="text-purple-400" id="ai-stat-logs">...</strong></div>
+            </div>
+
+            <!-- Action Prompts -->
+            <div class="space-y-2 pt-2">
+              <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Gyors Kérdések</h4>
+              <button onclick="fillAndSendAIQuery('Hogyan védekezzek a paréj ellen szójában a jelenlegi raktárkészletünkkel?')" class="w-full text-left bg-slate-950 hover:bg-slate-850 p-2.5 rounded-lg border border-slate-850 transition text-xs text-slate-300">🌿 Gyomirtás szójában Pledge-el?</button>
+              <button onclick="fillAndSendAIQuery('Milyen tápanyagutánpótlást javasolsz az Őszi búza táblánkra a raktárban lévő műtrágyával?')" class="w-full text-left bg-slate-950 hover:bg-slate-850 p-2.5 rounded-lg border border-slate-850 transition text-xs text-slate-300">🌾 Tápanyagtervezés búzához?</button>
+              <button onclick="fillAndSendAIQuery('A könyvelés alapján hogyan optimalizálhatnánk az input anyagok költségét?')" class="w-full text-left bg-slate-950 hover:bg-slate-850 p-2.5 rounded-lg border border-slate-850 transition text-xs text-slate-300">💰 Költségoptimalizálási javaslatok</button>
+            </div>
+          </div>
+
+          <!-- Generate Audit Button -->
+          <div class="pt-4 border-t border-slate-800">
+            <button onclick="generateAIFarmAudit()" class="w-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-900/30 flex items-center justify-center space-x-2">
+              <span>✨</span>
+              <span>Intelligens Gazdasági Riport</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- ==================== TAB 6: KÖNYVELÉS NYOMTATÁSSAL ==================== -->
       <section id="tab-bookkeeping" class="space-y-6 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-center non-printable">
@@ -355,7 +449,7 @@
               </div>
               <div class="text-right text-xs text-slate-500 font-mono">
                 <div>Dátum: <span id="pdf-date-field" class="text-slate-900 font-semibold"></span></div>
-                <div>Rendszer: <span class="text-green-600 font-semibold">Cloud Sync</span></div>
+                <div>Rendszer: <span class="text-green-600 font-semibold">Offline Secure DB</span></div>
               </div>
             </div>
           </div>
@@ -436,7 +530,6 @@
               <option value="Rovarölő szer">Rovarölő szer</option>
               <option value="Növénykondicionáló szer">Növénykondicionáló szer</option>
               <option value="Vetőmag">Vetőmag</option>
-              <option value="Üzemanyag">Üzemanyag</option>
               <option value="Egyéb">Egyéb</option>
             </select>
           </div>
@@ -453,7 +546,7 @@
         </div>
         <div>
           <label class="block text-xs text-slate-400 mb-1">Anyag / Készítmény megnevezése</label>
-          <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP / Prémium Diesel" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP / YaraMila" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
         <div id="modal-qty-wrapper">
           <label class="block text-xs text-slate-400 mb-1">Mennyiség</label>
@@ -490,7 +583,6 @@
         <button onclick="closeFieldHistoryModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
       </div>
       <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
-        <!-- Összegző Kártyák -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
             <span class="text-[10px] text-green-400 uppercase tracking-widest font-bold block">Összes Kijuttatott Input Anyag</span>
@@ -502,16 +594,41 @@
           </div>
         </div>
 
-        <!-- Részletes Lista -->
         <div class="space-y-2 pt-2">
           <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Műveletek Kronológiája</h4>
-          <div id="history-logs-container" class="space-y-2">
-            <!-- Logok helye -->
-          </div>
+          <div id="history-logs-container" class="space-y-2"></div>
         </div>
       </div>
       <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end">
         <button onclick="closeFieldHistoryModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition">Bezárás</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AI ELEMENT REPORT VIEWER (DEDICATED FULL SCREEN) -->
+  <div id="ai-report-modal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="px-6 py-5 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+        <div class="flex items-center space-x-3">
+          <span class="text-3xl">🤖</span>
+          <div>
+            <h3 class="font-bold text-xl text-white">Generált Agrár-Gazdasági Diagnosztika</h3>
+            <p class="text-xs text-purple-400">Összeállítva: <span id="ai-report-time">---</span></p>
+          </div>
+        </div>
+        <button onclick="closeAIReportModal()" class="text-slate-400 hover:text-white text-3xl font-light">&times;</button>
+      </div>
+
+      <div class="p-8 space-y-6 overflow-y-auto bg-slate-950/30 text-slate-100 flex-1 leading-relaxed text-sm md:text-base" id="ai-report-body">
+        <!-- AI Report Text will go here -->
+      </div>
+
+      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+        <button onclick="window.print()" class="px-5 py-2.5 bg-green-700 hover:bg-green-600 text-white rounded-xl text-sm font-semibold transition flex items-center space-x-1.5">
+          <span>🖨️</span>
+          <span>Nyomtatás</span>
+        </button>
+        <button onclick="closeAIReportModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition">Bezárás</button>
       </div>
     </div>
   </div>
@@ -522,30 +639,60 @@
     <p id="toast-message" class="text-sm font-medium text-slate-200"></p>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    const defaultFirebaseConfig = {
-      apiKey: "AIzaSyDbN2zs0L16ro2L9818wNbhs5CeGkRT6Fw",
-      authDomain: "prkraktar.firebaseapp.com",
-      projectId: "prkraktar",
-      storageBucket: "prkraktar.firebasestorage.app",
-      messagingSenderId: "711509190038",
-      appId: "1:711509190038:web:ea6ea17555ec9a3761a9b7"
-    };
-
-    let firebaseConfig = defaultFirebaseConfig;
-    if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-      try { firebaseConfig = JSON.parse(__firebase_config); } catch (e) { console.error(e); }
+  <style>
+    @media print {
+      body { 
+        background: white !important; 
+        color: #0f172a !important; 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      .non-printable, aside, header, button, select, input { 
+        display: none !important; 
+      }
+      main { 
+        width: 100% !important; 
+        padding: 0 !important; 
+        overflow: visible !important; 
+      }
+      .printable-header { 
+        display: block !important; 
+        border-bottom: 2px solid #e2e8f0 !important;
+        margin-bottom: 24px !important;
+      }
+      #printable-report-area { 
+        background: white !important; 
+        border: none !important; 
+        padding: 0 !important; 
+      }
+      .id-report-table { 
+        color: #1e293b !important; 
+        width: 100% !important; 
+        background: white !important; 
+        border-collapse: collapse !important;
+      }
+      .id-report-table th { 
+        background-color: #f8fafc !important; 
+        color: #0f172a !important; 
+        border-bottom: 2px solid #cbd5e1 !important; 
+        padding: 10px 12px !important; 
+        font-weight: 700 !important;
+      }
+      .id-report-table td { 
+        border-bottom: 1px solid #e2e8f0 !important; 
+        color: #334155 !important; 
+        padding: 10px 12px !important; 
+      }
+      .badge-print-bevetel { background: #dcfce7 !important; color: #166534 !important; border: 1px solid #bbf7d0 !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+      .badge-print-kiadas { background: #fee2e2 !important; color: #991b1b !important; border: 1px solid #fecaca !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+      .badge-print-aratas { background: #fef3c7 !important; color: #92400e !important; border: 1px solid #fde68a !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
+      .badge-print-eladas { background: #dbeafe !important; color: #1e40af !important; border: 1px solid #bfdbfe !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 10px !important; }
     }
+  </style>
 
-    const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'prkraktar';
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
+  <!-- APP STATE AND LOGIC SCRIPT -->
+  <script>
+    // AZ ALAPÉRTELMEZETT ADATBÁZIS 100%-IG ÜRESRE LETT TISZTÍTVA A BIZTONSÁG ÉRDEKÉBEN
     let state = {
       products: [],
       fields: [],
@@ -554,75 +701,150 @@
     };
 
     let activeTxType = 'BEVÉTEL';
+    let selectedCategory = null;
 
-    function setCloudStatus(status, text = "") {
-      const dotDesktop = document.getElementById('status-dot-desktop');
-      const dotMobile = document.getElementById('status-dot-mobile');
-      const statusDot = document.getElementById('status-dot');
-      const textStatus = document.getElementById('status-text');
-      let colorClass = "bg-yellow-500 animate-pulse";
-      let statusLabel = text || "Szinkronizálás...";
-      if (status === 'connected') { colorClass = "bg-green-500 shadow-lg shadow-green-900/40"; statusLabel = text || "Felhőkapcsolat aktív"; }
-      else if (status === 'disconnected') { colorClass = "bg-red-500"; statusLabel = text || "Kapcsolat megszakadt"; }
-      if (dotDesktop) dotDesktop.className = `w-3 h-3 rounded-full ${colorClass}`;
-      if (dotMobile) dotMobile.className = `w-2.5 h-2.5 rounded-full ${colorClass}`;
-      if (statusDot) statusDot.className = `h-2 w-2 rounded-full ${colorClass}`;
-      if (textStatus) { textStatus.innerText = statusLabel; textStatus.className = `text-xs ${status === 'connected' ? 'text-green-400' : (status === 'disconnected' ? 'text-red-400' : 'text-yellow-400')} font-mono`; }
+    // Fixed Categories for the two-step Inventory
+    const categoriesList = [
+      { 
+        id: "Műtrágya", 
+        name: "Műtrágyák", 
+        icon: `<svg class="w-8 h-8 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" /><path d="M4 8h16l-1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 8z" /><path d="M12 12v6" /><path d="M12 14c1.5-1 3-1 3-1" /><path d="M12 15c-1.5-1-3-1-3-1" /></svg>` 
+      },
+      { 
+        id: "Gombaölő szer", 
+        name: "Gombaölő szerek", 
+        icon: `<svg class="w-8 h-8 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31c0 .86-.34 1.69-.96 2.32L5 16.51C4.04 17.5 4.67 19 6 19h12c1.33 0 1.96-1.5 1-2.49l-4.04-4.88c-.62-.63-.96-1.46-.96-2.32V2h-4z"/></svg>` 
+      },
+      { 
+        id: "Gyomirtó szer", 
+        name: "Gyomirtó szerek", 
+        icon: `<svg class="w-8 h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v12"/><path d="M8 10h8"/></svg>` 
+      },
+      { 
+        id: "Rovarölő szer", 
+        name: "Rovarölő szerek", 
+        icon: `<svg class="w-8 h-8 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M12 2v9"/><path d="M8 5h8"/><path d="M18 14h3"/><path d="M18 19h3"/><path d="M3 14h3"/><path d="M3 19h3"/></svg>` 
+      },
+      { 
+        id: "Növénykondicionáló szer", 
+        name: "Növénykondicionálók", 
+        icon: `<svg class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` 
+      },
+      { 
+        id: "Vetőmag", 
+        name: "Vetőmagok", 
+        icon: `<svg class="w-8 h-8 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>` 
+      },
+      { 
+        id: "Egyéb", 
+        name: "Egyéb anyagok", 
+        icon: `<svg class="w-8 h-8 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>` 
+      }
+    ];
+
+    function loadLocalData() {
+      const saved = localStorage.getItem('prk_agrosync_state');
+      if (saved) {
+        try { state = JSON.parse(saved); } catch (e) { console.error("Hiba az adatok betöltésénél", e); }
+      }
     }
 
-    async function initAuthAndSync() {
-      setCloudStatus('connecting', 'Hitelesítés...');
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { await signInWithCustomToken(auth, __initial_auth_token); }
-        else { await signInAnonymously(auth); }
-      } catch (err) { setCloudStatus('disconnected', 'Hiba!'); return; }
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          const userDisp = document.getElementById('user-display-id');
-          if (userDisp) userDisp.innerText = user.uid.slice(0, 8) + "...";
-          startRealtimeSync(user);
-        }
-      });
+    function saveLocalData() {
+      localStorage.setItem('prk_agrosync_state', JSON.stringify(state));
     }
 
-    function startRealtimeSync(user) {
-      const publicPath = `artifacts/${currentAppId}/public/data`;
-      onSnapshot(collection(db, publicPath, 'products'), (snap) => {
-        state.products = []; snap.forEach(d => state.products.push({ id: d.id, ...d.data() })); renderAll(); setCloudStatus('connected');
-      });
-      onSnapshot(collection(db, publicPath, 'fields'), (snap) => {
-        state.fields = []; snap.forEach(d => state.fields.push({ id: d.id, ...d.data() })); renderAll();
-      });
-      onSnapshot(collection(db, publicPath, 'logs'), (snap) => {
-        state.logs = []; snap.forEach(d => state.logs.push({ id: d.id, ...d.data() })); renderAll();
-      });
-      onSnapshot(doc(db, publicPath, 'grainWarehouse', 'inventory'), (docSnap) => {
-        if (docSnap.exists()) { state.grainStock = docSnap.data(); }
+    // Manuális mintaadat generáló (Csak kérésre fut le)
+    window.loadDemoData = function() {
+      state = {
+        products: [
+          { id: "p1", name: "Pledge 50 WP", category: "Gyomirtó szer", unit: "gr", quantity: 1500 },
+          { id: "p2", name: "YaraMila Complex NPK", category: "Műtrágya", unit: "kg", quantity: 4500 },
+          { id: "p3", name: "Wuxal Növénykondicionáló", category: "Növénykondicionáló szer", unit: "liter", quantity: 240 }
+        ],
+        fields: [
+          { id: "f1", name: "Kovács-dűlő", number: "T-01", blockId: "MePAR-4432", size: 45.2, culture: "Szója" },
+          { id: "f2", name: "Északi-tábla", number: "T-02", blockId: "MePAR-9812", size: 18.7, culture: "Őszi búza" }
+        ],
+        grainStock: { "Szója": 145000, "Őszi búza": 220000, "Kukorica": 0, "Cirok": 35000, "Napraforgó": 0, "Árpa": 92000, "Gyep (Széna)": 0 },
+        logs: [
+          { id: "l1", timestamp: "2026. 05. 24. 14:32", type: "BEVÉTEL", productName: "Pledge 50 WP", unit: "gr", qty: 1500, reason: "Kezdő készlet feltöltés" },
+          { id: "l2", timestamp: "2026. 05. 25. 08:15", type: "KIADÁS", productName: "Pledge 50 WP", unit: "gr", qty: -1200, targetField: "Kovács-dűlő", appliedHectares: 45.2, reason: "Kelés előtti gyomirtás" }
+        ]
+      };
+      saveLocalData();
+      updateAIDiagnosticStats();
+      renderAll();
+      showToast("Demó mintaadatok sikeresen betöltve!");
+    }
+
+    window.resetDatabase = function() {
+      customConfirm("Rendszer kiürítése (Élesítés)", "Biztosan törölni szeretnéd az összes demó és rögzített adatot? Ezzel a gombbal teljesen tiszta lapot kapsz, hogy felvihesd a saját tábláidat és anyagaidat.", () => {
+        state = {
+          products: [],
+          fields: [],
+          grainStock: { "Szója": 0, "Őszi búza": 0, "Kukorica": 0, "Cirok": 0, "Napraforgó": 0, "Árpa": 0, "Gyep (Széna)": 0 },
+          logs: []
+        };
+        saveLocalData();
         renderAll();
+        showToast("Rendszer sikeresen kiürítve!");
       });
+    }
+
+    function initLocalApp() {
+      loadLocalData();
+      const dateStr = new Date().toLocaleString('hu-HU');
+      const dateField = document.getElementById('pdf-date-field');
+      if (dateField) dateField.innerText = dateStr;
+      
+      updateAIDiagnosticStats();
+      renderAll();
     }
 
     function renderAll() {
-      renderDashboard(); renderInventoryTable(); renderFieldsGrid(); renderBookkeeping();
-      populateTxProductSelect(); populateTxFieldSelect(); populateHarvestFieldSelect();
+      renderDashboard(); 
+      renderInventoryCategories(); 
+      renderInventoryTable(); 
+      renderFieldsGrid(); 
+      renderBookkeeping();
+      populateTxProductSelect(); 
+      populateTxFieldSelect(); 
+      populateHarvestFieldSelect();
     }
 
     function renderDashboard() {
       const totalHectares = state.fields.reduce((s, f) => s + parseFloat(f.size || 0), 0).toFixed(2);
       const totalGrainWeight = Object.values(state.grainStock).reduce((s, v) => s + v, 0);
-      if (document.getElementById('stat-total-hectares')) document.getElementById('stat-total-hectares').innerText = `${totalHectares} ha`;
-      if (document.getElementById('stat-total-grain')) document.getElementById('stat-total-grain').innerText = `${totalGrainWeight.toLocaleString('hu-HU')} kg`;
-      if (document.getElementById('stat-total-products')) document.getElementById('stat-total-products').innerText = `${state.products.length} db`;
-      
-      const cultList = document.getElementById('dashboard-culture-list');
-      if (cultList) {
-        cultList.innerHTML = ''; let cultMap = {};
-        state.fields.forEach(f => { const c = f.culture || 'Ugar / Nincs'; cultMap[c] = (cultMap[c] || 0) + parseFloat(f.size || 0); });
-        for (const [cult, size] of Object.entries(cultMap)) {
-          cultList.innerHTML += `<div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800"><span class="font-semibold">${cult}</span><span class="font-mono text-green-400 font-bold">${size.toFixed(2)} ha</span></div>`;
+      document.getElementById('stat-total-hectares').innerText = `${totalHectares} ha`;
+      document.getElementById('stat-total-grain').innerText = `${totalGrainWeight.toLocaleString('hu-HU')} kg`;
+      document.getElementById('stat-total-products').innerText = `${state.products.length} db`;
+
+      // CONDITIONAL WELCOME SCREEN IF STATE IS ENTIRELY EMPTY
+      const isEmpty = state.fields.length === 0 && state.products.length === 0 && Object.values(state.grainStock).every(v => v === 0);
+      const welcomeEl = document.getElementById('empty-state-welcome');
+      if (welcomeEl) {
+        if (isEmpty) {
+          welcomeEl.classList.remove('hidden');
+        } else {
+          welcomeEl.classList.add('hidden');
         }
       }
-      const grainBody = document.getElementById('dashboard-grain-stock-body');
+
+      const cultList = document.getElementById('dashboard-culture-list'); 
+      if (cultList) {
+        cultList.innerHTML = ''; 
+        let cultMap = {}; 
+        state.fields.forEach(f => { const c = f.culture || 'Ugar / Nincs'; cultMap[c] = (cultMap[c] || 0) + parseFloat(f.size || 0); });
+        
+        let hasCultures = false;
+        for (const [cult, size] of Object.entries(cultMap)) {
+          hasCultures = true;
+          cultList.innerHTML += `<div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800"><span>${cult}</span><span class="font-mono text-green-400 font-bold">${size.toFixed(2)} ha</span></div>`;
+        }
+        document.getElementById('no-cultures-msg').classList.toggle('hidden', hasCultures);
+      }
+
+      const grainBody = document.getElementById('dashboard-grain-stock-body'); 
       if (grainBody) {
         grainBody.innerHTML = '';
         for (const [grain, qty] of Object.entries(state.grainStock)) {
@@ -632,25 +854,82 @@
       }
     }
 
+    function renderInventoryCategories() {
+      const grid = document.getElementById('inventory-categories-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      categoriesList.forEach(cat => {
+        const items = state.products.filter(p => p.category === cat.id);
+        const count = items.length;
+        
+        grid.innerHTML += `
+          <div onclick="openCategoryDetails('${cat.id}')" class="bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded-2xl p-5 flex items-center space-x-4 cursor-pointer transition transform hover:-translate-y-0.5 shadow-md">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">${cat.icon}</div>
+            <div class="min-w-0 flex-1">
+              <h4 class="font-bold text-white break-words whitespace-normal leading-snug tracking-tight text-sm sm:text-base">${cat.name}</h4>
+              <p class="text-xs text-slate-400 font-medium mt-1"><span class="text-green-400 font-bold font-mono">${count}</span> tétel a raktárban</p>
+            </div>
+          </div>`;
+      });
+    }
+
     function renderInventoryTable() {
       const b = document.getElementById('inventory-table-body'); if (!b) return;
       b.innerHTML = '';
-      state.products.forEach(p => {
+      
+      const filteredProducts = selectedCategory 
+        ? state.products.filter(p => p.category === selectedCategory)
+        : [];
+
+      if (filteredProducts.length === 0) {
+        b.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-500 italic text-xs">Ebben a kategóriában jelenleg nincs egyetlen raktározott tétel sem.</td></tr>`;
+        return;
+      }
+
+      filteredProducts.forEach(p => {
         b.innerHTML += `
           <tr class="hover:bg-slate-800/30">
-            <td class="p-4 font-semibold text-white">${p.name}</td>
-            <td class="p-4 text-slate-400 text-xs">${p.category}</td>
-            <td class="p-4 text-center font-bold text-white">${p.quantity.toLocaleString('hu-HU')} ${p.unit || 'kg'}</td>
+            <td class="p-4 font-semibold text-white text-sm">${p.name}</td>
+            <td class="p-4 text-center font-mono font-bold text-slate-200">${p.quantity.toLocaleString('hu-HU')} ${p.unit || 'kg'}</td>
             <td class="p-4 text-center space-x-2">
-              <button onclick="openEditProductModal('${p.id}')" class="text-xs bg-slate-800 hover:bg-slate-700 px-2 py-1 rounded-md">Szerkesztés</button>
-              <button onclick="deleteProduct('${p.id}')" class="text-xs bg-red-950/40 text-red-400 px-2 py-1 rounded-md">Törlés</button>
+              <button onclick="openEditProductModal('${p.id}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg transition">Szerkesztés</button>
+              <button onclick="deleteProduct('${p.id}')" class="text-xs bg-red-950/40 hover:bg-red-950 text-red-400 px-2.5 py-1.5 rounded-lg transition">Törlés</button>
             </td>
           </tr>`;
       });
-      filterInventory();
+      filterInventoryList();
     }
 
-    // ==================== TÁBLÁK KÁRTYÁS MEGJELENÍTÉSE RÁKATTINTÁS FUNKCIÓVAL ====================
+    window.openCategoryDetails = function(catId) {
+      selectedCategory = catId;
+      const catObj = categoriesList.find(c => c.id === catId);
+      
+      document.getElementById('inventory-categories-grid').classList.add('hidden');
+      document.getElementById('inventory-details-title').innerText = catObj.name;
+      document.getElementById('inventory-search').value = '';
+      document.getElementById('inventory-details-panel').classList.remove('hidden');
+      
+      renderInventoryTable();
+    }
+
+    window.closeInventoryDetails = function() {
+      selectedCategory = null;
+      document.getElementById('inventory-details-panel').classList.add('hidden');
+      document.getElementById('inventory-categories-grid').classList.remove('hidden');
+      renderInventoryCategories();
+    }
+
+    window.filterInventoryList = function() {
+      const s = document.getElementById('inventory-search').value.toLowerCase();
+      const rows = document.getElementById('inventory-table-body').getElementsByTagName('tr');
+      for (let r of rows) {
+        if (r.cells.length < 2) continue;
+        const textMatch = r.cells[0].innerText.toLowerCase().includes(s);
+        r.style.display = textMatch ? '' : 'none';
+      }
+    }
+
     function renderFieldsGrid() {
       const g = document.getElementById('fields-grid'); if (!g) return; g.innerHTML = '';
       state.fields.forEach(f => {
@@ -681,20 +960,9 @@
       });
     }
 
-    window.filterInventory = function() {
-      const s = document.getElementById('inventory-search').value.toLowerCase();
-      const filterCat = document.getElementById('inventory-category-filter').value;
-      const rows = document.getElementById('inventory-table-body').getElementsByTagName('tr');
-      for (let r of rows) {
-        const textMatch = r.innerText.toLowerCase().includes(s);
-        const catMatch = filterCat === "" || r.cells[1].innerText === filterCat;
-        r.style.display = (textMatch && catMatch) ? '' : 'none';
-      }
-    }
-
     function populateTxProductSelect() {
       const s = document.getElementById('tx-product-select'); if(!s) return; s.innerHTML = '';
-      state.products.forEach(p => { s.innerHTML += `<option value="${p.id}">${p.name} (${p.quantity} ${p.unit || 'kg'})</option>`; });
+      state.products.forEach(p => { s.innerHTML += `<option value="${p.id}">${p.name} (${p.quantity} ${p.unit})</option>`; });
       updateTxQtyLabel();
     }
 
@@ -707,7 +975,7 @@
     function populateHarvestFieldSelect() {
       const s = document.getElementById('harvest-field-select'); if(!s) return;
       s.innerHTML = '<option value="">-- Válassz táblát --</option>';
-      state.fields.forEach(f => { s.innerHTML += `<option value="${f.id}">${f.name} (${f.culture || 'Nincs'})</option>`; });
+      state.fields.forEach(f => { s.innerHTML += `<option value="${f.id}">${f.name} (${f.culture})</option>`; });
     }
 
     window.setTransactionType = function(type) {
@@ -735,7 +1003,7 @@
     function updateTxQtyLabel() {
       const pId = document.getElementById('tx-product-select').value;
       const label = document.getElementById('tx-qty-label');
-      if(pId && label) { const p = state.products.find(prod => prod.id === pId); if(p) label.innerText = `Mennyiség (${p.unit || 'kg'})`; }
+      if(pId && label) { const p = state.products.find(prod => prod.id === pId); if(p) label.innerText = `Mennyiség (${p.unit})`; }
     }
 
     window.onTxFieldSelectChange = function() {
@@ -755,54 +1023,53 @@
         const p = state.products.find(prod => prod.id === pId);
         preview.classList.remove('hidden');
         document.getElementById('tx-calc-rate').innerText = (qty / ha).toFixed(2);
-        document.getElementById('tx-calc-unit').innerText = `${p.unit || 'kg'}/ha`;
+        document.getElementById('tx-calc-unit').innerText = `${p.unit}/ha`;
       } else { preview.classList.add('hidden'); }
     }
 
-    window.executeTransaction = async function() {
-      if (!auth.currentUser) { showToast("Nincs kapcsolat!", "error"); return; }
-      const path = `artifacts/${currentAppId}/public/data`;
-
+    window.executeTransaction = function() {
       if (activeTxType === 'ELADÁS') {
         const grain = document.getElementById('tx-grain-select').value;
         const qty = parseFloat(document.getElementById('tx-sale-qty').value) || 0;
         const buyer = document.getElementById('tx-buyer-name').value.trim() || 'Ismeretlen vevő';
-        if (qty <= 0) { showToast("Hibás mennyiség!", "error"); return; }
-        try {
-          const updatedStock = { ...state.grainStock }; updatedStock[grain] = (updatedStock[grain] || 0) - qty;
-          await setDoc(doc(db, path, 'grainWarehouse', 'inventory'), updatedStock);
-          await addDoc(collection(db, path, 'logs'), { timestamp: new Date().toLocaleString('hu-HU'), type: "TERMÉNY ELADÁS", targetField: buyer, productName: grain, qty: -qty, unit: "kg", reason: document.getElementById('tx-reason').value || "Értékesítés" });
-          showToast("Eladás mentve!"); switchTab('dashboard');
-        } catch(e) { showToast("Hiba!", "error"); }
+        if (qty <= 0) { showToast("Kérjük, adj meg érvényes súlyt!", "error"); return; }
+
+        state.grainStock[grain] = (state.grainStock[grain] || 0) - qty;
+        state.logs.push({ id: "l_" + Math.random().toString(36).substr(2, 5), timestamp: new Date().toLocaleString('hu-HU'), type: "TERMÉNY ELADÁS", targetField: buyer, productName: grain, qty: -qty, unit: "kg", reason: document.getElementById('tx-reason').value || "Értékesítés raktárból" });
+        saveLocalData();
+        showToast("Eladás rögzítve!"); 
+        updateAIDiagnosticStats();
+        switchTab('dashboard'); 
         return;
       }
 
       const pId = document.getElementById('tx-product-select').value;
       const qty = parseFloat(document.getElementById('tx-qty').value) || 0;
-      if (!pId || qty <= 0) { showToast("Tölts ki minden mezőt!", "error"); return; }
+      if (!pId || qty <= 0) { showToast("Kérjük tölts ki minden szükséges mezőt!", "error"); return; }
       const p = state.products.find(prod => prod.id === pId);
 
-      let logData = { timestamp: new Date().toLocaleString('hu-HU'), type: activeTxType, productName: p.name, unit: p.unit || 'kg', qty: activeTxType === 'KIADÁS' ? -qty : qty, reason: document.getElementById('tx-reason').value || "Készlettranzakció" };
+      let logData = { id: "l_" + Math.random().toString(36).substr(2, 5), timestamp: new Date().toLocaleString('hu-HU'), type: activeTxType, productName: p.name, unit: p.unit, qty: activeTxType === 'KIADÁS' ? -qty : qty, reason: document.getElementById('tx-reason').value || "Tranzakció" };
+
       if (activeTxType === 'KIADÁS') {
         const fId = document.getElementById('tx-field-select').value;
-        const ha = parseFloat(document.getElementById('tx-hectares').value) || 0;
-        if (!fId || ha <= 0) { showToast("Válassz táblát!", "error"); return; }
-        if (p.quantity - qty < 0) { showToast("Nincs elég anyag a raktárban!", "error"); return; }
+        if (!fId) { showToast("Kérjük válassz cél táblát!", "error"); return; }
+        if (p.quantity - qty < 0) { showToast("Nincs elegendő raktárkészlet ehhez a kiadáshoz!", "error"); return; }
         const f = state.fields.find(field => field.id === fId);
-        logData.targetField = f.name; logData.appliedHectares = ha;
-      }
-      try {
-        const finalQty = activeTxType === 'KIADÁS' ? (p.quantity - qty) : (p.quantity + qty);
-        await updateDoc(doc(db, path, 'products', p.id), { quantity: finalQty });
-        await addDoc(collection(db, path, 'logs'), logData);
-        showToast("Sikeres készletmódosítás!"); switchTab('dashboard');
-      } catch(e) { showToast("Hiba!", "error"); }
+        logData.targetField = f.name; logData.appliedHectares = f.size;
+        p.quantity -= qty;
+      } else { p.quantity += qty; }
+
+      state.logs.push(logData); 
+      saveLocalData();
+      showToast("Készlet sikeresen frissítve!"); 
+      updateAIDiagnosticStats();
+      switchTab('dashboard');
     }
 
     window.onHarvestFieldChange = function() {
       const id = document.getElementById('harvest-field-select').value;
       const f = state.fields.find(field => field.id === id);
-      document.getElementById('harvest-detected-culture').innerText = f ? (f.culture || 'Ugar') : 'Válassz táblát...';
+      document.getElementById('harvest-detected-culture').innerText = f ? f.culture : 'Válassz táblát...';
       calculateNetWeight();
     }
 
@@ -819,131 +1086,172 @@
       return Math.round(net);
     }
 
-    window.executeHarvest = async function() {
+    window.executeHarvest = function() {
       const fId = document.getElementById('harvest-field-select').value;
       const raw = parseFloat(document.getElementById('harvest-raw-weight').value) || 0;
-      if (!fId || raw <= 0) { showToast("Hibás adatok!", "error"); return; }
+      if (!fId || raw <= 0) { showToast("Kérjük, válassz dűlőt és adj meg beszállított súlyt!", "error"); return; }
       const f = state.fields.find(field => field.id === fId);
-      const cult = f.culture || 'Egyéb';
       const netWeight = calculateNetWeight();
-      const path = `artifacts/${currentAppId}/public/data`;
-      try {
-        const updatedStock = { ...state.grainStock }; updatedStock[cult] = (updatedStock[cult] || 0) + netWeight;
-        await setDoc(doc(db, path, 'grainWarehouse', 'inventory'), updatedStock);
-        await addDoc(collection(db, path, 'logs'), { timestamp: new Date().toLocaleString('hu-HU'), type: "BETAKARÍTÁS", targetField: f.name, productName: cult, qty: netWeight, unit: "kg", reason: `Aratás. Nyers: ${raw} kg.` });
-        showToast("Aratás sikeresen naplózva!"); switchTab('dashboard');
-      } catch(e) { showToast("Hiba!", "error"); }
+
+      state.grainStock[f.culture] = (state.grainStock[f.culture] || 0) + netWeight;
+      state.logs.push({ id: "l_" + Math.random().toString(36).substr(2, 5), timestamp: new Date().toLocaleString('hu-HU'), type: "BETAKARÍTÁS", targetField: f.name, productName: f.culture, qty: netWeight, unit: "kg", reason: `Aratás. Nyers: ${raw} kg.` });
+      
+      saveLocalData();
+      showToast("Aratási bizonylat sikeresen rögzítve!"); 
+      updateAIDiagnosticStats();
+      switchTab('dashboard');
     }
 
-    // ==================== TÁBLA MODAL MŰVELETEK (HOZZÁADÁS ÉS SZERKESZTÉS) ====================
-    window.openAddFieldModal = function() {
+    window.openAddFieldModal = function() { 
       document.getElementById('field-modal-title').innerText = "Új Tábla Felvétele";
-      document.getElementById('modal-field-id').value = '';
-      document.getElementById('field-modal-name').value = '';
-      document.getElementById('field-modal-number').value = '';
-      document.getElementById('field-modal-block').value = '';
-      document.getElementById('field-modal-size').value = '';
-      document.getElementById('field-modal-culture').value = 'Ugar / Nincs';
-      document.getElementById('field-modal').classList.remove('hidden');
+      document.getElementById('modal-field-id').value = "";
+      document.getElementById('field-modal-name').value = "";
+      document.getElementById('field-modal-number').value = "";
+      document.getElementById('field-modal-block').value = "";
+      document.getElementById('field-modal-size').value = "";
+      document.getElementById('field-modal-culture').value = "Ugar / Nincs";
+      document.getElementById('field-modal').classList.remove('hidden'); 
     }
-
+    
     window.openEditFieldModal = function(id) {
       const f = state.fields.find(field => field.id === id); if (!f) return;
-      document.getElementById('field-modal-title').innerText = "Tábla Adatainak Módosítása";
+      document.getElementById('field-modal-title').innerText = "Tábla Szerkesztése";
       document.getElementById('modal-field-id').value = f.id;
-      document.getElementById('field-modal-name').value = f.name || '';
-      document.getElementById('field-modal-number').value = f.number || '';
+      document.getElementById('field-modal-name').value = f.name;
+      document.getElementById('field-modal-number').value = f.number;
       document.getElementById('field-modal-block').value = f.blockId || '';
-      document.getElementById('field-modal-size').value = f.size || '';
+      document.getElementById('field-modal-size').value = f.size;
       document.getElementById('field-modal-culture').value = f.culture || 'Ugar / Nincs';
       document.getElementById('field-modal').classList.remove('hidden');
     }
 
     window.closeFieldModal = function() { document.getElementById('field-modal').classList.add('hidden'); }
     
-    window.saveField = async function() {
+    window.saveField = function() {
       const id = document.getElementById('modal-field-id').value;
       const name = document.getElementById('field-modal-name').value.trim();
       const number = document.getElementById('field-modal-number').value.trim();
       const blockId = document.getElementById('field-modal-block').value.trim();
       const size = parseFloat(document.getElementById('field-modal-size').value) || 0;
       const culture = document.getElementById('field-modal-culture').value;
-      const path = `artifacts/${currentAppId}/public/data/fields`;
-      if(!name || !number || size <= 0) { showToast("Tölts ki minden mezőt helyesen!", "error"); return; }
-      try {
-        if (id) {
-          await updateDoc(doc(db, path, id), { name, number, blockId, size, culture });
-          showToast(`A(z) ${name} tábla módosításai mentve lettek.`);
-        } else {
-          await addDoc(collection(db, path), { name, number, blockId, size, culture });
-          showToast(`A(z) ${name} tábla sikeresen rögzítve lett.`);
-        }
-        closeFieldModal();
-      } catch(e) { showToast("Hiba a mentésnél!", "error"); }
+      if(!name || !number || size <= 0) { showToast("Kérjük, töltsd ki az összes kötelező mezőt!", "error"); return; }
+      
+      if (id) {
+        const f = state.fields.find(field => field.id === id);
+        if (f) { f.name = name; f.number = number; f.blockId = blockId; f.size = size; f.culture = culture; }
+      } else {
+        state.fields.push({ id: "f_" + Math.random().toString(36).substr(2, 5), name, number, blockId, size, culture });
+      }
+      saveLocalData();
+      closeFieldModal(); 
+      updateAIDiagnosticStats();
+      renderAll();
+      showToast("Tábla sikeresen mentve!");
     }
 
-    window.deleteField = function(id) {
-      customConfirm("Törlés", "Biztosan véglegesen törlöd ezt a táblát?", async () => {
-        try { await deleteDoc(doc(db, `artifacts/${currentAppId}/public/data/fields`, id)); showToast("Tábla törölve."); }
-        catch(e) { showToast("Hiba!", "error"); }
+    window.deleteField = function(id) { 
+      customConfirm("Tábla törlése", "Biztosan véglegesen törölni szeretnéd ezt a táblát?", () => {
+        state.fields = state.fields.filter(f => f.id !== id); 
+        saveLocalData();
+        updateAIDiagnosticStats();
+        renderAll();
+        showToast("Tábla törölve.");
       });
     }
 
     window.startTxOnField = function(id) {
-      const f = state.fields.find(field => field.id === id); switchTab('transactions'); setTransactionType('KIADÁS');
-      setTimeout(() => { document.getElementById('tx-field-select').value = f.id; document.getElementById('tx-hectares').value = f.size; calculateApplicationRate(); }, 60);
+      const f = state.fields.find(field => field.id === id);
+      switchTab('transactions'); setTransactionType('KIADÁS');
+      setTimeout(() => { document.getElementById('tx-field-select').value = f.id; document.getElementById('tx-hectares').value = f.size; calculateApplicationRate(); }, 50);
     }
 
-    // ==================== TÁBLA TÖRTÉNET MODAL MEGJELENÍTÉS ÉS SZÁMÍTÁS ====================
-    window.openFieldHistoryModal = function(id, event) {
-      // Ha a szerkesztő vagy törlő gombokra kattintott, ne ugorjon fel az előzmény modal
-      if (event && event.target.closest('button')) return;
+    window.openAddProductModal = function() {
+      document.getElementById('product-modal-title').innerText = "Új Input Anyag Bevételezése";
+      document.getElementById('modal-product-id').value = '';
+      document.getElementById('modal-name').value = '';
+      document.getElementById('modal-qty').value = '0';
+      document.getElementById('modal-qty-wrapper').classList.remove('hidden');
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
 
-      const f = state.fields.find(field => field.id === id);
-      if (!f) return;
+    window.openEditProductModal = function(id) {
+      const p = state.products.find(prod => prod.id === id);
+      document.getElementById('product-modal-title').innerText = "Input Anyag Módosítása";
+      document.getElementById('modal-product-id').value = p.id;
+      document.getElementById('modal-name').value = p.name;
+      document.getElementById('modal-category').value = p.category;
+      document.getElementById('modal-unit').value = p.unit;
+      document.getElementById('modal-qty').value = p.quantity;
+      document.getElementById('modal-qty-wrapper').classList.remove('hidden');
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    window.closeProductModal = function() { document.getElementById('product-modal').classList.add('hidden'); }
+    
+    window.saveProduct = function() {
+      const id = document.getElementById('modal-product-id').value;
+      const name = document.getElementById('modal-name').value.trim();
+      const category = document.getElementById('modal-category').value;
+      const unit = document.getElementById('modal-unit').value;
+      const qty = parseFloat(document.getElementById('modal-qty').value) || 0;
+      if(!name) { showToast("Kérjük add meg az anyag nevét!", "error"); return; }
+
+      if (id) {
+        const p = state.products.find(prod => prod.id === id); 
+        p.name = name; p.category = category; p.unit = unit; p.quantity = qty;
+        showToast("Anyag sikeresen módosítva!");
+      } else {
+        state.products.push({ id: "p_" + Math.random().toString(36).substr(2, 5), name, category, unit, quantity: qty });
+        if (qty > 0) { 
+          state.logs.push({ id: "l_" + Math.random().toString(36).substr(2, 5), timestamp: new Date().toLocaleString('hu-HU'), type: "BEVÉTEL", productName: name, unit: unit, qty: qty, reason: "Kezdő bevételezés" }); 
+        }
+        showToast("Új tétel sikeresen bevételezve!");
+      }
+      saveLocalData();
+      closeProductModal(); 
+      updateAIDiagnosticStats();
+      renderAll();
+    }
+
+    window.deleteProduct = function(id) { 
+      customConfirm("Anyag törlése", "Biztosan véglegesen törölni szeretnéd ezt a készletet a nyilvántartásból?", () => {
+        state.products = state.products.filter(p => p.id !== id); 
+        saveLocalData();
+        updateAIDiagnosticStats();
+        renderAll();
+        showToast("Anyag eltávolítva.");
+      });
+    }
+
+    window.openFieldHistoryModal = function(id, event) {
+      if (event && event.target.closest('button')) return;
+      const f = state.fields.find(field => field.id === id); if (!f) return;
 
       document.getElementById('history-modal-title').innerText = `${f.name} (${f.number})`;
-      document.getElementById('history-modal-subtitle').innerText = `MePAR ID: ${f.blockId || 'Nincs'} • Terület: ${f.size} ha • Aktuális kultúra: ${f.culture || 'Ugar'}`;
+      document.getElementById('history-modal-subtitle').innerText = `MePAR ID: ${f.blockId || 'Nincs'} • Terület: ${f.size} ha • Aktuális kultúra: ${f.culture}`;
 
-      // Szűrjük a táblához tartozó bejegyzéseket
       const fieldLogs = state.logs.filter(log => log.targetField === f.name);
-
-      // Összegzések elkészítése
-      let totalAppliedMap = {};
-      let totalHarvestedMap = {};
+      let totalAppliedMap = {}; let totalHarvestedMap = {};
 
       fieldLogs.forEach(log => {
-        if (log.type === 'KIADÁS') {
-          totalAppliedMap[log.productName] = (totalAppliedMap[log.productName] || 0) + Math.abs(log.qty);
-        } else if (log.type === 'BETAKARÍTÁS') {
-          totalHarvestedMap[log.productName] = (totalHarvestedMap[log.productName] || 0) + Math.abs(log.qty);
-        }
+        if (log.type === 'KIADÁS') { totalAppliedMap[log.productName] = (totalAppliedMap[log.productName] || 0) + Math.abs(log.qty); }
+        else if (log.type === 'BETAKARÍTÁS') { totalHarvestedMap[log.productName] = (totalHarvestedMap[log.productName] || 0) + Math.abs(log.qty); }
       });
 
-      // Kijuttatott anyagok listázása mértékegységgel
       let appliedHTML = '';
       for (const [name, qty] of Object.entries(totalAppliedMap)) {
-        const prod = state.products.find(p => p.name === name);
-        const unit = prod ? prod.unit : 'kg';
+        const prod = state.products.find(p => p.name === name); const unit = prod ? prod.unit : 'gr';
         appliedHTML += `<div class="flex justify-between border-b border-slate-800 pb-1"><span>${name}</span><span class="font-mono font-bold text-green-400">${qty.toLocaleString('hu-HU')} ${unit}</span></div>`;
       }
-      document.getElementById('history-total-applied').innerHTML = appliedHTML !== '' 
-        ? `<div class="space-y-1">${appliedHTML}</div>` 
-        : '<span class="text-slate-500 text-xs italic">Nincs rögzített kijuttatás ezen a területen.</span>';
+      document.getElementById('history-total-applied').innerHTML = appliedHTML !== '' ? `<div class="space-y-1">${appliedHTML}</div>` : '<span class="text-slate-500 text-xs italic">Nincs rögzített kijuttatás ezen a területen.</span>';
 
-      // Betakarított termény listázása
       let harvestedHTML = '';
       for (const [name, qty] of Object.entries(totalHarvestedMap)) {
         harvestedHTML += `<div class="flex justify-between border-b border-slate-800 pb-1"><span>${name}</span><span class="font-mono font-bold text-amber-400">${qty.toLocaleString('hu-HU')} kg</span></div>`;
       }
-      document.getElementById('history-total-harvested').innerHTML = harvestedHTML !== '' 
-        ? `<div class="space-y-1">${harvestedHTML}</div>` 
-        : '<span class="text-slate-500 text-xs italic">Nincs rögzített betakarítás erről a területről.</span>';
+      document.getElementById('history-total-harvested').innerHTML = harvestedHTML !== '' ? `<div class="space-y-1">${harvestedHTML}</div>` : '<span class="text-slate-500 text-xs italic">Nincs rögzített betakarítás erről a területről.</span>';
 
-      // Részletes kronológiai lista felépítése
-      const container = document.getElementById('history-logs-container');
-      container.innerHTML = '';
-
+      const container = document.getElementById('history-logs-container'); container.innerHTML = '';
       if (fieldLogs.length === 0) {
         container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs italic">Még semmilyen művelet nem lett rögzítve ehhez a táblához.</div>';
       } else {
@@ -952,12 +1260,8 @@
           let badgeClass = "bg-slate-800 text-slate-300";
           if (l.type === 'KIADÁS') badgeClass = "bg-red-950/80 text-red-400 border border-red-500/20";
           if (l.type === 'BETAKARÍTÁS') badgeClass = "bg-amber-950/80 text-amber-400 border border-amber-500/20";
-
           let doseInfo = l.reason || '-';
-          if (l.type === 'KIADÁS' && l.appliedHectares) {
-            doseInfo = `Számított dózis: ${(Math.abs(l.qty)/l.appliedHectares).toFixed(2)} ${l.unit}/ha • ${l.reason || ''}`;
-          }
-
+          if (l.type === 'KIADÁS' && l.appliedHectares) { doseInfo = `Számított dózis: ${(Math.abs(l.qty)/l.appliedHectares).toFixed(2)} ${l.unit}/ha • ${l.reason || ''}`; }
           container.innerHTML += `
             <div class="bg-slate-950 p-3 rounded-xl border border-slate-850/80 text-xs flex justify-between items-start space-x-2">
               <div class="space-y-1 w-full">
@@ -965,94 +1269,16 @@
                   <span class="px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}">${l.type}</span>
                   <span class="text-[10px] text-slate-500 font-mono">${l.timestamp.slice(0, 16)}</span>
                 </div>
-                <div class="font-bold text-slate-200 text-sm mt-1">
-                  ${l.productName} 
-                  <span class="text-green-400 font-mono ml-1">(${Math.abs(l.qty).toLocaleString('hu-HU')} ${l.unit})</span>
-                </div>
+                <div class="font-bold text-slate-200 text-sm mt-1">${l.productName} <span class="text-green-400 font-mono ml-1">(${Math.abs(l.qty).toLocaleString('hu-HU')} ${l.unit})</span></div>
                 <p class="text-slate-400 text-[11px] italic mt-0.5">${doseInfo}</p>
               </div>
             </div>`;
         });
       }
-
       document.getElementById('field-history-modal').classList.remove('hidden');
     }
 
-    window.closeFieldHistoryModal = function() {
-      document.getElementById('field-history-modal').classList.add('hidden');
-    }
-
-    // ==================== INPUT MODAL MŰVELETEK (SZERKESZTHETŐ MENNYISÉGGEL) ====================
-    window.openAddProductModal = function() {
-      document.getElementById('product-modal-title').innerText = "Új Input Anyag Bevételezése";
-      document.getElementById('modal-product-id').value = ''; 
-      document.getElementById('modal-name').value = '';
-      document.getElementById('modal-qty').value = '0'; 
-      document.getElementById('modal-qty-wrapper').classList.remove('hidden');
-      document.getElementById('product-modal').classList.remove('hidden');
-    }
-
-    window.openEditProductModal = function(id) {
-      const p = state.products.find(prod => prod.id === id);
-      document.getElementById('product-modal-title').innerText = "Input Anyag Módosítása";
-      document.getElementById('modal-product-id').value = p.id; 
-      document.getElementById('modal-name').value = p.name;
-      document.getElementById('modal-category').value = p.category; 
-      document.getElementById('modal-unit').value = p.unit || 'kg';
-      
-      // Megnyitjuk a mennyiség módosítási lehetőséget és kitöltjük az aktuális raktár készlet szinttel
-      document.getElementById('modal-qty').value = p.quantity;
-      document.getElementById('modal-qty-wrapper').classList.remove('hidden'); 
-      document.getElementById('product-modal').classList.remove('hidden');
-    }
-
-    window.closeProductModal = function() { document.getElementById('product-modal').classList.add('hidden'); }
-    
-    window.saveProduct = async function() {
-      const id = document.getElementById('modal-product-id').value;
-      const name = document.getElementById('modal-name').value.trim();
-      const category = document.getElementById('modal-category').value;
-      const unit = document.getElementById('modal-unit').value;
-      const qty = parseFloat(document.getElementById('modal-qty').value) || 0;
-      const path = `artifacts/${currentAppId}/public/data/products`;
-      
-      if(!name) { showToast("Adj meg nevet!", "error"); return; }
-      try {
-        if (id) { 
-          // Frissítjük a megadott új adatokat és a közvetlenül átírt fizikai raktári készlet szintet is!
-          await updateDoc(doc(db, path, id), { name, category, unit, quantity: qty }); 
-          showToast("Módosítások sikeresen elmentve."); 
-        }
-        else {
-          await addDoc(collection(db, path), { name, category, unit, quantity: qty });
-          if (qty > 0) { 
-            await addDoc(collection(db, `artifacts/${currentAppId}/public/data/logs`), { 
-              timestamp: new Date().toLocaleString('hu-HU'), 
-              type: "BEVÉTEL", 
-              productName: name, 
-              unit: unit, 
-              qty: qty, 
-              reason: "Kezdő raktárkészlet" 
-            }); 
-          }
-          showToast("Új tétel bevételezve.");
-        }
-        closeProductModal();
-      } catch(e) { showToast("Hiba!", "error"); }
-    }
-
-    window.deleteProduct = function(id) {
-      customConfirm("Törlés", "Biztosan törlöd?", async () => {
-        try { await deleteDoc(doc(db, `artifacts/${currentAppId}/public/data/products`, id)); showToast("Törölve."); } catch(e) { showToast("Hiba!", "error"); }
-      });
-    }
-
-    window.deleteLog = function(id) {
-      customConfirm("Főkönyvi napló bizonylat törlése", "Biztosan törlöd ezt a bejegyzést a könyvelésből? (A raktárérték nem módosul automatikusan vissza.)", async () => {
-        try { await deleteDoc(doc(db, `artifacts/${currentAppId}/public/data/logs`, id)); showToast("Bejegyzés törölve a felhőből."); }
-        catch(e) { showToast("Hiba!", "error"); }
-      });
-    }
+    window.closeFieldHistoryModal = function() { document.getElementById('field-history-modal').classList.add('hidden'); }
 
     function renderBookkeeping() {
       const body = document.getElementById('bookkeeping-table-body'); if (!body) return; body.innerHTML = '';
@@ -1060,22 +1286,51 @@
       sorted.forEach(l => {
         let badgeClass = "px-2 py-0.5 rounded text-xs font-bold bg-slate-800 text-slate-300";
         let printBadgeClass = "badge-print-standard";
-        if(l.type === 'BEVÉTEL') { badgeClass = "bg-green-950/80 text-green-400 border border-green-500/30 px-2 py-0.5 rounded text-xs font-bold"; printBadgeClass = "badge-print-bevetel"; }
-        if(l.type === 'KIADÁS') { badgeClass = "bg-red-950/80 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-xs font-bold"; printBadgeClass = "badge-print-kiadas"; }
-        if(l.type === 'BETAKARÍTÁS') { badgeClass = "bg-amber-950/80 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded text-xs font-bold"; printBadgeClass = "badge-print-aratas"; }
-        if(l.type === 'TERMÉNY ELADÁS') { badgeClass = "bg-blue-950/80 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-xs font-bold"; printBadgeClass = "badge-print-eladas"; }
+        
+        if(l.type === 'BEVÉTEL') {
+          badgeClass = "bg-green-950/80 text-green-400 border border-green-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-bevetel";
+        }
+        if(l.type === 'KIADÁS') {
+          badgeClass = "bg-red-950/80 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-kiadas";
+        }
+        if(l.type === 'BETAKARÍTÁS') {
+          badgeClass = "bg-amber-950/80 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-aratas";
+        }
+        if(l.type === 'TERMÉNY ELADÁS') {
+          badgeClass = "bg-blue-950/80 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded text-xs font-bold";
+          printBadgeClass = "badge-print-eladas";
+        }
+
         let note = l.reason || '-';
         if(l.type === 'KIADÁS' && l.appliedHectares) { note = `<span class="text-blue-400 font-mono font-bold">${(Math.abs(l.qty)/l.appliedHectares).toFixed(2)} ${l.unit}/ha</span>`; }
         body.innerHTML += `
           <tr class="hover:bg-slate-800/20 text-xs">
             <td class="p-4 text-slate-500 whitespace-nowrap">${l.timestamp.slice(0, 16)}</td>
-            <td class="p-4"><span class="${badgeClass} non-printable">${l.type}</span><span class="hidden printable-inline ${printBadgeClass}">${l.type}</span></td>
+            <td class="p-4">
+              <span class="${badgeClass} non-printable">${l.type}</span>
+              <span class="hidden printable-inline ${printBadgeClass}">${l.type}</span>
+            </td>
             <td class="p-4 font-bold text-slate-200">${l.targetField || 'Központi Raktár'}</td>
             <td class="p-4 text-white font-bold">${l.productName}</td>
             <td class="p-4 text-center font-bold ${l.qty < 0 ? 'text-red-400':'text-green-400'}">${l.qty > 0 ? '+':''}${l.qty.toLocaleString('hu-HU')} ${l.unit}</td>
             <td class="p-4 text-right text-slate-400 italic">${note}</td>
-            <td class="p-4 text-center non-printable"><button onclick="deleteLog('${l.id}')" class="text-xs bg-red-950/40 hover:bg-red-900/60 text-red-400 font-bold px-2 py-1 rounded transition">Törlés</button></td>
+            <td class="p-4 text-center non-printable">
+              <button onclick="deleteBookkeepingEntry('${l.id}')" class="text-xs bg-red-950/40 hover:bg-red-950 text-red-400 px-2 py-1 rounded transition">Törlés</button>
+            </td>
           </tr>`;
+      });
+    }
+
+    window.deleteBookkeepingEntry = function(id) {
+      customConfirm("Tranzakció törlése", "Biztosan törölni szeretnéd ezt a naplóbejegyzést? Figyelem: A raktárértékek visszatöltését kézzel kell elvégezned!", () => {
+        state.logs = state.logs.filter(l => l.id !== id);
+        saveLocalData();
+        updateAIDiagnosticStats();
+        renderAll();
+        showToast("Bizonylat sikeresen törölve a főkönyvből.");
       });
     }
 
@@ -1087,19 +1342,51 @@
     }
 
     window.switchTab = function(tabId) {
-      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'bookkeeping'].forEach(id => {
-        document.getElementById('tab-' + id).classList.add('hidden');
-        document.getElementById('nav-' + id).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent";
+      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'bookkeeping', 'ai-assistant'].forEach(id => {
+        const el = document.getElementById('tab-' + id);
+        if (el) el.classList.add('hidden');
+        
+        const nav = document.getElementById('nav-' + id);
+        if (nav) {
+          if (id === 'ai-assistant') {
+            nav.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-purple-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent";
+          } else {
+            nav.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent";
+          }
+        }
       });
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
-      document.getElementById('nav-' + tabId).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium bg-slate-800 text-white border-l-4 border-green-500";
-      const titles = { 'dashboard': 'PRK AgroSync - Műszerfal', 'inventory': 'Input Anyagok Készletszintje', 'fields': 'Táblák & Vetésterv', 'transactions': 'Készlet Mozgások', 'harvest': 'Betakarítás & Mérlegjegyek', 'bookkeeping': 'Könyvelési Napló és PDF Riport' };
+      
+      const targetEl = document.getElementById('tab-' + tabId);
+      if (targetEl) targetEl.classList.remove('hidden');
+      
+      const targetNav = document.getElementById('nav-' + tabId);
+      if (targetNav) {
+        if (tabId === 'ai-assistant') {
+          targetNav.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition bg-slate-800 text-purple-300 border-l-4 border-purple-500 font-bold";
+        } else {
+          targetNav.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition bg-slate-800 text-white border-l-4 border-green-500";
+        }
+      }
+      
+      const titles = { 
+        'dashboard': 'Műszerfal & Áttekintés', 
+        'inventory': 'Input Anyagok Készlete', 
+        'fields': 'Táblák & Kultúrák', 
+        'transactions': 'Készlet Mozgások', 
+        'harvest': 'Betakarítás & Szárító', 
+        'bookkeeping': 'Könyvelés & Riport',
+        'ai-assistant': '✨ AI Agronómus & Mezőgazdasági Tanácsadó'
+      };
       document.getElementById('view-title').innerText = titles[tabId];
-      renderAll();
+      if (tabId === 'dashboard') renderDashboard();
+      if (tabId === 'inventory') { closeInventoryDetails(); renderInventoryCategories(); }
+      if (tabId === 'fields') renderFieldsGrid();
+      if (tabId === 'bookkeeping') renderBookkeeping();
     }
 
     window.toggleMobileMenu = function(forceClose = false) {
-      const s = document.getElementById('sidebar'); if (forceClose || !s.classList.contains('-translate-x-full')) { s.classList.add('-translate-x-full'); } else { s.classList.remove('-translate-x-full'); }
+      const s = document.getElementById('sidebar');
+      if (forceClose || !s.classList.contains('-translate-x-full')) { s.classList.add('-translate-x-full'); } else { s.classList.remove('-translate-x-full'); }
     }
 
     window.showToast = function(message, type = "success") {
@@ -1113,13 +1400,261 @@
 
     let customConfirm = function(title, message, onConfirm) {
       const modal = document.getElementById('confirm-modal');
-      document.getElementById('confirm-modal-title').innerText = title; document.getElementById('confirm-modal-text').innerText = message;
+      document.getElementById('confirm-modal-title').innerText = title;
+      document.getElementById('confirm-modal-text').innerText = message;
       modal.classList.remove('hidden');
       document.getElementById('confirm-ok-btn').onclick = () => { modal.classList.add('hidden'); onConfirm(); };
       document.getElementById('confirm-cancel-btn').onclick = () => { modal.classList.add('hidden'); };
     }
 
-    initAuthAndSync();
+
+    // ==================== ✨ GEMINI API & AI INTEGRATION LOGIC ====================
+
+    function updateAIDiagnosticStats() {
+      const fieldsCountEl = document.getElementById('ai-stat-fields');
+      const invCountEl = document.getElementById('ai-stat-inventory');
+      const logsCountEl = document.getElementById('ai-stat-logs');
+      if (fieldsCountEl) fieldsCountEl.innerText = `${state.fields.length} db tábla`;
+      if (invCountEl) invCountEl.innerText = `${state.products.length} db anyag`;
+      if (logsCountEl) logsCountEl.innerText = `${state.logs.length} db bizonylat`;
+    }
+
+    function getFarmStatePromptContext() {
+      let context = "A gazdaság (PRK AgroSync) aktuális, valós idejű adatai:\n\n";
+      
+      context += "1. Termőterületek (parcellák, táblák):\n";
+      if (state.fields.length === 0) {
+        context += "- Jelenleg nincsenek felvéve táblák a rendszerbe.\n";
+      } else {
+        state.fields.forEach(f => {
+          context += `- ${f.name} (Sorszám: ${f.number}, MePAR Blokk ID: ${f.blockId || 'Nincs'}, Terület: ${f.size} ha, Vetett kultúra: ${f.culture})\n`;
+        });
+      }
+      
+      context += "\n2. Raktárkészlet (Input Anyagok):\n";
+      if (state.products.length === 0) {
+        context += "- Jelenleg a raktár teljesen üres.\n";
+      } else {
+        state.products.forEach(p => {
+          context += `- Megnevezés: ${p.name} | Kategória: ${p.category} | Készleten: ${p.quantity} ${p.unit}\n`;
+        });
+      }
+      
+      context += "\n3. Magtári Készlet (Termény szintek):\n";
+      for (const [grain, qty] of Object.entries(state.grainStock)) {
+        context += `- ${grain}: ${qty.toLocaleString('hu-HU')} kg\n`;
+      }
+      
+      context += "\n4. Legutóbbi naplóbejegyzések (Bizonylatok):\n";
+      if (state.logs.length === 0) {
+        context += "- Nincsenek még bizonylatok könyvelve.\n";
+      } else {
+        context += "- Legutóbbi bejegyzések a könyvelési naplóból:\n";
+        state.logs.slice(-10).forEach(l => {
+          context += `- [${l.timestamp}] ${l.type} | Termék/Kultúra: ${l.productName} | Mennyiség: ${l.qty} ${l.unit} | Helyszín/Vevő: ${l.targetField || 'Raktár'} | Indok: ${l.reason}\n`;
+        });
+      }
+      
+      return context;
+    }
+
+    async function callGemini(userQuery, systemPrompt) {
+      const apiKey = ""; 
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        }
+      };
+
+      let delay = 1000;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            return await response.json();
+          }
+        } catch (e) {
+          console.debug(`Gemini API connection failed on attempt ${attempt + 1}. Retrying...`);
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= 2;
+      }
+      throw new Error("Sikertelen kapcsolódás a Gemini AI szerverhez. Kérjük próbáld újra később!");
+    }
+
+    function convertMarkdownToHTML(text) {
+      if (!text) return "";
+      let html = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      html = html.replace(/^### (.*$)/gim, '<h4 class="text-base font-bold text-purple-300 mt-4 mb-2">$1</h4>');
+      html = html.replace(/^## (.*$)/gim, '<h3 class="text-lg font-bold text-purple-400 mt-5 mb-3 border-b border-slate-800 pb-1">$1</h3>');
+      html = html.replace(/^# (.*$)/gim, '<h2 class="text-xl font-extrabold text-white mt-6 mb-4">$1</h2>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
+      html = html.replace(/^\s*-\s*(.*$)/gim, '<li class="ml-4 list-disc text-slate-300 my-1">$1</li>');
+      html = html.replace(/\n/g, '<br>');
+      
+      return html;
+    }
+
+    window.sendAIChatMessage = async function() {
+      const inputEl = document.getElementById('ai-user-input');
+      const query = inputEl.value.trim();
+      if (!query) return;
+
+      inputEl.value = '';
+      const chatBox = document.getElementById('ai-chat-messages');
+
+      chatBox.innerHTML += `
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 max-w-[85%] text-sm ml-auto text-right">
+          <p class="text-xs font-bold text-green-400 mb-1">Tangazdaság Vezető</p>
+          <p class="text-slate-200">${query}</p>
+        </div>`;
+      
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const typingId = "typing-" + Math.random().toString(36).substr(2, 5);
+      chatBox.innerHTML += `
+        <div id="${typingId}" class="bg-slate-950 p-4 rounded-xl border border-slate-850/60 max-w-[85%] text-sm flex items-center space-x-2">
+          <p class="text-xs font-bold text-purple-400">✨ AI Agronómus gépel...</p>
+          <span class="flex space-x-1"><span class="h-1.5 w-1.5 bg-purple-500 rounded-full animate-bounce"></span><span class="h-1.5 w-1.5 bg-purple-500 rounded-full animate-bounce delay-75"></span><span class="h-1.5 w-1.5 bg-purple-500 rounded-full animate-bounce delay-150"></span></span>
+        </div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const systemPrompt = `Te egy világklasszis, rendkívül tapasztalt magyar agrárszakember, agronómus és mezőgazdasági szaktanácsadó vagy, aki a PRK AgroSync szoftver rendszerét használó Tangazdaság Vezetőjét és a csapatot segíti.
+      A válaszaid legyenek szakmailag tűpontosak, gyakorlatiasak, tömörek és kifejezetten a magyar mezőgazdasági szabályozásokhoz (MePAR, NÉBIH engedélyek, vetésforgó) igazítottak.
+      Ismered a gazdaság jelenlegi állapotát, tábláit és raktárkészletét. Ha a felhasználó kérdez, vedd figyelembe az aktuális raktárkészletet és táblákat, ha releváns!
+      Mindig barátságos, de professzionális stílusban válaszolj magyarul. Használj emojikat is a jobb olvashatóságért!`;
+
+      const context = getFarmStatePromptContext();
+      const combinedQuery = `${context}\n\nKérdés/Utasítás a felhasználótól:\n${query}`;
+
+      try {
+        const result = await callGemini(combinedQuery, systemPrompt);
+        const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        document.getElementById(typingId).remove();
+
+        if (textResponse) {
+          chatBox.innerHTML += `
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850/60 max-w-[85%] text-sm">
+              <p class="text-xs font-bold text-purple-400 mb-1">✨ AI Agronómus</p>
+              <div class="text-slate-300 space-y-1">${convertMarkdownToHTML(textResponse)}</div>
+            </div>`;
+        } else {
+          throw new Error("Üres válasz.");
+        }
+      } catch (e) {
+        document.getElementById(typingId).remove();
+        chatBox.innerHTML += `
+          <div class="bg-red-950/40 p-4 rounded-xl border border-red-900/30 max-w-[85%] text-sm">
+            <p class="text-xs font-bold text-red-400 mb-1">Hiba történt</p>
+            <p class="text-slate-300">Nem sikerült kapcsolatot teremteni az AI szakértővel. Kérjük próbáld újra később!</p>
+          </div>`;
+      }
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    window.fillAndSendAIQuery = function(text) {
+      document.getElementById('ai-user-input').value = text;
+      sendAIChatMessage();
+    }
+
+    window.generateAIFarmAudit = async function() {
+      const loadingFacts = [
+        "NÉBIH engedélyezési okiratok és dózisok egyeztetése...",
+        "Nitrogén, Foszfor és Kálium (NPK) tápanyagigények számítása...",
+        "Szója és Őszi búza hozamok számítása a korábbi mérlegjegyek alapján...",
+        "Vetésforgó és MePAR parcellahatár-kockázatok felmérése...",
+        "Készlethiányok elemzése és beszerzési ajánlások összeállítása...",
+        "Dűlőnkénti vegyszerfelhasználás gazdasági elemzése..."
+      ];
+
+      const reportModal = document.getElementById('ai-report-modal');
+      const body = document.getElementById('ai-report-body');
+      
+      document.getElementById('ai-report-time').innerText = new Date().toLocaleString('hu-HU');
+      body.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-12 space-y-6">
+          <div class="relative w-20 h-20">
+            <div class="absolute inset-0 rounded-full border-4 border-purple-500/20 animate-ping"></div>
+            <div class="absolute inset-2 rounded-full border-4 border-t-purple-500 animate-spin"></div>
+            <div class="absolute inset-4 bg-slate-900 rounded-full flex items-center justify-center text-2xl">🚜</div>
+          </div>
+          <div class="text-center space-y-2">
+            <h4 class="font-bold text-lg text-white animate-pulse">Az AI Agronómus elemzi a gazdaságát...</h4>
+            <p id="ai-loading-fact" class="text-xs text-slate-400 font-mono italic max-w-sm"></p>
+          </div>
+        </div>`;
+      
+      reportModal.classList.remove('hidden');
+
+      let factIdx = 0;
+      const interval = setInterval(() => {
+        const factEl = document.getElementById('ai-loading-fact');
+        if (factEl) {
+          factEl.innerText = loadingFacts[factIdx % loadingFacts.length];
+          factIdx++;
+        }
+      }, 3000);
+
+      const systemPrompt = `Te egy vezető mezőgazdasági szakértő, főagronómus és agrár-közgazdász vagy. A feladatod, hogy a PRK AgroSync vállalatirányítási rendszer adatai alapján egy ÁTFOGÓ, RENDKÍVÜL SZAKMAI ÉS GYAKORLATI AGRO-GAZDASÁGI AUDIT jelentést készíts.
+      A jelentés tartalmazza a következő szakaszokat:
+      1. VEZETŐI ÖSSZEFOGLALÓ (A gazdaság mérete, állapota, főbb mutatói)
+      2. RAKTÁRGAZDÁLKODÁSI ÉS KÉSZLETEZÉSI AUDIT (Melyik anyagból mennyi van, elég-e a területre, mit kell pótolni, por alapú Pledge gr/ha dózisok ellenőrzése)
+      3. TÁBLÁK ÉS KULTÚRÁK ELEMZÉSE (Vetésforgók, növénykondíció javaslatok, MePAR megfelelőség, különös tekintettel a Szójára és Őszi búzára, esetleges Gyep (Széna) átállásra)
+      4. KÖNYVELÉSI ÉS HATÉKONYSÁGI JAVASLATOK (Hektáronkénti input költségek, legutóbbi tranzakciók hatékonysága, termény eladások gazdaságossági véleményezése)
+      
+      Fogalmazz érthetően, de magasan képzett agronómusi szaknyelven. Használj számozott listákat, kiemeléseket és emojikat a szakaszoknál. Válaszolj magyarul.`;
+
+      const context = getFarmStatePromptContext();
+      const query = `Kérjük, készíts egy teljes, részletes gazdasági és agronómiai audit jelentést az alábbi adatok alapján!`;
+
+      try {
+        const result = await callGemini(`${context}\n\n${query}`, systemPrompt);
+        const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+        clearInterval(interval);
+
+        if (textResponse) {
+          body.innerHTML = `
+            <div class="space-y-4">
+              <div class="bg-purple-950/20 border border-purple-900/40 p-4 rounded-2xl text-xs text-purple-300 flex items-center space-x-2 mb-4">
+                <span>⚡</span>
+                <span>Ez a jelentés a Google Gemini által lett generálva valós időben a tangazdaság ${state.fields.length} db táblájának és ${state.products.length} db input anyagának elemzésével.</span>
+              </div>
+              <div class="prose prose-invert max-w-none text-slate-300 space-y-2">
+                ${convertMarkdownToHTML(textResponse)}
+              </div>
+            </div>`;
+        } else {
+          throw new Error("Üres válasz.");
+        }
+      } catch (e) {
+        clearInterval(interval);
+        body.innerHTML = `
+          <div class="text-center py-12 space-y-4 text-red-400">
+            <span class="text-5xl">⚠️</span>
+            <h4 class="font-bold text-lg">Nem sikerült generálni a jelentést</h4>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">Az AI szerver átmenetileg nem elérhető, vagy nincs internetkapcsolat. Kérjük, ellenőrizd a hálózati kapcsolatokat!</p>
+            <button onclick="generateAIFarmAudit()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition mt-2">Újrapróbálkozás</button>
+          </div>`;
+      }
+    }
+
+    window.closeAIReportModal = function() {
+      document.getElementById('ai-report-modal').classList.add('hidden');
+    }
+
+    window.onload = initLocalApp;
   </script>
 </body>
 </html>
