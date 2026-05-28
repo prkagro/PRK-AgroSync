@@ -197,8 +197,7 @@
           </div>
           <button onclick="openAddFieldModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow-lg shadow-green-900/20">Új Tábla Rögzítése</button>
         </div>
-        <!-- High-density spacious dynamic grid exactly like the original screenshot -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="fields-grid"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="fields-grid"></div>
       </section>
 
       <!-- ==================== TAB 4: KÉSZLET MOZGATÁS ==================== -->
@@ -724,15 +723,7 @@
           const nameText = cells[0].innerText.toLowerCase();
           const categoryText = cells[1].innerText;
           
-          const matchSearch = nameText.includes(s) || categoryText.toLowerCase().includes(s);
-          const matchCategory = (cat === 'ALL' || categoryText === cat);
-          
-          r.style.display = (matchSearch && matchCategory) ? '' : 'none';
-        }
-      }
-    }
-
-    // ==================== FIELDS RENDERING (ORIGINAL PRESTIGE DESIGN) ====================
+    // ==================== FIELDS RENDERING (COMPACT PRESTIGE DESIGN) ====================
     function renderFieldsGrid() {
       const g = document.getElementById('fields-grid'); if (!g) return;
       g.innerHTML = '';
@@ -743,33 +734,41 @@
 
       sortedFields.forEach(f => {
         g.innerHTML += `
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between transition duration-150">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between transition duration-150">
             <div>
-              <!-- Kártya fejléc: Eredeti sorszám és Műveletek (Szerkesztés & Törlés) -->
-              <div class="flex justify-between items-start">
+              <!-- Kártya fejléc: Eredeti sorszám és prémium akciógombok (Szerkesztés és Törlés) -->
+              <div class="flex justify-between items-center">
                 <span class="bg-green-950/85 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-lg font-mono font-bold text-sm tracking-wide shadow-inner">${f.number}</span>
-                <div class="flex items-center space-x-2.5">
-                  <button onclick="openEditFieldModal('${f.id}')" class="text-slate-500 hover:text-green-400 transition" title="Módosítás">
-                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                <div class="flex items-center space-x-2">
+                  <!-- Módosítás Gomb -->
+                  <button onclick="openEditFieldModal('${f.id}')" class="text-slate-400 hover:text-green-400 transition p-1.5 rounded-lg bg-slate-950/40 border border-slate-800" title="Módosítás">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                    </svg>
                   </button>
-                  <button onclick="deleteField('${f.id}')" class="text-slate-500 hover:text-red-400 font-bold text-xl leading-none transition">&times;</button>
+                  <!-- Törlés Gomb -->
+                  <button onclick="deleteField('${f.id}')" class="text-slate-400 hover:text-red-400 transition p-1.5 rounded-lg bg-slate-950/40 border border-slate-800" title="Törlés">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  </button>
                 </div>
               </div>
               
               <!-- Tábla név és MePAR -->
-              <h4 class="text-2xl font-bold text-white mt-4 truncate" title="${f.name}">${f.name}</h4>
-              <p class="text-xs text-slate-500 mt-1 font-mono">MePAR: ${f.blockId || '-'}</p>
+              <h4 class="text-xl font-bold text-white mt-3 truncate" title="${f.name}">${f.name}</h4>
+              <p class="text-[11px] text-slate-500 mt-0.5 font-mono">MePAR: ${f.blockId || '-'}</p>
               
-              <!-- Eredeti sötét kultúra doboz -->
-              <div class="mt-4 p-4 bg-slate-950/80 rounded-xl border border-slate-900">
-                <span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">Kultúra</span>
-                <span class="text-base font-bold text-amber-400 block mt-1">${f.culture || 'Ugar / Nincs'}</span>
+              <!-- Eredeti sötét kultúra doboz sűrített méretben -->
+              <div class="mt-3 p-3 bg-slate-950/80 rounded-xl border border-slate-900">
+                <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold block">Kultúra</span>
+                <span class="text-sm font-bold text-amber-400 block mt-0.5">${f.culture || 'Ugar / Nincs'}</span>
               </div>
             </div>
             
             <!-- Alsó sáv: Területméret és Kijuttatás link -->
-            <div class="flex items-center justify-between mt-6 pt-4 border-t border-slate-800/40">
-              <span class="text-lg font-bold text-green-400 font-mono">${f.size} ha</span>
+            <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/40">
+              <span class="text-base font-bold text-green-400 font-mono">${f.size} ha</span>
               <button onclick="startTxOnField('${f.id}')" class="text-xs text-green-400 hover:text-green-300 transition font-bold flex items-center space-x-1">
                 <span>Kijuttatás indítása</span>
                 <span>&rarr;</span>
