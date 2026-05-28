@@ -188,7 +188,7 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK ==================== -->
+      <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK (ORIGINAL COMPACT DESIGN) ==================== -->
       <section id="tab-fields" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>
@@ -395,22 +395,22 @@
         <input type="hidden" id="modal-field-id">
         <div>
           <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Tábla Megnevezése</label>
-          <input type="text" id="field-modal-name" placeholder="pl. Kovács-dűlő / K8" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+          <input type="text" id="field-modal-name" placeholder="pl. Kovács-dűlő / K8" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500 font-semibold">
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Sorszám (pl. T-01 vagy 13)</label>
+            <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Sorszám (pl. 13 vagy T-01)</label>
             <input type="text" id="field-modal-number" placeholder="pl. 13" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
           </div>
           <div>
             <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Blokk ID (MePAR)</label>
-            <input type="text" id="field-modal-block" placeholder="pl. CV8EJQ24" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+            <input type="text" id="field-modal-block" placeholder="pl. CV8EJQ24" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500 font-mono">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Terület (ha)</label>
-            <input type="number" step="0.0001" id="field-modal-size" placeholder="pl. 6.1488" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500">
+            <input type="number" step="0.0001" id="field-modal-size" placeholder="pl. 6.1488" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500 font-mono">
           </div>
           <div>
             <label class="block text-xs text-slate-400 mb-1 font-semibold uppercase">Növénykultúra</label>
@@ -723,7 +723,19 @@
           const nameText = cells[0].innerText.toLowerCase();
           const categoryText = cells[1].innerText;
           
-    // ==================== FIELDS RENDERING (COMPACT PRESTIGE DESIGN) ====================
+          const matchesSearch = nameText.includes(s);
+          const matchesCategory = (cat === 'ALL' || categoryText === cat);
+          
+          if (matchesSearch && matchesCategory) {
+            r.style.display = '';
+          } else {
+            r.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    // ==================== FIELDS RENDERING (ORIGINAL LOOK BUT TIGHTER WITH EDIT/DELETE) ====================
     function renderFieldsGrid() {
       const g = document.getElementById('fields-grid'); if (!g) return;
       g.innerHTML = '';
@@ -734,9 +746,9 @@
 
       sortedFields.forEach(f => {
         g.innerHTML += `
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between transition duration-150">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between transition duration-150 shadow-lg">
             <div>
-              <!-- Kártya fejléc: Eredeti sorszám és prémium akciógombok (Szerkesztés és Törlés) -->
+              <!-- Kártya fejléc: Sorszám és módosító, törlő gombok -->
               <div class="flex justify-between items-center">
                 <span class="bg-green-950/85 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-lg font-mono font-bold text-sm tracking-wide shadow-inner">${f.number}</span>
                 <div class="flex items-center space-x-2">
@@ -759,7 +771,7 @@
               <h4 class="text-xl font-bold text-white mt-3 truncate" title="${f.name}">${f.name}</h4>
               <p class="text-[11px] text-slate-500 mt-0.5 font-mono">MePAR: ${f.blockId || '-'}</p>
               
-              <!-- Eredeti sötét kultúra doboz sűrített méretben -->
+              <!-- Kultúra doboz sűrített méretben -->
               <div class="mt-3 p-3 bg-slate-950/80 rounded-xl border border-slate-900">
                 <span class="text-[9px] uppercase tracking-wider text-slate-500 font-semibold block">Kultúra</span>
                 <span class="text-sm font-bold text-amber-400 block mt-0.5">${f.culture || 'Ugar / Nincs'}</span>
@@ -770,8 +782,7 @@
             <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/40">
               <span class="text-base font-bold text-green-400 font-mono">${f.size} ha</span>
               <button onclick="startTxOnField('${f.id}')" class="text-xs text-green-400 hover:text-green-300 transition font-bold flex items-center space-x-1">
-                <span>Kijuttatás indítása</span>
-                <span>&rarr;</span>
+                <span>Kijuttatás indítása &rarr;</span>
               </button>
             </div>
           </div>`;
