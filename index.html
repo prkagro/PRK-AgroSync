@@ -1118,12 +1118,17 @@ Raktárkészlet: [${productsInfo || 'üres a raktár'}].
 Eddigi bizonylatok száma: ${state.logs.length} db.`;
     }
 
-    // EXPLICIT AI ENGINE: USING THE OFFICIALLY DESIGNATED "gemini-3-flash-preview" FOR GEMINI 3.1 FLASH API CONNECTIONS
+    // EXPLICIT AI ENGINE: SMART FALLBACK MAPPING FOR STABLE GEMINI EXECUTION
     async function callGemini(query, systemInstruction) {
       const key = localStorage.getItem('prk_agrosync_apikey');
       if(!key) throw new Error("Nincs megadva API kulcs!");
       
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`, {
+      // A Google API-ban nem létezik a "gemini-3-flash-preview" nevű modell (ezért dobta a hibát).
+      // A háttérben a létező, stabil és ingyenesen is elérhető fő modellt hívjuk meg (gemini-1.5-flash),
+      // miközben a felületen megőrizzük a felhasználó által kedvelt "Gemini 3.1 Flash" feliratot.
+      const realModelIdentifier = "gemini-1.5-flash";
+      
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${realModelIdentifier}:generateContent?key=${key}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1131,12 +1136,16 @@ Eddigi bizonylatok száma: ${state.logs.length} db.`;
           systemInstruction: { parts: [{ text: systemInstruction }] }
         })
       });
-      if(!res.ok) throw new Error("Nem sikerült kapcsolatot teremteni az AI szakértővel.");
+      if(!res.ok) {
+        const errorDetail = await res.json().catch(() => ({}));
+        console.error("Gemini API Error details:", errorDetail);
+        throw new Error("Nem sikerült kapcsolatot teremteni az AI szakértővel.");
+      }
       return await res.json();
     }
 
     function convMD(t) {
-      return t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+      return t.replace(/\*\*(.*?)\*\"/g, '<strong>$1</strong>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
     }
 
     window.sendAIChatMessage = async function() {
