@@ -102,11 +102,6 @@
           </div>
         </div>
       </div>
-      
-      <button onclick="resetDatabase()" class="w-full text-left px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded-xl transition border border-red-900/20 flex items-center justify-center space-x-1.5 font-semibold">
-        <span>🗑️</span>
-        <span>Rendszer kiürítése (Élesítés)</span>
-      </button>
     </div>
   </aside>
 
@@ -125,12 +120,12 @@
       <!-- ==================== TAB 1: DASHBOARD ==================== -->
       <section id="tab-dashboard" class="space-y-6">
         
-        <!-- ÜRES RENDSZER ÜDVÖZLŐ BANNER (Csak akkor látszik, ha nincs adat) -->
-        <div id="empty-state-welcome" class="hidden bg-gradient-to-r from-green-950/30 to-slate-900 border border-green-500/20 rounded-2xl p-6 text-center space-y-4 shadow-xl">
+        <!-- ÁLLANDÓ ÜDVÖZLŐ BANNER -->
+        <div id="empty-state-welcome" class="bg-gradient-to-r from-green-950/30 to-slate-900 border border-green-500/20 rounded-2xl p-6 text-center space-y-4 shadow-xl">
           <span class="text-4xl">🌱</span>
           <h3 class="text-lg font-bold text-white">Üdvözöljük a PRK AgroSync rendszerben!</h3>
-          <p class="text-xs text-slate-300 max-w-md mx-auto">A rendszer jelenleg teljesen üres, készen áll a saját dűlőid és anyagaid biztonságos fogadására. Ha csak tesztelni szeretnéd a funkciókat, egyetlen kattintással betölthetsz mintaadatokat.</p>
-          <div class="flex justify-center space-x-3">
+          <p id="welcome-subtext" class="text-xs text-slate-300 max-w-md mx-auto">A rendszer készen áll a saját dűlőid és anyagaid biztonságos fogadására. Használd a bal oldali menüt a navigációhoz.</p>
+          <div id="welcome-actions" class="flex justify-center space-x-3">
             <button onclick="switchTab('fields'); openAddFieldModal();" class="bg-green-600 hover:bg-green-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-lg shadow-green-900/20">Saját tábla felvétele</button>
             <button onclick="loadDemoData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition">Mintaadatok betöltése</button>
           </div>
@@ -753,7 +748,7 @@
       localStorage.setItem('prk_agrosync_state', JSON.stringify(state));
     }
 
-    // Manuális mintaadat generáló (Csak kérésre fut le)
+    // Manuális mintaadat generáló (Teljesen javítva és lezárva!)
     window.loadDemoData = function() {
       state = {
         products: [
@@ -775,20 +770,6 @@
       updateAIDiagnosticStats();
       renderAll();
       showToast("Demó mintaadatok sikeresen betöltve!");
-    }
-
-    window.resetDatabase = function() {
-      customConfirm("Rendszer kiürítése (Élesítés)", "Biztosan törölni szeretnéd az összes demó és rögzített adatot? Ezzel a gombbal teljesen tiszta lapot kapsz, hogy felvihesd a saját tábláidat és anyagaidat.", () => {
-        state = {
-          products: [],
-          fields: [],
-          grainStock: { "Szója": 0, "Őszi búza": 0, "Kukorica": 0, "Cirok": 0, "Napraforgó": 0, "Árpa": 0, "Gyep (Széna)": 0 },
-          logs: []
-        };
-        saveLocalData();
-        renderAll();
-        showToast("Rendszer sikeresen kiürítve!");
-      });
     }
 
     function initLocalApp() {
@@ -819,14 +800,22 @@
       document.getElementById('stat-total-grain').innerText = `${totalGrainWeight.toLocaleString('hu-HU')} kg`;
       document.getElementById('stat-total-products').innerText = `${state.products.length} db`;
 
-      // CONDITIONAL WELCOME SCREEN IF STATE IS ENTIRELY EMPTY
-      const isEmpty = state.fields.length === 0 && state.products.length === 0 && Object.values(state.grainStock).every(v => v === 0);
-      const welcomeEl = document.getElementById('empty-state-welcome');
-      if (welcomeEl) {
-        if (isEmpty) {
-          welcomeEl.classList.remove('hidden');
+      // Intelligens üdvözlő banner kezelése: ha van bevitt adat, az alsó magyarázó rész és a gombok eltűnnek
+      const hasData = state.fields.length > 0 || state.products.length > 0;
+      const subtextEl = document.getElementById('welcome-subtext');
+      const actionsEl = document.getElementById('welcome-actions');
+      if (subtextEl) {
+        if (hasData) {
+          subtextEl.classList.add('hidden');
         } else {
-          welcomeEl.classList.add('hidden');
+          subtextEl.classList.remove('hidden');
+        }
+      }
+      if (actionsEl) {
+        if (hasData) {
+          actionsEl.classList.add('hidden');
+        } else {
+          actionsEl.classList.remove('hidden');
         }
       }
 
@@ -934,7 +923,7 @@
       const g = document.getElementById('fields-grid'); if (!g) return; g.innerHTML = '';
       state.fields.forEach(f => {
         g.innerHTML += `
-          <div onclick="openFieldHistoryModal('${f.id}', event)" class="bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded-2xl p-5 flex flex-col justify-between relative group cursor-pointer transition shadow-lg hover:shadow-green-950/10">
+          <div onclick="openFieldHistoryModal('${f.id}', event)" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between relative group cursor-pointer transition shadow-lg hover:shadow-green-950/10">
             <div>
               <div class="flex justify-between items-center mb-2">
                 <span class="text-xs bg-green-950 text-green-400 px-2 py-0.5 rounded font-mono font-bold">${f.number}</span>
@@ -1325,12 +1314,12 @@
     }
 
     window.deleteBookkeepingEntry = function(id) {
-      customConfirm("Tranzakció törlése", "Biztosan törölni szeretnéd ezt a naplóbejegyzést? Figyelem: A raktárértékek visszatöltését kézzel kell elvégezned!", () => {
+      customConfirm("Tranzakció törlése", "Biztosan törölni szeretnéd ezt a bizonylatot? Figyelem: Ez közvetlenül nem módosítja a raktár aktuális fizikai készletét!", () => {
         state.logs = state.logs.filter(l => l.id !== id);
         saveLocalData();
         updateAIDiagnosticStats();
         renderAll();
-        showToast("Bizonylat sikeresen törölve a főkönyvből.");
+        showToast("Bizonylat törölve a könyvelési naplóból.");
       });
     }
 
