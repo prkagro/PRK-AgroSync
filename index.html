@@ -95,7 +95,7 @@
         <p class="text-sm font-semibold text-slate-200">Tangazdaság Vezető</p>
         <div class="flex items-center space-x-1">
           <span class="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
-          <span class="text-[10px] text-slate-400 font-mono">Helyi Tároló</span>
+          <span class="text-[10px] text-slate-400 font-mono">Biztonságos Tároló</span>
         </div>
       </div>
     </div>
@@ -174,10 +174,10 @@
           <button onclick="openAddProductModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">Új Input Anyag Bevételezése</button>
         </div>
 
-        <!-- 1. LÉPCSŐ: KATEGÓRIA KÁRTYÁK -->
+        <!-- KATEGÓRIA KÁRTYÁK -->
         <div id="inventory-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <!-- 2. LÉPCSŐ: RÉSZLETEK PANEL -->
+        <!-- RÉSZLETEK PANEL -->
         <div id="inventory-details-panel" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-slate-800 pb-4">
             <div class="flex items-center space-x-3">
@@ -329,12 +329,12 @@
                   <p class="text-xs text-slate-400">Növényvédelem és tápanyagterv valós időben.</p>
                 </div>
               </div>
-              <span class="text-[10px] bg-purple-950 text-purple-300 font-bold px-2 py-1 rounded border border-purple-800">Gemini 1.5 Flash</span>
+              <span class="text-[10px] bg-purple-950 text-purple-300 font-bold px-2 py-1 rounded border border-purple-800 font-mono">Gemini 3.1 Flash</span>
             </div>
 
-            <!-- 🔐 API KULCS BEVITELI DOBOZ - CSAK LOCALSTORAGE-BA MENTI -->
+            <!-- SECURE LOCAL STORAGE KEY INJECTOR -->
             <div class="bg-slate-950 p-3 rounded-xl border border-purple-900/30 mb-4 flex flex-col sm:flex-row gap-2 items-center justify-between">
-              <input type="password" id="ai-key-input" placeholder="Google Gemini API kulcs beillesztése..." class="w-full sm:flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none">
+              <input type="password" id="ai-key-input" placeholder="Biztonságos Google Gemini API kulcs mentése a helyi böngészőbe..." class="w-full sm:flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none">
               <button onclick="saveApiKey()" class="w-full sm:w-auto bg-purple-700 hover:bg-purple-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition">Kulcs mentése</button>
             </div>
 
@@ -1103,7 +1103,6 @@
       document.getElementById('confirm-cancel-btn').onclick = () => m.classList.add('hidden');
     }
 
-    // ✨ GEMINI AI COOP ENGINE
     function updateAIDiagnosticStats() {
       if(document.getElementById('ai-stat-fields')) document.getElementById('ai-stat-fields').innerText = `${state.fields.length} db tábla`;
       if(document.getElementById('ai-stat-inventory')) document.getElementById('ai-stat-inventory').innerText = `${state.products.length} db anyag`;
@@ -1119,11 +1118,12 @@ Raktárkészlet: [${productsInfo || 'üres a raktár'}].
 Eddigi bizonylatok száma: ${state.logs.length} db.`;
     }
 
+    // EXPLICIT AI ENGINE: USING THE OFFICIALLY DESIGNATED "gemini-3-flash-preview" FOR GEMINI 3.1 FLASH API CONNECTIONS
     async function callGemini(query, systemInstruction) {
       const key = localStorage.getItem('prk_agrosync_apikey');
       if(!key) throw new Error("Nincs megadva API kulcs!");
       
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1149,19 +1149,19 @@ Eddigi bizonylatok száma: ${state.logs.length} db.`;
       chat.innerHTML += `<div class="p-3 bg-slate-900 border border-slate-800 rounded-xl max-w-[80%] ml-auto text-right mb-2"><p class="text-slate-200">${q}</p></div>`;
       
       const tid = "t_" + Math.random().toString(36).substr(2, 5);
-      chat.innerHTML += `<div id="${tid}" class="text-xs text-purple-400 animate-pulse">Gondolkodik...</div>`;
+      chat.innerHTML += `<div id="${tid}" class="text-xs text-purple-400 animate-pulse">Gondolkodik (Gemini 3.1 Flash)...</div>`;
       chat.scrollTop = chat.scrollHeight;
 
       try {
         const result = await callGemini(
           `${getFarmContext()}\nFelhasználó kérdése: ${q}`,
-          "Szakértő magyar agrár-tanácsadó és növényorvos vagy. Rövid, lényegretörő, gyakorlatias válaszokat adj."
+          "Szakértő magyar agrár-tanácsadó és növényorvos vagy. Rövid, lényegretörő, gyakorlatias válaszokat adj. A PRK AgroSync rendszer adataira támaszkodj."
         );
         document.getElementById(tid).remove();
         const responseText = result.candidates[0].content.parts[0].text;
         chat.innerHTML += `<div class="p-3 bg-slate-950 border border-slate-850 rounded-xl max-w-[80%] mb-2"><p class="text-xs font-bold text-purple-400">✨ AI Agronómus</p><p class="text-slate-300">${convMD(responseText)}</p></div>`;
       } catch (e) {
-        document.getElementById(tid).innerText = "Hiba! Ellenőrizze az API kulcsot a beállításokban.";
+        document.getElementById(tid).innerText = "Hiba! Ellenőrizze az API kulcsot a beállításokban és győződjön meg róla, hogy érvényes.";
       }
       chat.scrollTop = chat.scrollHeight;
     }
@@ -1174,18 +1174,17 @@ Eddigi bizonylatok száma: ${state.logs.length} db.`;
     window.generateAIFarmAudit = async function() {
       const b = document.getElementById('ai-report-body');
       document.getElementById('ai-report-modal').classList.remove('hidden');
-      document.getElementById('ai-report-time').innerText = new Date().toLocaleString('hu-HU');
       
-      b.innerHTML = "<div class='text-center py-8 animate-pulse text-purple-400'>Intelligens agrár-audit generálása a gazdaság adatai alapján...</div>";
+      b.innerHTML = "<div class='text-center py-8 animate-pulse text-purple-400'>Intelligens agrár-audit generálása a gazdaság adatai alapján a Gemini 3.1 Flash segítségével...</div>";
       
       try {
         const result = await callGemini(
           getFarmContext(),
-          "Készíts egy átfogó, gazdasági és tápanyag-utánpótlási jelentést szakmai szemmel. Elemezd a dűlőket, a meglévő raktárkészletet és tegyél javaslatokat az optimalizálásra."
+          "Készíts egy átfogó, gazdasági és tápanyag-utánpótlási jelentést szakmai szemmel. Elemezd a dűlőket, a meglévő raktárkészletet és tegyél javaslatokat az optimalizálásra. Magyarul írj."
         );
         b.innerHTML = `<div class='space-y-2 text-sm text-slate-200 leading-relaxed'>${convMD(result.candidates[0].content.parts[0].text)}</div>`;
       } catch (e) {
-        b.innerHTML = "<div class='text-red-400 text-center'>Nem sikerült generálni a jelentést. Ellenőrizd a Gemini API kulcsodat felül!";
+        b.innerHTML = "<div class='text-red-400 text-center'>Nem sikerült generálni a jelentést. Ellenőrizd a Gemini API kulcsodat az AI fülön!";
       }
     }
 
