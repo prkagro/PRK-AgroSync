@@ -25,19 +25,16 @@
     }
   </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
     body {
       font-family: 'Inter', sans-serif;
     }
     
     /* PROFESSZIONÁLIS NYOMTATÁSI KÉP STÍLUSOK (PDF MENTÉSHEZ) */
     @media print {
-      /* Rejtsünk el minden alapvető webes elemet a képernyőn */
-      aside, header, .non-printable, button, select, label, input, #view-title, .bg-slate-850 {
+      aside, header, .non-printable, button, select, label, input, #view-title, .bg-slate-800 {
         display: none !important;
       }
-      
-      /* Alapozzuk meg a tiszta fehér papírt */
       body, html, main {
         background: #ffffff !important;
         color: #000000 !important;
@@ -48,13 +45,9 @@
         margin: 0 !important;
         position: static !important;
       }
-      
-      /* Rejtsünk el minden egyéb tab-ot (Dashboard, Raktár, stb.) */
       section {
         display: none !important;
       }
-      
-      /* Kényszerítsük a Könyvelési Napló fül megjelenítését, hogy ne legyen üres a lap! */
       #tab-bookkeeping {
         display: block !important;
         position: absolute !important;
@@ -65,8 +58,6 @@
         padding: 0 !important;
         margin: 0 !important;
       }
-      
-      /* Riport terület stílusának csupaszítása nyomtatáshoz */
       #printable-report-area {
         display: block !important;
         border: none !important;
@@ -77,8 +68,6 @@
         margin: 0 !important;
         width: 100% !important;
       }
-      
-      /* Táblázat strukturált nyomtatási nézete */
       table {
         width: 100% !important;
         border-collapse: collapse !important;
@@ -102,13 +91,9 @@
       tr {
         page-break-inside: avoid !important;
       }
-      
-      /* Minden szöveg és kiemelés legyen sötét és olvasható */
       span, p, h1, h2, h3, h4, td, th, strong {
         color: #000000 !important;
       }
-      
-      /* Fejléc és lábléc nyomtatáskor */
       #print-only-header {
         display: block !important;
       }
@@ -116,7 +101,6 @@
         display: flex !important;
       }
     }
-    
     #print-only-header, #print-only-footer {
       display: none;
     }
@@ -145,7 +129,7 @@
     <div>
       <div class="p-6 border-b border-slate-800 hidden md:flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg shadow-green-950/40">
+          <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg shadow-green-955/40">
             <i class="fa-solid fa-wheat-awn text-xl"></i>
           </div>
           <div>
@@ -163,6 +147,10 @@
         <a href="#" onclick="switchTab('inventory')" id="nav-inventory" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
           <i class="fa-solid fa-warehouse w-5 text-center"></i>
           <span>Input Anyagok</span>
+        </a>
+        <a href="#" onclick="switchTab('crops')" id="nav-crops" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <i class="fa-solid fa-wheat-awn w-5 text-center text-amber-500"></i>
+          <span>Termények & Magtár</span>
         </a>
         <a href="#" onclick="switchTab('fields')" id="nav-fields" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
           <i class="fa-solid fa-map-location-dot w-5 text-center"></i>
@@ -199,7 +187,7 @@
   <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-950 print-layout">
     <header class="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 non-printable">
       <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Műszerfal & Operatív Időjárás</h2>
-      <span class="text-xs text-slate-300 font-mono bg-slate-850 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center space-x-2">
+      <span class="text-xs text-slate-300 font-mono bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center space-x-2">
         <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
         <span>PRK AgroSync — Online</span>
       </span>
@@ -225,7 +213,7 @@
         <!-- HELYTAKARÉKOS KOMPAKT IDŐJÁRÁS CSÍK -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col lg:flex-row items-center justify-between gap-4 shadow-xl">
           <div class="flex items-center space-x-4">
-            <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 text-amber-400 shadow-inner" id="weather-icon-main">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-400 shadow-inner" id="weather-icon-main">
               <i class="fa-solid fa-cloud-sun text-xl animate-pulse"></i>
             </div>
             <div>
@@ -244,7 +232,7 @@
                      class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-green-500 w-36 sm:w-48">
               <i class="fa-solid fa-location-dot absolute right-3 top-2.5 text-slate-500 text-xs"></i>
             </div>
-            <button onclick="updateWeather()" class="bg-slate-850 hover:bg-slate-800 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-755 transition">
+            <button onclick="updateWeather()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-700 transition">
               Lekérés
             </button>
             <button onclick="openWeatherModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-green-950/20 flex items-center space-x-1.5">
@@ -269,7 +257,7 @@
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
             <p class="text-sm font-semibold text-slate-400">Készlet Riport</p>
             <h3 id="stat-total-products" class="text-3xl font-bold mt-2 text-blue-400">0 db</h3>
-            <span class="text-xs text-slate-550 block mt-1">bejegyzett tétel a raktárban</span>
+            <span class="text-xs text-slate-500 block mt-1">bejegyzett tétel a raktárban</span>
           </div>
         </div>
 
@@ -327,7 +315,25 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK ==================== -->
+      <!-- ==================== TAB 3: TERMÉNYEK & MAGTÁR ==================== -->
+      <section id="tab-crops" class="hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div>
+            <h3 class="font-bold text-lg text-white">Magtári Termények & Készletek</h3>
+            <p class="text-xs text-slate-400 mt-1">Kövesse nyomon a tárolt szemes terményeket, vagy végezzen manuális leltárkorrekciót.</p>
+          </div>
+          <button onclick="openCropAdjustmentModal()" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-lg">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Manuális Készlet Korrekció</span>
+          </button>
+        </div>
+
+        <div id="crops-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Kártyák JS-ből renderelve -->
+        </div>
+      </section>
+
+      <!-- ==================== TAB 4: TÁBLÁK & KULTÚRÁK ==================== -->
       <section id="tab-fields" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <h3 class="font-bold text-lg text-white">Gazdasági Táblák és Vetésterv</h3>
@@ -336,7 +342,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="fields-grid"></div>
       </section>
 
-      <!-- ==================== TAB 4: KÉSZLET MOZGATÁS ==================== -->
+      <!-- ==================== TAB 5: KÉSZLET MOZGATÁS ==================== -->
       <section id="tab-transactions" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
           <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Készlettranzakció</h3>
@@ -397,7 +403,7 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 5: BETAKARÍTÁS ==================== -->
+      <!-- ==================== TAB 6: BETAKARÍTÁS ==================== -->
       <section id="tab-harvest" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
           <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Betakarítási Mérlegjegy</h3>
@@ -440,7 +446,7 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 6: KÖNYVELÉS ÉS PDF EXPORT ==================== -->
+      <!-- ==================== TAB 7: KÖNYVELÉS ÉS PDF EXPORT ==================== -->
       <section id="tab-bookkeeping" class="space-y-6 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-center non-printable">
           <h3 class="font-bold text-sm text-slate-400 uppercase">Könyvelési Napló és Tranzakciók</h3>
@@ -449,7 +455,7 @@
               <i class="fa-solid fa-file-pdf"></i>
               <span>Nyomtatás / Mentés PDF-ként</span>
             </button>
-            <button onclick="exportBookkeepingToCSV()" class="bg-slate-850 hover:bg-slate-800 text-slate-200 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5">
+            <button onclick="exportBookkeepingToCSV()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5">
               <i class="fa-solid fa-file-csv text-green-400"></i>
               <span>CSV Letöltés</span>
             </button>
@@ -475,6 +481,7 @@
                 <option value="KIVÉTELEZÉS">Kivételezések (Kijuttatások)</option>
                 <option value="BETAKARÍTÁS">Betakarítások</option>
                 <option value="ELADÁS">Termény eladások</option>
+                <option value="TERMÉNY_KORREKCIÓ">Magtár korrekciók</option>
               </select>
             </div>
             <div class="flex flex-col min-w-[160px]">
@@ -541,6 +548,50 @@
     </div>
   </main>
 
+  <!-- MODAL: TERMÉNY KÉSZLET KORREKCIÓ -->
+  <div id="crop-adjustment-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+        <h3 class="text-lg font-bold text-white flex items-center">
+          <i class="fa-solid fa-sliders text-amber-500 mr-2.5"></i> Készlet Korrekció / Manuális Írás
+        </h3>
+        <button onclick="closeCropAdjustmentModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <label for="adj-crop-select" class="block text-xs font-semibold text-slate-400 mb-2">Válaszd ki a terményt</label>
+          <select id="adj-crop-select" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none">
+            <option value="Szója">Szója</option>
+            <option value="Őszi búza">Őszi búza</option>
+            <option value="Kukorica">Kukorica</option>
+            <option value="Cirok">Cirok</option>
+            <option value="Napraforgó">Napraforgó</option>
+            <option value="Árpa">Árpa</option>
+          </select>
+        </div>
+        <div>
+          <label for="adj-type-select" class="block text-xs font-semibold text-slate-400 mb-2">Művelet típusa</label>
+          <select id="adj-type-select" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none">
+            <option value="PLUS">Készlet növelése (Manuális bevételezés)</option>
+            <option value="MINUS">Készlet csökkentése (Selejt, fogyás, korrekció)</option>
+          </select>
+        </div>
+        <div>
+          <label for="adj-qty" class="block text-xs font-semibold text-slate-400 mb-2">Korrekciós súly (kg)</label>
+          <input type="number" id="adj-qty" placeholder="pl. 1500" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        </div>
+        <div>
+          <label for="adj-reason" class="block text-xs font-semibold text-slate-400 mb-2">Művelet indoka (Megjegyzés)</label>
+          <input type="text" id="adj-reason" placeholder="pl. Év végi leltár korrekció" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+        <button onclick="closeCropAdjustmentModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm">Mégsem</button>
+        <button onclick="saveCropAdjustment()" class="px-5 py-2 bg-amber-600 text-white rounded-xl text-sm font-semibold">Korrekció mentése</button>
+      </div>
+    </div>
+  </div>
+
   <!-- WEATHER MODAL DETAILS -->
   <div id="weather-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
@@ -564,7 +615,7 @@
               <span id="weather-modal-wind" class="text-sm font-bold text-white">7 km/h</span>
             </div>
           </div>
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 flex items-center space-x-3">
+          <div class="bg-slate-955 p-3 rounded-xl border border-slate-850 flex items-center space-x-3">
             <i class="fa-solid fa-droplet text-blue-400 text-lg"></i>
             <div>
               <span class="text-[10px] text-slate-500 block uppercase font-bold">Páratartalom</span>
@@ -578,7 +629,7 @@
               <span id="weather-modal-precip" class="text-sm font-bold text-white">10%</span>
             </div>
           </div>
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 flex items-center space-x-3">
+          <div class="bg-slate-955 p-3 rounded-xl border border-slate-850 flex items-center space-x-3">
             <i class="fa-solid fa-sun text-yellow-400 text-lg"></i>
             <div>
               <span class="text-[10px] text-slate-500 block uppercase font-bold">UV sugárzás</span>
@@ -672,7 +723,7 @@
         </div>
         <div id="seed-count-wrapper" class="hidden space-y-1">
           <label class="block text-xs text-slate-400 mb-1">Magok száma zsákonként (szemszám)</label>
-          <input type="number" id="modal-seed-count" placeholder="pl. 50000" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="number" id="modal-seed-count" placeholder="pl. 50000" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
       </div>
       <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
@@ -689,7 +740,7 @@
       <p id="confirm-modal-text" class="text-sm text-slate-300"></p>
       <div class="flex justify-end space-x-3">
         <button id="confirm-cancel-btn" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-semibold">Mégsem</button>
-        <button id="confirm-ok-btn" class="px-5 py-2 bg-red-600 text-white rounded-xl text-sm font-semibold">Végrehajtás</button>
+        <button id="confirm-ok-btn" class="px-5 py-2 bg-red-650 text-white rounded-xl text-sm font-semibold">Végrehajtás</button>
       </div>
     </div>
   </div>
@@ -721,7 +772,7 @@
             <span class="text-[10px] text-green-400 font-bold uppercase">Kijuttatott Anyagok</span>
             <div id="history-total-applied" class="text-xs text-slate-200 mt-2 space-y-1"></div>
           </div>
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+          <div class="bg-slate-955 p-4 rounded-xl border border-slate-850">
             <span class="text-[10px] text-amber-400 font-bold uppercase">Betakarított Termény</span>
             <div id="history-total-harvested" class="text-xs text-slate-200 mt-2 space-y-1"></div>
           </div>
@@ -761,7 +812,7 @@
       "szigetvár": { temp: "15°C", feels: "13°C", wind: "24 km/h", humidity: "82%", precip: "75%", status: "VESZÉLYES", title: "Eső & Erős szél! Kijuttatás Tilos!", text: "A viharos erejű szél és a csapadék miatt a permetszer kimosódása és elsodródása elkerülhetetlen. Halassza el a munkát!", uv: "Alacsony" },
       "budapest": { temp: "25°C", feels: "26°C", wind: "5 km/h", humidity: "42%", precip: "0%", status: "IDEÁLIS", title: "Tökéletes meteorológiai ablak", text: "Minden feltétel ideális a precíziós szántóföldi munkákhoz és betakarításhoz.", uv: "Nagyon Erős" },
       "kaposvár": { temp: "19°C", feels: "19°C", wind: "9 km/h", humidity: "63%", precip: "20%", status: "IDEÁLIS", title: "Megfelelő munkakörülmények", text: "A szél és csapadékelőrejelzés kedvező a gombaölő és gyomirtó szerek biztonságos kihelyezéséhez.", uv: "Mérsékelt" },
-      "baja": { temp: "28°C", feels: "30°C", wind: "11 km/h", humidity: "31%", precip: "5%", status: "FIGYELMEZTETÉS", title: "Magas párolgási veszteség veszélye", text: "A rendkívül száraz levegő és magas hőmérséklet miatt javasolt a permetezést a kora reggeli vagy esti órákra ütemezni.", uv: "Nagyon Erős" }
+      "baja": { temp: "28°C", feels: "30°C", wind: "11 km/h", humidity: "31%", precip: "5%", status: "FIGYELMEZTETÉS", title: "Magas párolgási veszteség veszélye", text: "A rendkívül sivatagi páratartalom és magas hőmérséklet miatt javasolt a permetezést a kora reggeli vagy esti órákra ütemezni.", uv: "Nagyon Erős" }
     };
 
     let activeWeatherData = weatherDatabase["sellye"];
@@ -770,7 +821,7 @@
       { id: "Műtrágya", name: "Műtrágyák", icon: `<i class="fa-solid fa-leaf text-2xl text-emerald-400"></i>` },
       { id: "Gombaölő szer", name: "Gombaölő szerek", icon: `<i class="fa-solid fa-flask text-2xl text-blue-400"></i>` },
       { id: "Gyomirtó szer", name: "Gyomirtó szerek", icon: `<i class="fa-solid fa-droplet-slash text-2xl text-amber-500"></i>` },
-      { id: "Rovarölő szer", name: "Rovarölő szerek", icon: `<i class="fa-solid fa-bug text-2xl text-red-400"></i>` },
+      { id: "Rovarölő szer", name: "Rovarölő szerek", icon: `<i class="fa-solid fa-bug text-2xl text-red-450"></i>` },
       { id: "Növénykondicionáló szer", name: "Növénykondicionálók", icon: `<i class="fa-solid fa-shield-halved text-2xl text-yellow-400"></i>` },
       { id: "Vetőmag", name: "Vetőmagok", icon: `<i class="fa-solid fa-seedling text-2xl text-green-400"></i>` },
       { id: "Egyéb", name: "Egyéb anyagok", icon: `<i class="fa-solid fa-boxes-stacked text-2xl text-slate-400"></i>` }
@@ -840,13 +891,13 @@
       labelFeels.innerText = `(Érzet: ${wData.feels})`;
 
       if (wData.status === 'IDEÁLIS') {
-        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-850 text-amber-400";
+        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-400";
         iconMain.innerHTML = `<i class="fa-solid fa-sun text-xl animate-pulse"></i>`;
       } else if (wData.status === 'FIGYELMEZTETÉS') {
-        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-850 text-yellow-500";
+        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-yellow-500";
         iconMain.innerHTML = `<i class="fa-solid fa-cloud-sun text-xl"></i>`;
       } else {
-        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-850 text-sky-400";
+        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-sky-400";
         iconMain.innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-xl"></i>`;
       }
 
@@ -874,10 +925,10 @@
         boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-emerald-950/20 border-emerald-900/40";
         iconAlert.innerHTML = `<i class="fa-solid fa-circle-check text-green-400"></i>`;
       } else if (activeWeatherData.status === 'FIGYELMEZTETÉS') {
-        boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-amber-950/20 border-amber-905/40";
+        boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-amber-950/20 border-amber-900/40";
         iconAlert.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>`;
       } else {
-        boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-red-955/20 border-red-900/40";
+        boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-rose-950/20 border-red-900/40";
         iconAlert.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-400"></i>`;
       }
 
@@ -920,6 +971,7 @@
       renderInventoryTable();
       renderFieldsGrid();
       renderBookkeeping();
+      renderCrops();
       populateTxProductSelect();
       populateTxFieldSelect();
       populateHarvestFieldSelect();
@@ -992,7 +1044,7 @@
             <td class="p-4 text-center font-mono font-bold text-slate-200">${p.quantity.toLocaleString('hu-HU')} ${p.unit}</td>
             <td class="p-4 text-center space-x-2">
               <button onclick="openEditProductModal('${p.id}')" class="text-xs bg-green-600 hover:bg-green-500 text-white px-2.5 py-1.5 rounded-lg transition font-semibold">Szerkesztés</button>
-              <button onclick="deleteProduct('${p.id}')" class="text-xs bg-red-955/40 hover:bg-red-955 text-red-400 px-2.5 py-1.5 rounded-lg transition font-semibold">Törlés</button>
+              <button onclick="deleteProduct('${p.id}')" class="text-xs bg-red-900 hover:bg-red-850 text-red-400 px-2.5 py-1.5 rounded-lg transition font-semibold">Törlés</button>
             </td>
           </tr>`;
       });
@@ -1013,6 +1065,181 @@
       renderInventoryCategories();
     }
 
+    // DINAMIKUS TERMÉNYEK & MAGTÁR MEGJELENÍTÉS (PRECÍZ EGYEDI EGYSÉGESÍTETT IKONOKKAL)
+    function renderCrops() {
+      const grid = document.getElementById('crops-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      // Tervezett, színharmonikus és részletgazdag SVG minták
+      const cropIcons = {
+        "Szója": `<svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Hüvelytermés ívelt körvonala -->
+          <path d="M3 11.5c2.5-3.5 8-5 13-3 3.5 1.5 5 5 5 5s-3.5-.8-6.5-1.8c-3-1-7.5-.5-10 1.8-1 .7-1.5-2-1.5-2z" fill="currentColor" fill-opacity="0.25" />
+          <path d="M3 11.5c-1-1-1.5-2.5-1.5-2.5" stroke-width="2.5" />
+          <!-- Szójabab szemek a hüvelyen belül -->
+          <circle cx="7.5" cy="11" r="1.8" fill="currentColor" stroke="none" />
+          <circle cx="12.5" cy="11.5" r="1.8" fill="currentColor" stroke="none" />
+          <circle cx="17" cy="12.5" r="1.8" fill="currentColor" stroke="none" />
+        </svg>`,
+        
+        "Őszi búza": `<svg class="w-8 h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Középső szár -->
+          <path d="M12 22V2" stroke-width="2.2" />
+          <!-- Kalász magvak (Spikelets) -->
+          <path d="M12 4c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 4c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 8c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 8c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 12c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 12c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 16c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 16c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <!-- Szálkák (Awns) -->
+          <path d="M15.8 4.5l2-2.5" stroke-width="1.2" />
+          <path d="M8.2 4.5l-2-2.5" stroke-width="1.2" />
+          <path d="M15.8 8.5l2-2.5" stroke-width="1.2" />
+          <path d="M8.2 8.5l-2-2.5" stroke-width="1.2" />
+          <path d="M15.8 12.5l2-2.5" stroke-width="1.2" />
+          <path d="M8.2 12.5l-2-2.5" stroke-width="1.2" />
+          <path d="M15.8 16.5l2-2.5" stroke-width="1.2" />
+          <path d="M8.2 16.5l-2-2.5" stroke-width="1.2" />
+        </svg>`,
+        
+        "Árpa": `<svg class="w-8 h-8 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Középső szár -->
+          <path d="M12 22V2" stroke-width="2.2" />
+          <!-- Kalász magvak (Spikelets) meleg aranybarna árnyalatban -->
+          <path d="M12 4c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 4c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 8c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 8c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 12c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 12c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 16c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <path d="M12 16c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
+          <!-- Jellegzetes, hosszú árpa szálkák -->
+          <path d="M15.8 4.5l2.5-3.5" stroke-width="1" />
+          <path d="M8.2 4.5l-2.5-3.5" stroke-width="1" />
+          <path d="M15.8 8.5l2.5-3.5" stroke-width="1" />
+          <path d="M8.2 8.5l-2.5-3.5" stroke-width="1" />
+          <path d="M15.8 12.5l2.5-3.5" stroke-width="1" />
+          <path d="M8.2 12.5l-2.5-3.5" stroke-width="1" />
+          <path d="M15.8 16.5l2.5-3.5" stroke-width="1" />
+          <path d="M8.2 16.5l-2.5-3.5" stroke-width="1" />
+        </svg>`,
+        
+        "Kukorica": `<svg class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="3" width="6" height="15" rx="3" fill="currentColor" fill-opacity="0.25" />
+          <path d="M12 22v-4" stroke="#16a34a" stroke-width="2.5" />
+          <path d="M6 16c0-4.5 2.5-9 6-12" stroke="#22c55e" stroke-width="1.5" />
+          <path d="M18 16c0-4.5-2.5-9-6-12" stroke="#22c55e" stroke-width="1.5" />
+          <path d="M11 6h2M10 9h4M10 12h4M11 15h2" stroke="currentColor" stroke-width="1.5" />
+        </svg>`,
+        
+        "Cirok": `<svg class="w-8 h-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22V12" stroke-width="2" />
+          <path d="M12 12c-2-1.5-3-3.5-3-5.5s1-4 3-5.5" />
+          <path d="M12 12c2-1.5 3-3.5 3-5.5s-1-4-3-5.5" />
+          <circle cx="12" cy="4" r="1.5" fill="currentColor" />
+          <circle cx="10" cy="7" r="1.5" fill="currentColor" />
+          <circle cx="14" cy="7" r="1.5" fill="currentColor" />
+          <circle cx="11" cy="10" r="1.5" fill="currentColor" />
+          <circle cx="13" cy="10" r="1.5" fill="currentColor" />
+        </svg>`,
+        
+        "Napraforgó": `<svg class="w-8 h-8 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 14v8" stroke="#16a34a" stroke-width="2" />
+          <path d="M12 17c2-1 4-1.5 5-3" stroke="#16a34a" stroke-width="1.5" />
+          <circle cx="12" cy="7" r="6" stroke="currentColor" stroke-dasharray="3 1.5" stroke-width="3" fill="none" />
+          <circle cx="12" cy="7" r="3" fill="#78350f" stroke="#78350f" />
+        </svg>`
+      };
+
+      for (const [crop, qty] of Object.entries(state.grainStock)) {
+        const tonnes = (qty / 1000).toFixed(2);
+        const icon = cropIcons[crop] || `<i class="fa-solid fa-wheat-awn text-2xl text-slate-400"></i>`;
+        grid.innerHTML += `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+            <div class="flex justify-between items-start">
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 shadow-inner flex items-center justify-center">${icon}</div>
+              <span class="text-[10px] text-slate-500 font-mono tracking-wider uppercase">Magtári tétel</span>
+            </div>
+            <div class="mt-4">
+              <h4 class="font-bold text-white text-base">${crop}</h4>
+              <p class="text-2xl font-black text-amber-400 mt-2 font-mono">${qty.toLocaleString('hu-HU')} <span class="text-xs font-normal text-slate-400">kg</span></p>
+              <p class="text-xs text-slate-500 mt-1 font-mono">${tonnes} tonna (t)</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/60 flex justify-between gap-2">
+              <button onclick="quickCropSale('${crop}')" class="flex-1 bg-slate-950 hover:bg-slate-850 text-sky-400 border border-blue-900/30 text-xs font-bold py-2 rounded-xl transition">
+                <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Eladás
+              </button>
+              <button onclick="quickCropAdjustment('${crop}')" class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 text-xs font-bold py-2 rounded-xl transition">
+                <i class="fa-solid fa-sliders mr-1"></i> Korrekció
+              </button>
+            </div>
+          </div>`;
+      }
+    }
+
+    window.openCropAdjustmentModal = function() {
+      document.getElementById('adj-qty').value = '';
+      document.getElementById('adj-reason').value = '';
+      document.getElementById('crop-adjustment-modal').classList.remove('hidden');
+    }
+
+    window.quickCropAdjustment = function(crop) {
+      document.getElementById('adj-crop-select').value = crop;
+      window.openCropAdjustmentModal();
+    }
+
+    window.closeCropAdjustmentModal = function() {
+      document.getElementById('crop-adjustment-modal').classList.add('hidden');
+    }
+
+    window.quickCropSale = function(crop) {
+      switchTab('transactions');
+      setTransactionType('ELADÁS');
+      setTimeout(() => {
+        document.getElementById('tx-grain-select').value = crop;
+      }, 50);
+    }
+
+    window.saveCropAdjustment = function() {
+      const crop = document.getElementById('adj-crop-select').value;
+      const type = document.getElementById('adj-type-select').value;
+      const qty = parseFloat(document.getElementById('adj-qty').value) || 0;
+      const reason = document.getElementById('adj-reason').value.trim() || "Manuális magtári készlet korrekció";
+
+      if (qty <= 0) {
+        customAlert("Hiba", "Adjon meg egy érvényes, nullánál nagyobb korrekciós súlyt!");
+        return;
+      }
+
+      const finalQty = type === 'PLUS' ? qty : -qty;
+
+      // Készlet frissítése a memóriában
+      state.grainStock[crop] = (state.grainStock[crop] || 0) + finalQty;
+      if (state.grainStock[crop] < 0) state.grainStock[crop] = 0;
+
+      // Bejegyzés a zárt könyvelési naplóba
+      state.logs.push({
+        id: "l_" + Math.random().toString(36).substr(2, 5),
+        timestamp: new Date().toLocaleString('hu-HU'),
+        type: "TERMÉNY_KORREKCIÓ",
+        targetField: "Magtár",
+        productName: crop,
+        qty: finalQty,
+        unit: "kg",
+        reason: reason
+      });
+
+      saveLocalData();
+      closeCropAdjustmentModal();
+      renderAll();
+      showToast(`${crop} készlet sikeresen korrigálva!`);
+    }
+
     function renderFieldsGrid() {
       const g = document.getElementById('fields-grid');
       if (!g) return;
@@ -1022,10 +1249,10 @@
           <div onclick="openFieldHistoryModal('${f.id}', event)" class="bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition shadow-lg">
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs bg-green-950 text-green-400 px-2 py-0.5 rounded font-mono font-bold">${f.number}</span>
-              <button onclick="event.stopPropagation(); deleteField('${f.id}')" class="p-1 text-slate-500 hover:text-red-450 transition text-xs">🗑️</button>
+              <button onclick="event.stopPropagation(); deleteField('${f.id}')" class="p-1 text-slate-500 hover:text-red-500 transition text-xs">🗑️</button>
             </div>
             <h4 class="text-xl font-bold text-white leading-tight">${f.name}</h4>
-            <div class="mt-2 p-2 bg-slate-950 rounded-xl border border-slate-850">
+            <div class="mt-2 p-2 bg-slate-955 rounded-xl border border-slate-850">
               <span class="text-sm font-bold text-amber-400">${f.culture}</span>
             </div>
             <p class="text-lg font-extrabold text-green-400 mt-2">${f.size} <span class="text-xs font-normal text-slate-400">ha</span></p>
@@ -1069,7 +1296,7 @@
       activeTxType = type;
       document.getElementById('btn-tx-in').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
       document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
-      document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
+      document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-955 border-slate-800 text-slate-400";
 
       const std = document.getElementById('tx-standard-panel');
       const sale = document.getElementById('tx-sale-panel');
@@ -1082,7 +1309,7 @@
         document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-red-950/40 border-red-500 text-red-400";
         std.classList.remove('hidden'); sale.classList.add('hidden'); app.classList.remove('hidden');
       } else {
-        document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-blue-955/40 border-blue-500 text-blue-400";
+        document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-blue-950/40 border-blue-500 text-blue-400";
         std.classList.add('hidden'); sale.classList.remove('hidden'); app.classList.add('hidden');
       }
       updateTxQtyLabel();
@@ -1158,6 +1385,7 @@
           id: "l_" + Math.random().toString(36).substr(2, 5),
           timestamp: new Date().toLocaleString('hu-HU'),
           type: activeTxType,
+          productId: pId, // Mentjük az id-t a megfordíthatósághoz
           productName: p.name + labelSuffix,
           unit: p.unit,
           qty: activeTxType === 'KIVÉTELEZÉS' ? -qty : qty,
@@ -1420,14 +1648,14 @@
       const ts = document.getElementById('print-timestamp');
       if (ts) ts.innerText = new Date().toLocaleString('hu-HU');
 
-      // Megkeressük az aktív szűrőt, és átírjuk a nyomtatási jelentés alcímét is
       const filterType = document.getElementById('filter-tx-type')?.value || 'ALL';
       const filterTypeText = {
         'ALL': 'Teljes Főkönyvi Kivonat',
         'BEVÉTEL': 'Beszállított Input Anyagok (Bevételezés)',
         'KIVÉTELEZÉS': 'Szántóföldi Kijuttatások (Kivételezés)',
         'BETAKARÍTÁS': 'Betakarítási Mérlegjegyek',
-        'ELADÁS': 'Termény Értékesítések'
+        'ELADÁS': 'Termény Értékesítések',
+        'TERMÉNY_KORREKCIÓ': 'Manuális Magtári Korrekciók'
       }[filterType];
 
       const printLabel = document.getElementById('print-filter-type-label');
@@ -1472,6 +1700,7 @@
         if (displayType === 'KIVÉTELEZÉS') typeBadgeColor = 'text-red-400';
         if (displayType === 'ELADÁS') typeBadgeColor = 'text-blue-400';
         if (displayType === 'BETAKARÍTÁS') typeBadgeColor = 'text-amber-400';
+        if (displayType === 'TERMÉNY_KORREKCIÓ') typeBadgeColor = 'text-purple-400';
 
         body.innerHTML += `
           <tr class="hover:bg-slate-800/20 text-xs">
@@ -1488,18 +1717,42 @@
       });
     }
 
-    // NYOMTATÁSI BEINDÍTÓ EXPORT WRAPPER
     window.printReport = function() {
-      // Frissítsük a dátumot és címet közvetlenül a nyomtatási parancs előtt is a biztonság kedvéért
       renderBookkeeping();
       window.print();
     }
 
+    // INTUÍTIV ÉS BIZTONSÁGOS KÉSZLET VISSZAÁLLÍTÓ LOGIKÁVAL ELLÁTOTT TÖRLÉS
     window.deleteLog = function(id) {
-      customConfirm("Bizonylat törlése", "Biztosan törölni szeretné ezt a bejegyzést?", () => {
+      customConfirm("Bizonylat törlése", "Biztosan törölni szeretné ezt a bejegyzést? A készletek ennek megfelelően visszaállnak a korábbi szintre.", () => {
+        const log = state.logs.find(l => l.id === id);
+        if (!log) return;
+
+        // VISSZAÁLLÍTÁSI MATEMATIKAI MODELL
+        if (log.type === 'ELADÁS' || log.type === 'BETAKARÍTÁS' || log.type === 'TERMÉNY_KORREKCIÓ') {
+          // Ha eladás volt (negatív érték), a kivonás hozzáadja. Ha betakarítás (pozitív), levonja belőle.
+          state.grainStock[log.productName] = (state.grainStock[log.productName] || 0) - log.qty;
+          if (state.grainStock[log.productName] < 0) state.grainStock[log.productName] = 0;
+        } else if (log.type === 'BEVÉTEL' && log.productId) {
+          const p = state.products.find(prod => prod.id === log.productId);
+          if (p) {
+            p.quantity -= log.qty;
+            if (p.quantity < 0) p.quantity = 0;
+          }
+        } else if (log.type === 'KIVÉTELEZÉS' && log.productId) {
+          const p = state.products.find(prod => prod.id === log.productId);
+          if (p) {
+            // log.qty negatív kijuttatásként van tárolva, így a levonással visszakapjuk a pozitív értéket
+            p.quantity -= log.qty;
+            if (p.quantity < 0) p.quantity = 0;
+          }
+        }
+
+        // Tényleges törlés a zárt naplóból
         state.logs = state.logs.filter(l => l.id !== id);
         saveLocalData();
-        renderBookkeeping();
+        renderAll();
+        showToast("Bizonylat törölve, a készletek sikeresen visszaálltak!");
       });
     }
 
@@ -1558,7 +1811,7 @@
     }
 
     window.switchTab = function(tabId) {
-      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'bookkeeping'].forEach(id => {
+      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'bookkeeping', 'crops'].forEach(id => {
         document.getElementById('tab-' + id)?.classList.add('hidden');
         document.getElementById('nav-' + id).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 border-l-4 border-transparent hover:bg-slate-800 hover:text-white";
       });
@@ -1572,6 +1825,7 @@
       if (tabId === 'transactions') { titleNode.innerText = "Készlet Mozgatás"; }
       if (tabId === 'harvest') { titleNode.innerText = "Mérlegjegy Rögzítése"; }
       if (tabId === 'bookkeeping') { titleNode.innerText = "Zárt Könyvelési Napló"; renderBookkeeping(); }
+      if (tabId === 'crops') { titleNode.innerText = "Termények & Magtár"; renderCrops(); }
     }
 
     window.toggleMobileMenu = function() {
