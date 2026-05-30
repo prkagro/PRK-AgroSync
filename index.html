@@ -215,7 +215,7 @@
         <div id="tx-standard-panel" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="tx-product-select" class="block text-xs font-semibold text-slate-400 mb-2">Input Anyag</label>
-            <select id="tx-product-select" onchange="calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
+            <select id="tx-product-select" onchange="updateTxQtyLabel(); calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
           </div>
           <div>
             <label id="tx-qty-label" for="tx-qty" class="block text-xs font-semibold text-slate-400 mb-2">Mennyiség</label>
@@ -407,11 +407,11 @@
           </div>
           <div>
             <label class="block text-xs text-slate-400 mb-1">Mértékegység</label>
-            <select id="modal-unit" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+            <select id="modal-unit" onchange="toggleUnitExtraFields()" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
               <option value="kg">kg</option>
               <option value="gr">gr</option>
               <option value="liter">liter</option>
-              <option value="db">db</option>
+              <option value="zsák">zsák</option>
             </select>
           </div>
         </div>
@@ -419,6 +419,13 @@
           <label class="block text-xs text-slate-400 mb-1">Készítmény neve</label>
           <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
+        
+        <!-- INTUITÍV MAGSZÁM MEZŐ -->
+        <div id="seed-count-wrapper" class="hidden space-y-1">
+          <label class="block text-xs text-slate-400 mb-1">Magok száma zsákonként (szemszám)</label>
+          <input type="number" id="modal-seed-count" placeholder="pl. 50000" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        </div>
+
         <div id="modal-qty-wrapper"></div>
       </div>
       <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
@@ -512,8 +519,9 @@
     window.loadDemoData = function() {
       state = {
         products: [
-          { id: "p1", name: "Pledge 50 WP", category: "Gyomirtó szer", unit: "gr", quantity: 1500 },
-          { id: "p2", name: "YaraMila Complex NPK", category: "Műtrágya", unit: "kg", quantity: 4500 }
+          { id: "p1", name: "Pledge 50 WP", category: "Gyomirtó szer", unit: "gr", quantity: 1500, seedCount: null },
+          { id: "p2", name: "YaraMila Complex NPK", category: "Műtrágya", unit: "kg", quantity: 4500, seedCount: null },
+          { id: "p3", name: "KWS Amicello Vetőkukorica", category: "Vetőmag", unit: "zsák", quantity: 35, seedCount: 50000 }
         ],
         fields: [
           { id: "f1", name: "Kovács-dűlő", number: "T-01", blockId: "MePAR-4432", size: 45.2, culture: "Szója" }
@@ -600,9 +608,10 @@
         return;
       }
       filtered.forEach(p => {
+        const seedInfo = p.seedCount ? ` <span class="text-xs text-slate-400">(${p.seedCount.toLocaleString('hu-HU')} szem/zsák)</span>` : '';
         b.innerHTML += `
           <tr class="hover:bg-slate-800/30">
-            <td class="p-4 font-semibold text-white text-sm">${p.name}</td>
+            <td class="p-4 font-semibold text-white text-sm">${p.name}${seedInfo}</td>
             <td class="p-4 text-center font-mono font-bold text-slate-200">${p.quantity.toLocaleString('hu-HU')} ${p.unit}</td>
             <td class="p-4 text-center space-x-2">
               <button onclick="deleteProduct('${p.id}')" class="text-xs bg-red-950/40 hover:bg-red-950 text-red-400 px-2.5 py-1.5 rounded-lg transition">Törlés</button>
@@ -654,7 +663,8 @@
       if(!s) return;
       s.innerHTML = '';
       state.products.forEach(p => {
-        s.innerHTML += `<option value="${p.id}">${p.name} (${p.quantity} ${p.unit})</option>`;
+        const seedInfo = p.seedCount ? ` (${p.seedCount.toLocaleString('hu-HU')} szem/zsák)` : '';
+        s.innerHTML += `<option value="${p.id}">${p.name} (${p.quantity} ${p.unit}${seedInfo})</option>`;
       });
       updateTxQtyLabel();
     }
@@ -705,7 +715,11 @@
       const lbl = document.getElementById('tx-qty-label');
       if(pId && lbl) {
         const p = state.products.find(prod => prod.id === pId);
-        if(p) lbl.innerText = `Mennyiség (${p.unit})`;
+        if(p) {
+          lbl.innerText = `Mennyiség (${p.unit})`;
+        }
+      } else if(lbl) {
+        lbl.innerText = `Mennyiség`;
       }
     }
 
@@ -755,11 +769,12 @@
         if (!pId || qty <= 0) return;
         const p = state.products.find(prod => prod.id === pId);
 
+        const labelSuffix = p.seedCount ? ` (${p.seedCount.toLocaleString('hu-HU')} szem/zsák)` : '';
         let log = {
           id: "l_" + Math.random().toString(36).substr(2, 5),
           timestamp: new Date().toLocaleString('hu-HU'),
           type: activeTxType,
-          productName: p.name,
+          productName: p.name + labelSuffix,
           unit: p.unit,
           qty: activeTxType === 'KIADÁS' ? -qty : qty,
           reason: document.getElementById('tx-reason').value || "Tranzakció"
@@ -871,6 +886,9 @@
       document.getElementById('product-modal-title').innerText = "Új Anyag Bevételezése";
       document.getElementById('modal-product-id').value = '';
       document.getElementById('modal-name').value = '';
+      document.getElementById('modal-unit').value = 'kg';
+      document.getElementById('modal-seed-count').value = '';
+      document.getElementById('seed-count-wrapper').classList.add('hidden');
       document.getElementById('product-modal').classList.remove('hidden');
     }
 
@@ -878,15 +896,29 @@
       document.getElementById('product-modal').classList.add('hidden');
     }
 
+    window.toggleUnitExtraFields = function() {
+      const unit = document.getElementById('modal-unit').value;
+      const wrapper = document.getElementById('seed-count-wrapper');
+      if (unit === 'zsák') {
+        wrapper.classList.remove('hidden');
+      } else {
+        wrapper.classList.add('hidden');
+        document.getElementById('modal-seed-count').value = '';
+      }
+    }
+
     window.saveProduct = function() {
       const name = document.getElementById('modal-name').value.trim();
       const category = document.getElementById('modal-category').value;
       const unit = document.getElementById('modal-unit').value;
+      const seedCountVal = document.getElementById('modal-seed-count').value;
+      const seedCount = unit === 'zsák' && seedCountVal ? parseInt(seedCountVal) : null;
+      
       if(!name) return;
 
       state.products.push({
         id: "p_" + Math.random().toString(36).substr(2, 5),
-        name, category, unit, quantity: 0
+        name, category, unit, quantity: 0, seedCount
       });
 
       saveLocalData();
@@ -1069,6 +1101,7 @@
       setTimeout(() => {
         document.getElementById('tx-field-select').value = f.id;
         document.getElementById('tx-hectares').value = f.size;
+        updateTxQtyLabel();
         calculateApplicationRate();
       }, 50);
     }
