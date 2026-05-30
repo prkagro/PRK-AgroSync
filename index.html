@@ -26,6 +26,7 @@
 </head>
 <body class="h-full flex flex-col md:flex-row overflow-hidden font-sans" onload="initLocalApp()">
 
+  <!-- MOBIL NAVIGÁCIÓS FEJLÉC -->
   <header class="md:hidden flex items-center justify-between bg-slate-900 px-4 py-3 border-b border-slate-800 z-30">
     <div class="flex items-center space-x-3">
       <div class="bg-brand-600 p-2 rounded-lg text-white">
@@ -41,6 +42,7 @@
     </div>
   </header>
 
+  <!-- OLDALSÁV (SIDEBAR) -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out z-40 w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between h-full">
     <div>
       <div class="p-6 border-b border-slate-800 hidden md:flex items-center justify-between">
@@ -95,6 +97,7 @@
     </div>
   </aside>
 
+  <!-- FŐ TARTALOMTERÜLET -->
   <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-950">
     <header class="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
       <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Műszerfal & Áttekintés</h2>
@@ -106,6 +109,7 @@
 
     <div class="p-6 flex-1 max-w-7xl w-full mx-auto space-y-6">
 
+      <!-- ==================== TAB 1: DASHBOARD ==================== -->
       <section id="tab-dashboard" class="space-y-6">
         
         <div id="empty-state-welcome" class="bg-gradient-to-r from-green-950/30 to-slate-900 border border-green-500/20 rounded-2xl p-6 text-center space-y-3 shadow-xl">
@@ -150,7 +154,6 @@
                 <tr>
                   <th class="p-3">Termény</th>
                   <th class="p-3 text-center">Mennyiség</th>
-                  <th class="p-3 text-right">Státusz</th>
                 </tr>
               </thead>
               <tbody id="dashboard-grain-stock-body" class="divide-y divide-slate-800"></tbody>
@@ -159,14 +162,17 @@
         </div>
       </section>
 
+      <!-- ==================== TAB 2: INVENTORY ==================== -->
       <section id="tab-inventory" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div class="text-sm text-slate-400">Anyagraktár Kategóriák</div>
           <button onclick="openAddProductModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">Új Input Anyag Bevételezése</button>
         </div>
 
+        <!-- KATEGÓRIA KÁRTYÁK -->
         <div id="inventory-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
+        <!-- RÉSZLETEK PANEL -->
         <div id="inventory-details-panel" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-slate-800 pb-4">
             <div class="flex items-center space-x-3">
@@ -187,6 +193,7 @@
         </div>
       </section>
 
+      <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK ==================== -->
       <section id="tab-fields" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <h3 class="font-bold text-lg text-white">Gazdasági Táblák és Vetésterv</h3>
@@ -195,6 +202,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="fields-grid"></div>
       </section>
 
+      <!-- ==================== TAB 4: KÉSZLET MOZGATÁS ==================== -->
       <section id="tab-transactions" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
         <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Készlettranzakció</h3>
 
@@ -259,6 +267,7 @@
         <button onclick="executeTransaction()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition">Tranzakció Mentése</button>
       </section>
 
+      <!-- ==================== TAB 5: BETAKARÍTÁS ==================== -->
       <section id="tab-harvest" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
         <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Betakarítási Mérlegjegy</h3>
         
@@ -303,14 +312,17 @@
         <button onclick="executeHarvest()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition">Betakarítás Mentése</button>
       </section>
 
+      <!-- ==================== TAB 6: KÖNYVELÉS NYOMTATÁSSAL ==================== -->
       <section id="tab-bookkeeping" class="space-y-6 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-center non-printable">
           <h3 class="font-bold text-sm text-slate-400 uppercase">Könyvelési Napló és Tranzakciók</h3>
-          <div class="flex space-x-2 w-full sm:w-auto">
-            <button onclick="window.print()" class="w-full sm:w-auto bg-green-700 hover:bg-green-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-green-900/20">
+          <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+            <button onclick="window.print()" class="bg-green-700 hover:bg-green-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-green-900/20">
               <span>Nyomtatás / Mentés PDF-ként</span>
             </button>
-            <button onclick="exportBookkeepingToCSV()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm px-5 py-2.5 rounded-xl transition">CSV Letöltés</button>
+            <button onclick="exportBookkeepingToCSV()" class="bg-slate-850 hover:bg-slate-805 text-slate-200 font-semibold text-sm px-4 py-2.5 rounded-xl transition">CSV Letöltés</button>
+            <button onclick="exportStateBackup()" class="bg-blue-900 hover:bg-blue-800 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition">Adatmentés (.json)</button>
+            <button onclick="importStateBackup()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-sm px-4 py-2.5 rounded-xl transition">Adatvisszaállítás (.json)</button>
           </div>
         </div>
 
@@ -337,10 +349,11 @@
     </div>
   </main>
 
+  <!-- MODAL: TÁBLA SZOFTVER -->
   <div id="field-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-white">Új Tábla Felvétele</h3>
+        <h3 id="field-modal-title" class="text-lg font-bold text-white">Új Tábla Felvétele</h3>
         <button onclick="closeFieldModal()" class="text-slate-400 hover:text-white">&times;</button>
       </div>
       <div class="p-6 space-y-4">
@@ -370,6 +383,7 @@
     </div>
   </div>
 
+  <!-- MODAL: ÚJ INPUT ANYAG -->
   <div id="product-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
@@ -414,6 +428,7 @@
     </div>
   </div>
 
+  <!-- CONFIRM MODAL -->
   <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
       <h3 id="confirm-modal-title" class="text-lg font-bold text-white">Megerősítés</h3>
@@ -425,6 +440,7 @@
     </div>
   </div>
 
+  <!-- MODAL: TÁBLA TÖRTÉNET -->
   <div id="field-history-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
@@ -456,11 +472,13 @@
     </div>
   </div>
 
+  <!-- TOAST -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-3">
     <div id="toast-icon-wrapper" class="p-1 px-2.5 rounded-xl text-white font-bold bg-green-500">&checkmark;</div>
     <p id="toast-message" class="text-xs font-medium text-slate-200"></p>
   </div>
 
+  <!-- ENGINE -->
   <script>
     let state = {
       products: [],
@@ -531,8 +549,15 @@
       document.getElementById('stat-total-products').innerText = `${state.products.length} db`;
 
       const hasData = state.fields.length > 0 || state.products.length > 0;
-      document.getElementById('welcome-subtext').classList.toggle('hidden', hasData);
-      document.getElementById('welcome-actions').classList.toggle('hidden', hasData);
+      
+      const subtext = document.getElementById('welcome-subtext');
+      if (subtext) subtext.classList.toggle('hidden', hasData);
+
+      const actions = document.getElementById('welcome-actions');
+      if (actions) actions.classList.toggle('hidden', hasData);
+
+      const welcome = document.getElementById('empty-state-welcome');
+      if (welcome) welcome.classList.toggle('hidden', hasData);
 
       const cultList = document.getElementById('dashboard-culture-list');
       if (cultList) {
@@ -542,7 +567,8 @@
         for (const [cult, size] of Object.entries(cultMap)) {
           cultList.innerHTML += `<div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span>${cult}</span><span class="font-mono text-green-400 font-bold">${size.toFixed(2)} ha</span></div>`;
         }
-        document.getElementById('no-cultures-msg').classList.toggle('hidden', Object.keys(cultMap).length > 0);
+        const noCult = document.getElementById('no-cultures-msg');
+        if (noCult) noCult.classList.toggle('hidden', Object.keys(cultMap).length > 0);
       }
 
       const grainBody = document.getElementById('dashboard-grain-stock-body');
@@ -647,7 +673,7 @@
       if(!s) return;
       s.innerHTML = '<option value="">-- Válassz táblát --</option>';
       state.fields.forEach(f => {
-        s.innerHTML += `<option value="${f.id}">${f.name} (${f.culture})</option>';
+        s.innerHTML += `<option value="${f.id}">${f.name} (${f.culture})</option>`;
       });
     }
 
@@ -957,6 +983,45 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+
+    window.exportStateBackup = function() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "agrosync_mentes_biztonsagi.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Adatbázis exportálva fájlba!");
+    }
+
+    window.importStateBackup = function() {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.json';
+      fileInput.onchange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = readerEvent => {
+          try {
+            const parsed = JSON.parse(readerEvent.target.result);
+            if (parsed && (parsed.fields || parsed.products || parsed.logs)) {
+              state = parsed;
+              saveLocalData();
+              renderAll();
+              showToast("Biztonsági mentés visszaállítva!");
+            } else {
+              showToast("Érvénytelen adatbázis fájl!", "error");
+            }
+          } catch (err) {
+            showToast("Hiba történt a fájl beolvasása közben!", "error");
+          }
+        }
+        reader.readAsText(file, 'UTF-8');
+      }
+      fileInput.click();
     }
 
     window.switchTab = function(tabId) {
