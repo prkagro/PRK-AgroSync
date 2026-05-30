@@ -23,10 +23,74 @@
       }
     }
   </script>
+  
+  <style>
+    @media print {
+      /* Rejtsük el a teljes kezelőfelületet */
+      aside, header, .non-printable, button, select, label, .bg-slate-900 border {
+        display: none !important;
+      }
+      /* Alapozzuk meg a fehér lapot */
+      body, main, html, #printable-report-area {
+        background: #ffffff !important;
+        color: #000000 !important;
+        height: auto !important;
+        overflow: visible !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      main {
+        position: static !important;
+      }
+      /* Jelentési terület formázása */
+      #printable-report-area {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 10mm !important;
+      }
+      /* Táblázat strukturált nyomtatási nézete */
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        color: #111111 !important;
+      }
+      th {
+        background-color: #f1f5f9 !important;
+        color: #000000 !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+        padding: 8px !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+      }
+      td {
+        border-bottom: 1px solid #e2e8f0 !important;
+        color: #222222 !important;
+        padding: 8px !important;
+        font-size: 11px !important;
+      }
+      tr {
+        page-break-inside: avoid !important;
+      }
+      .text-white, .font-semibold {
+        color: #000000 !important;
+      }
+      /* Egyedi nyomtatási fejléc és lábléc aktiválása */
+      #print-only-header {
+        display: block !important;
+      }
+      #print-only-footer {
+        display: flex !important;
+      }
+    }
+    /* Alapértelmezetten a képernyőn ezek rejtve vannak */
+    #print-only-header, #print-only-footer {
+      display: none;
+    }
+  </style>
 </head>
 <body class="h-full flex flex-col md:flex-row overflow-hidden font-sans" onload="initLocalApp()">
 
-  <!-- MOBIL NAVIGÁCIÓS FEJLÉC -->
   <header class="md:hidden flex items-center justify-between bg-slate-900 px-4 py-3 border-b border-slate-800 z-30">
     <div class="flex items-center space-x-3">
       <div class="bg-brand-600 p-2 rounded-lg text-white">
@@ -42,7 +106,6 @@
     </div>
   </header>
 
-  <!-- OLDALSÁV (SIDEBAR) -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out z-40 w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between h-full">
     <div>
       <div class="p-6 border-b border-slate-800 hidden md:flex items-center justify-between">
@@ -97,7 +160,6 @@
     </div>
   </aside>
 
-  <!-- FŐ TARTALOMTERÜLET -->
   <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-950">
     <header class="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
       <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Műszerfal & Áttekintés</h2>
@@ -109,7 +171,6 @@
 
     <div class="p-6 flex-1 max-w-7xl w-full mx-auto space-y-6">
 
-      <!-- ==================== TAB 1: DASHBOARD ==================== -->
       <section id="tab-dashboard" class="space-y-6">
         
         <div id="empty-state-welcome" class="bg-gradient-to-r from-green-950/30 to-slate-900 border border-green-500/20 rounded-2xl p-6 text-center space-y-3 shadow-xl">
@@ -162,17 +223,14 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 2: INVENTORY ==================== -->
       <section id="tab-inventory" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div class="text-sm text-slate-400">Anyagraktár Kategóriák</div>
           <button onclick="openAddProductModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">Új Input Anyag Bevételezése</button>
         </div>
 
-        <!-- KATEGÓRIA KÁRTYÁK -->
         <div id="inventory-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <!-- RÉSZLETEK PANEL -->
         <div id="inventory-details-panel" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-slate-800 pb-4">
             <div class="flex items-center space-x-3">
@@ -193,7 +251,6 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 3: TÁBLÁK & KULTÚRÁK ==================== -->
       <section id="tab-fields" class="hidden space-y-6">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <h3 class="font-bold text-lg text-white">Gazdasági Táblák és Vetésterv</h3>
@@ -202,117 +259,118 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="fields-grid"></div>
       </section>
 
-      <!-- ==================== TAB 4: KÉSZLET MOZGATÁS ==================== -->
-      <section id="tab-transactions" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-        <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Készlettranzakció</h3>
+      <section id="tab-transactions" class="hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+          <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Készlettranzakció</h3>
 
-        <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="setTransactionType('BEVÉTEL')" id="btn-tx-in" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-green-950/40 border-green-500 text-green-400">INPUT BEVÉTEL</button>
-          <button type="button" onclick="setTransactionType('KIVÉTELEZÉS')" id="btn-tx-out" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">KIJUTTATÁS (KIVÉTELEZÉS)</button>
-          <button type="button" onclick="setTransactionType('ELADÁS')" id="btn-tx-sale" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">TERMÉNY ELADÁS</button>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" onclick="setTransactionType('BEVÉTEL')" id="btn-tx-in" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-green-950/40 border-green-500 text-green-400">INPUT BEVÉTEL</button>
+            <button type="button" onclick="setTransactionType('KIVÉTELEZÉS')" id="btn-tx-out" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">KIJUTTATÁS (KIVÉTELEZÉS)</button>
+            <button type="button" onclick="setTransactionType('ELADÁS')" id="btn-tx-sale" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">TERMÉNY ELADÁS</button>
+          </div>
+
+          <div id="tx-standard-panel" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="tx-product-select" class="block text-xs font-semibold text-slate-400 mb-2">Input Anyag</label>
+              <select id="tx-product-select" onchange="updateTxQtyLabel(); calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
+            </div>
+            <div>
+              <label id="tx-qty-label" for="tx-qty" class="block text-xs font-semibold text-slate-400 mb-2">Mennyiség</label>
+              <input type="number" id="tx-qty" value="10" oninput="calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+            </div>
+          </div>
+
+          <div id="tx-sale-panel" class="hidden bg-slate-950 p-5 rounded-2xl border border-blue-900/30 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label for="tx-grain-select" class="block text-xs font-semibold text-slate-400 mb-2">Termény</label>
+              <select id="tx-grain-select" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200">
+                <option value="Szója">Szója</option>
+                <option value="Őszi búza">Őszi búza</option>
+                <option value="Kukorica">Kukorica</option>
+                <option value="Cirok">Cirok</option>
+                <option value="Napraforgó">Napraforgó</option>
+                <option value="Árpa">Árpa</option>
+              </select>
+            </div>
+            <div>
+              <label for="tx-sale-qty" class="block text-xs font-semibold text-slate-400 mb-2">Eladott súly (kg)</label>
+              <input type="number" id="tx-sale-qty" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+            </div>
+            <div>
+              <label for="tx-buyer-name" class="block text-xs font-semibold text-slate-400 mb-2">Vevő neve</label>
+              <input type="text" id="tx-buyer-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+            </div>
+          </div>
+
+          <div id="tx-application-panel" class="hidden p-5 bg-slate-950 rounded-2xl border border-green-900/30 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="tx-field-select" class="block text-xs font-semibold text-slate-400 mb-2">Cél Tábla</label>
+              <select id="tx-field-select" onchange="onTxFieldSelectChange()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200"></select>
+            </div>
+            <div>
+              <label for="tx-hectares" class="block text-xs font-semibold text-slate-400 mb-2">Kezelt terület (ha)</label>
+              <input type="number" step="0.01" id="tx-hectares" oninput="calculateApplicationRate()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+            </div>
+            <div id="tx-rate-preview" class="hidden col-span-2 text-xs bg-green-950/30 p-3 rounded-xl text-slate-300">
+              Számított dózis: <strong class="text-green-400" id="tx-calc-rate">0</strong> <span id="tx-calc-unit">kg/ha</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-400 mb-2">Megjegyzés</label>
+            <input type="text" id="tx-reason" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200">
+          </div>
+
+          <button onclick="executeTransaction()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition">Tranzakció Mentése</button>
         </div>
-
-        <div id="tx-standard-panel" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="tx-product-select" class="block text-xs font-semibold text-slate-400 mb-2">Input Anyag</label>
-            <select id="tx-product-select" onchange="updateTxQtyLabel(); calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
-          </div>
-          <div>
-            <label id="tx-qty-label" for="tx-qty" class="block text-xs font-semibold text-slate-400 mb-2">Mennyiség</label>
-            <input type="number" id="tx-qty" value="10" oninput="calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
-          </div>
-        </div>
-
-        <div id="tx-sale-panel" class="hidden bg-slate-950 p-5 rounded-2xl border border-blue-900/30 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label for="tx-grain-select" class="block text-xs font-semibold text-slate-400 mb-2">Termény</label>
-            <select id="tx-grain-select" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200">
-              <option value="Szója">Szója</option>
-              <option value="Őszi búza">Őszi búza</option>
-              <option value="Kukorica">Kukorica</option>
-              <option value="Cirok">Cirok</option>
-              <option value="Napraforgó">Napraforgó</option>
-              <option value="Árpa">Árpa</option>
-            </select>
-          </div>
-          <div>
-            <label for="tx-sale-qty" class="block text-xs font-semibold text-slate-400 mb-2">Eladott súly (kg)</label>
-            <input type="number" id="tx-sale-qty" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
-          </div>
-          <div>
-            <label for="tx-buyer-name" class="block text-xs font-semibold text-slate-400 mb-2">Vevő neve</label>
-            <input type="text" id="tx-buyer-name" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
-          </div>
-        </div>
-
-        <div id="tx-application-panel" class="hidden p-5 bg-slate-950 rounded-2xl border border-green-900/30 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="tx-field-select" class="block text-xs font-semibold text-slate-400 mb-2">Cél Tábla</label>
-            <select id="tx-field-select" onchange="onTxFieldSelectChange()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200"></select>
-          </div>
-          <div>
-            <label for="tx-hectares" class="block text-xs font-semibold text-slate-400 mb-2">Kezelt terület (ha)</label>
-            <input type="number" step="0.01" id="tx-hectares" oninput="calculateApplicationRate()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
-          </div>
-          <div id="tx-rate-preview" class="hidden col-span-2 text-xs bg-green-950/30 p-3 rounded-xl text-slate-300">
-            Számított dózis: <strong class="text-green-400" id="tx-calc-rate">0</strong> <span id="tx-calc-unit">kg/ha</span>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs text-slate-400 mb-2">Megjegyzés</label>
-          <input type="text" id="tx-reason" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200">
-        </div>
-
-        <button onclick="executeTransaction()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition">Tranzakció Mentése</button>
       </section>
 
-      <!-- ==================== TAB 5: BETAKARÍTÁS ==================== -->
-      <section id="tab-harvest" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-        <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Betakarítási Mérlegjegy</h3>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs text-slate-400 mb-2">Tábla</label>
-            <select id="harvest-field-select" onchange="onHarvestFieldChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200"></select>
+      <section id="tab-harvest" class="hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+          <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Betakarítási Mérlegjegy</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-slate-400 mb-2">Tábla</label>
+              <select id="harvest-field-select" onchange="onHarvestFieldChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200"></select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-2">Kultúra</label>
+              <div id="harvest-detected-culture" class="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-2.5 text-slate-400 font-bold italic">Válassz táblát...</div>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-2">Beszállított Súly (kg)</label>
+              <input type="number" id="harvest-raw-weight" oninput="calculateNetWeight()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-400 mb-2">Nedvesség (%)</label>
+              <input type="number" step="0.1" id="harvest-moisture" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+            </div>
           </div>
-          <div>
-            <label class="block text-xs text-slate-400 mb-2">Kultúra</label>
-            <div id="harvest-detected-culture" class="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-2.5 text-slate-400 font-bold italic">Válassz táblát...</div>
-          </div>
-          <div>
-            <label class="block text-xs text-slate-400 mb-2">Beszállított Súly (kg)</label>
-            <input type="number" id="harvest-raw-weight" oninput="calculateNetWeight()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
-          </div>
-          <div>
-            <label class="block text-xs text-slate-400 mb-2">Nedvesség (%)</label>
-            <input type="number" step="0.1" id="harvest-moisture" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
-          </div>
-        </div>
 
-        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 flex justify-between items-center">
-          <div>
-            <h4 class="text-sm font-semibold text-amber-400">Szárítási Levonás</h4>
-            <p class="text-xs text-slate-500">Mérlegjegyi százalék érvényesítése?</p>
+          <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 flex justify-between items-center">
+            <div>
+              <h4 class="text-sm font-semibold text-amber-400">Szárítási Levonás</h4>
+              <p class="text-xs text-slate-500">Mérlegjegyi százalék érvényesítése?</p>
+            </div>
+            <input type="checkbox" id="harvest-need-drying" onchange="toggleDryingPanel()" class="w-5 h-5 accent-green-500 rounded">
           </div>
-          <input type="checkbox" id="harvest-need-drying" onchange="toggleDryingPanel()" class="w-5 h-5 accent-green-500 rounded">
-        </div>
 
-        <div id="harvest-drying-panel" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-950 rounded-xl border border-slate-850">
-          <div>
-            <label class="block text-xs text-slate-400 mb-1">Levonási veszteség (%)</label>
-            <input type="number" step="0.01" id="harvest-deduction-rate" oninput="calculateNetWeight()" value="0.00" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white">
+          <div id="harvest-drying-panel" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-950 rounded-xl border border-slate-850">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Levonási veszteség (%)</label>
+              <input type="number" step="0.01" id="harvest-deduction-rate" oninput="calculateNetWeight()" value="0.00" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white">
+            </div>
+            <div class="flex flex-col justify-center">
+              <span class="text-xs text-slate-400">Kalkulált nettó súly:</span>
+              <span id="harvest-net-display" class="text-lg font-bold text-green-400">0 kg</span>
+            </div>
           </div>
-          <div class="flex flex-col justify-center">
-            <span class="text-xs text-slate-400">Kalkulált nettó súly:</span>
-            <span id="harvest-net-display" class="text-lg font-bold text-green-400">0 kg</span>
-          </div>
-        </div>
 
-        <button onclick="executeHarvest()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition">Betakarítás Mentése</button>
+          <button onclick="executeHarvest()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition">Betakarítás Mentése</button>
+        </div>
       </section>
 
-      <!-- ==================== TAB 6: KÖNYVELÉS SZŰRŐKKEL ÉS NYOMTATÁSSAL ==================== -->
       <section id="tab-bookkeeping" class="space-y-6 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-center non-printable">
           <h3 class="font-bold text-sm text-slate-400 uppercase">Könyvelési Napló és Tranzakciók</h3>
@@ -326,11 +384,10 @@
           </div>
         </div>
 
-        <!-- INTUITÍV SZŰRŐSÁV A KÖNYVELÉSHEZ -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center non-printable">
           <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
             <div class="flex flex-col min-w-[160px]">
-              <label for="filter-tx-type" class="text-xs text-slate-450 mb-1.5 font-semibold">Típus szűrése</label>
+              <label for="filter-tx-type" class="text-xs text-slate-445 mb-1.5 font-semibold">Típus szűrése</label>
               <select id="filter-tx-type" onchange="renderBookkeeping()" class="bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-1 focus:ring-green-500 focus:outline-none">
                 <option value="ALL">Összes mozgástípus</option>
                 <option value="BEVÉTEL">Bevételezések</option>
@@ -340,7 +397,7 @@
               </select>
             </div>
             <div class="flex flex-col min-w-[160px]">
-              <label for="filter-row-limit" class="text-xs text-slate-450 mb-1.5 font-semibold">Megjelenített sorok</label>
+              <label for="filter-row-limit" class="text-xs text-slate-445 mb-1.5 font-semibold">Megjelenített sorok</label>
               <select id="filter-row-limit" onchange="renderBookkeeping()" class="bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-1 focus:ring-green-500 focus:outline-none">
                 <option value="10">Legutóbbi 10 sor</option>
                 <option value="25">Legutóbbi 25 sor</option>
@@ -355,6 +412,22 @@
         </div>
 
         <div id="printable-report-area" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 overflow-hidden">
+          
+          <div id="print-only-header" style="margin-bottom: 25px; border-bottom: 3px double #334155; padding-bottom: 15px;">
+            <table style="width: 100%; border: none;">
+              <tr>
+                <td style="border: none; padding: 0; text-align: left; vertical-align: middle;">
+                  <h1 style="font-size: 24px; font-weight: 800; color: #16a34a; margin: 0; letter-spacing: 1px;">PRK AGROSYNC</h1>
+                  <p style="font-size: 12px; color: #475569; margin: 2px 0 0 0; font-weight: 600;">Agrárvállalati Nyilvántartó & Vezetői Rendszer</p>
+                </td>
+                <td style="border: none; padding: 0; text-align: right; vertical-align: middle;">
+                  <h2 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0; uppercase">KÖNYVELÉSI KIVONAT</h2>
+                  <p style="font-size: 10px; color: #64748b; margin: 2px 0 0 0;">Készült: <span id="print-timestamp" style="font-weight: bold;"></span></p>
+                </td>
+              </tr>
+            </table>
+          </div>
+
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-300 id-report-table">
               <thead class="text-xs uppercase bg-slate-950/80 text-slate-400 border-b border-slate-800">
@@ -371,13 +444,23 @@
               <tbody id="bookkeeping-table-body" class="divide-y divide-slate-800"></tbody>
             </table>
           </div>
+
+          <div id="print-only-footer" style="margin-top: 60px; justify-between: space-between; width: 100%;">
+            <div style="width: 45%; border-top: 1px solid #94a3b8; text-align: center; padding-top: 8px; font-size: 10px; color: #475569;">
+              Kiállította: Tangazdaság Vezető
+            </div>
+            <div style="width: 10%;"></div>
+            <div style="width: 45%; border-top: 1px solid #94a3b8; text-align: center; padding-top: 8px; font-size: 10px; color: #475569;">
+              Pénzügyi / Gazdasági jóváhagyás
+            </div>
+          </div>
+
         </div>
       </section>
 
     </div>
   </main>
 
-  <!-- MODAL: TÁBLA SZOFTVER -->
   <div id="field-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
@@ -411,7 +494,6 @@
     </div>
   </div>
 
-  <!-- MODAL: ÚJ/SZERKESZTETT INPUT ANYAG -->
   <div id="product-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
@@ -448,7 +530,6 @@
           <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
         
-        <!-- INTUITÍV MAGSZÁM MEZŐ -->
         <div id="seed-count-wrapper" class="hidden space-y-1">
           <label class="block text-xs text-slate-400 mb-1">Magok száma zsákonként (szemszám)</label>
           <input type="number" id="modal-seed-count" placeholder="pl. 50000" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
@@ -463,7 +544,6 @@
     </div>
   </div>
 
-  <!-- CONFIRM MODAL -->
   <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
       <h3 id="confirm-modal-title" class="text-lg font-bold text-white">Megerősítés</h3>
@@ -475,7 +555,6 @@
     </div>
   </div>
 
-  <!-- MODAL: TÁBLA TÖRTÉNET -->
   <div id="field-history-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
@@ -507,13 +586,11 @@
     </div>
   </div>
 
-  <!-- TOAST -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-3">
     <div id="toast-icon-wrapper" class="p-1 px-2.5 rounded-xl text-white font-bold bg-green-500">&checkmark;</div>
     <p id="toast-message" class="text-xs font-medium text-slate-200"></p>
   </div>
 
-  <!-- ENGINE -->
   <script>
     let state = {
       products: [],
@@ -802,7 +879,7 @@
         let log = {
           id: "l_" + Math.random().toString(36).substr(2, 5),
           timestamp: new Date().toLocaleString('hu-HU'),
-          type: activeTxType, // 'BEVÉTEL' vagy 'KIVÉTELEZÉS'
+          type: activeTxType,
           productName: p.name + labelSuffix,
           unit: p.unit,
           qty: activeTxType === 'KIVÉTELEZÉS' ? -qty : qty,
@@ -826,7 +903,6 @@
       saveLocalData();
       renderAll();
       
-      // Megtisztítjuk a beviteli mezőket a következő bejegyzéshez, de az aktív felületen maradunk!
       document.getElementById('tx-qty').value = '10';
       document.getElementById('tx-sale-qty').value = '';
       document.getElementById('tx-buyer-name').value = '';
@@ -875,7 +951,6 @@
       saveLocalData();
       renderAll();
       
-      // Megtisztítjuk az aratási űrlapot a következő mérlegjegyhez, de a fülön maradunk!
       document.getElementById('harvest-raw-weight').value = '';
       document.getElementById('harvest-moisture').value = '';
       document.getElementById('harvest-need-drying').checked = false;
@@ -978,7 +1053,6 @@
       if(!name) return;
 
       if (id) {
-        // Szerkesztési logika (megtartja a meglévő raktárkészletet!)
         const p = state.products.find(prod => prod.id === id);
         if (p) {
           p.name = name;
@@ -988,7 +1062,6 @@
         }
         showToast("Input anyag sikeresen módosítva!");
       } else {
-        // Új hozzáadása logika (0 kezdő készlettel)
         state.products.push({
           id: "p_" + Math.random().toString(36).substr(2, 5),
           name, category, unit, quantity: 0, seedCount
@@ -1053,17 +1126,18 @@
     }
 
     function renderBookkeeping() {
+      // Dinamikusan frissítjük a nyomtatási dátumbélyegzőt a fejlécben
+      const ts = document.getElementById('print-timestamp');
+      if (ts) ts.innerText = new Date().toLocaleString('hu-HU');
+
       const body = document.getElementById('bookkeeping-table-body');
       if (!body) return;
       body.innerHTML = '';
       
       let filteredLogs = state.logs.slice();
-      
-      // Szűrők beolvasása
       const typeFilter = document.getElementById('filter-tx-type')?.value || 'ALL';
       const limitFilter = document.getElementById('filter-row-limit')?.value || '10';
       
-      // Típus szűrés alkalmazása (a régi 'KIADÁS' és az új 'KIVÉTELEZÉS' kompatibilitását fenntartva!)
       if (typeFilter !== 'ALL') {
         filteredLogs = filteredLogs.filter(l => {
           const displayType = (l.type === 'KIADÁS') ? 'KIVÉTELEZÉS' : l.type;
@@ -1071,16 +1145,13 @@
         });
       }
       
-      // Időrendi sorrendbe rendezés (legfrissebb elől)
       filteredLogs.sort((a,b) => b.timestamp.localeCompare(a.timestamp));
       
-      // Statisztikai darabszám frissítése
       const statsBadge = document.getElementById('filter-stats-badge');
       if (statsBadge) {
         statsBadge.innerText = filteredLogs.length;
       }
       
-      // Sorlimit korlátozás alkalmazása
       if (limitFilter !== 'ALL') {
         const limit = parseInt(limitFilter);
         filteredLogs = filteredLogs.slice(0, limit);
