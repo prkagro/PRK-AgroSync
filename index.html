@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PRK AgroSync v2.0</title>
+  <title>PRK AgroSync v2.5 - Helyreállított Rendszer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script>
@@ -25,12 +25,12 @@
     }
   </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap');
     body {
       font-family: 'Inter', sans-serif;
     }
     
-    /* PROFESSZIONÁLIS NYOMTATÁSI KÉP STÍLUSOK (PDF MENTÉSHEZ) */
+    /* PROFESSZIONÁLIS NYOMTATÁSI KÉP STÍLUSOK */
     @media print {
       aside, header, .non-printable, button, select, label, input, #view-title, .bg-slate-800 {
         display: none !important;
@@ -86,7 +86,7 @@
         border-bottom: 1px solid #cbd5e1 !important;
         color: #1e293b !important;
         padding: 8px !important;
-        font-size: 11px !important;
+        font-size: 11px;
       }
       tr {
         page-break-inside: avoid !important;
@@ -106,7 +106,7 @@
     }
   </style>
 </head>
-<body class="h-full flex flex-col md:flex-row overflow-hidden" onload="initLocalApp()">
+<body class="h-full flex flex-col md:flex-row overflow-hidden">
 
   <!-- MOBIL NAVIGÁCIÓS FEJLÉC -->
   <header class="md:hidden flex items-center justify-between bg-slate-900 px-4 py-3 border-b border-slate-800 z-30 non-printable">
@@ -117,7 +117,7 @@
       <span class="font-bold text-lg tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></span>
     </div>
     <div class="flex items-center space-x-3">
-      <div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
+      <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
       <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white focus:outline-none">
         <i class="fa-solid fa-bars text-xl"></i>
       </button>
@@ -136,9 +136,10 @@
             <h1 class="font-bold text-md leading-tight tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></h1>
           </div>
         </div>
-        <div class="w-3 h-3 rounded-full bg-green-500 shadow-lg shadow-green-900/40"></div>
+        <div class="w-3 h-3 rounded-full bg-emerald-500 shadow-lg shadow-green-900/40"></div>
       </div>
 
+      <!-- UPGRADED PREMIUM MENU NAVIGATION -->
       <nav class="px-4 py-6 space-y-1">
         <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition bg-slate-800 text-white border-l-4 border-green-500">
           <i class="fa-solid fa-chart-pie w-5 text-center"></i>
@@ -164,6 +165,10 @@
           <i class="fa-solid fa-scale-balanced w-5 text-center text-amber-400"></i>
           <span class="text-amber-300">Betakarítás</span>
         </a>
+        <a href="#" onclick="switchTab('weather')" id="nav-weather" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
+          <i class="fa-solid fa-cloud-sun w-5 text-center text-sky-400"></i>
+          <span>Időjárás & Munkaterv</span>
+        </a>
         <a href="#" onclick="switchTab('bookkeeping')" id="nav-bookkeeping" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-white border-l-4 border-transparent">
           <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i>
           <span>Könyvelési Napló</span>
@@ -176,8 +181,8 @@
       <div>
         <p class="text-sm font-semibold text-slate-200">Tangazdaság Vezető</p>
         <div class="flex items-center space-x-1">
-          <span class="h-1.5 w-1.5 rounded-full bg-green-500 inline-block"></span>
-          <span class="text-[10px] text-slate-400 font-mono">Lokális Adatbázis</span>
+          <span id="sidebar-db-dot" class="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+          <span id="sidebar-db-text" class="text-[10px] text-slate-400 font-mono">Helyi Tároló</span>
         </div>
       </div>
     </div>
@@ -187,9 +192,9 @@
   <main class="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-950 print-layout">
     <header class="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 non-printable">
       <h2 id="view-title" class="text-xl font-bold text-white tracking-tight">Műszerfal & Operatív Időjárás</h2>
-      <span class="text-xs text-slate-300 font-mono bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center space-x-2">
-        <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-        <span>PRK AgroSync — Online</span>
+      <span id="status-cloud-badge" class="text-xs text-slate-300 font-mono bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center space-x-2">
+        <span id="status-cloud-dot" class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="status-cloud-text">PRK AgroSync — Online (Helyi)</span>
       </span>
     </header>
 
@@ -202,18 +207,18 @@
         <div id="empty-state-welcome" class="bg-gradient-to-r from-green-950/30 to-slate-900 border border-green-500/20 rounded-2xl p-6 text-center space-y-3 shadow-xl">
           <span class="text-4xl">🌱</span>
           <h3 class="text-lg font-bold text-white">Üdvözöljük a PRK AgroSync rendszerben!</h3>
-          <p id="welcome-subtext" class="text-xs text-slate-300 max-w-md mx-auto">A szoftver készen áll a saját dűlőid és anyagaid biztonságos fogadására.</p>
+          <p id="welcome-subtext" class="text-xs text-slate-300 max-w-md mx-auto">A szoftver készen áll a dűlők és anyagok biztonságos kezelésére.</p>
           
           <div id="welcome-action-buttons" class="flex justify-center space-x-3 pt-1 non-printable">
             <button onclick="switchTab('fields'); openAddFieldModal();" class="bg-green-600 hover:bg-green-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-lg">Saját tábla rögzítése</button>
-            <button onclick="loadDemoData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition">Mintaadatok betöltése</button>
+            <button onclick="loadDemoData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition font-semibold">Mintaadatok betöltése</button>
           </div>
         </div>
 
         <!-- HELYTAKARÉKOS KOMPAKT IDŐJÁRÁS CSÍK -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col lg:flex-row items-center justify-between gap-4 shadow-xl">
           <div class="flex items-center space-x-4">
-            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-400 shadow-inner" id="weather-icon-main">
+            <div class="bg-slate-955 p-3 rounded-xl border border-slate-800 text-amber-400 shadow-inner" id="weather-icon-main">
               <i class="fa-solid fa-cloud-sun text-xl animate-pulse"></i>
             </div>
             <div>
@@ -235,9 +240,9 @@
             <button onclick="updateWeather()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-700 transition">
               Lekérés
             </button>
-            <button onclick="openWeatherModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-green-950/20 flex items-center space-x-1.5">
-              <i class="fa-solid fa-circle-info"></i>
-              <span>További adatok</span>
+            <button onclick="openWeatherModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg flex items-center space-x-1.5">
+              <i class="fa-solid fa-info-circle text-xs"></i>
+              <span>Részletek</span>
             </button>
           </div>
         </div>
@@ -298,7 +303,7 @@
         <div id="inventory-details-panel" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div class="flex justify-between items-center border-b border-slate-800 pb-4">
             <div class="flex items-center space-x-3">
-              <button onclick="closeInventoryDetails()" class="bg-slate-950 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs">&larr; Vissza</button>
+              <button onclick="closeInventoryDetails()" class="bg-slate-955 border border-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs">&larr; Vissza</button>
               <h3 id="inventory-details-title" class="font-bold text-lg text-white"></h3>
             </div>
           </div>
@@ -328,9 +333,7 @@
           </button>
         </div>
 
-        <div id="crops-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Kártyák JS-ből renderelve -->
-        </div>
+        <div id="crops-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </section>
 
       <!-- ==================== TAB 4: TÁBLÁK & KULTÚRÁK ==================== -->
@@ -347,18 +350,18 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
           <h3 class="font-bold text-lg text-white border-b border-slate-800 pb-3">Készlettranzakció</h3>
           <div class="grid grid-cols-3 gap-2">
-            <button type="button" onclick="setTransactionType('BEVÉTEL')" id="btn-tx-in" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-green-950/40 border-green-500 text-green-400">INPUT BEVÉTEL</button>
+            <button type="button" onclick="setTransactionType('BEVÉTEL')" id="btn-tx-in" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-green-955 border-green-500 text-green-400">INPUT BEVÉTEL</button>
             <button type="button" onclick="setTransactionType('KIVÉTELEZÉS')" id="btn-tx-out" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">KIVÉTELEZÉS (KIJUTTATÁS)</button>
-            <button type="button" onclick="setTransactionType('ELADÁS')" id="btn-tx-sale" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700">TERMÉNY ELADÁS</button>
+            <button type="button" onclick="setTransactionType('ELADÁS')" id="btn-tx-sale" class="py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-955 border-slate-800 text-slate-400 hover:border-slate-700">TERMÉNY ELADÁS</button>
           </div>
           <div id="tx-standard-panel" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label for="tx-product-select" class="block text-xs font-semibold text-slate-400 mb-2">Input Anyag</label>
-              <select id="tx-product-select" onchange="updateTxQtyLabel(); calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
+              <select id="tx-product-select" onchange="updateTxQtyLabel(); calculateApplicationRate()" class="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"></select>
             </div>
             <div>
               <label id="tx-qty-label" for="tx-qty" class="block text-xs font-semibold text-slate-400 mb-2">Mennyiség</label>
-              <input type="number" id="tx-qty" value="10" oninput="calculateApplicationRate()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
+              <input type="number" id="tx-qty" value="10" oninput="calculateApplicationRate()" class="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-2.5 text-white focus:outline-none">
             </div>
           </div>
           <div id="tx-sale-panel" class="hidden bg-slate-950 p-5 rounded-2xl border border-blue-900/30 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -391,15 +394,15 @@
               <label for="tx-hectares" class="block text-xs font-semibold text-slate-400 mb-2">Kezelt terület (ha)</label>
               <input type="number" step="0.01" id="tx-hectares" oninput="calculateApplicationRate()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
             </div>
-            <div id="tx-rate-preview" class="hidden col-span-2 text-xs bg-green-950/30 p-3 rounded-xl text-slate-300">
+            <div id="tx-rate-preview" class="hidden col-span-2 text-xs bg-green-955 p-3 rounded-xl text-slate-300">
               Számított dózis: <strong class="text-green-400" id="tx-calc-rate">0</strong> <span id="tx-calc-unit">kg/ha</span>
             </div>
           </div>
           <div>
             <label class="block text-xs text-slate-400 mb-2">Megjegyzés</label>
-            <input type="text" id="tx-reason" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200">
+            <input type="text" id="tx-reason" class="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200">
           </div>
-          <button onclick="executeTransaction()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition font-semibold">Tranzakció Mentése</button>
+          <button onclick="executeTransaction()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl transition font-semibold shadow-lg">Tranzakció Mentése</button>
         </div>
       </section>
 
@@ -414,25 +417,25 @@
             </div>
             <div>
               <label class="block text-xs text-slate-400 mb-2">Kultúra</label>
-              <div id="harvest-detected-culture" class="w-full bg-slate-950 border border-slate-900 rounded-xl px-4 py-2.5 text-slate-400 font-bold italic">Válassz táblát...</div>
+              <div id="harvest-detected-culture" class="w-full bg-slate-955 border border-slate-900 rounded-xl px-4 py-2.5 text-slate-400 font-bold italic">Válassz táblát...</div>
             </div>
             <div>
               <label class="block text-xs text-slate-400 mb-2">Beszállított Súly (kg)</label>
-              <input type="number" id="harvest-raw-weight" oninput="calculateNetWeight()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+              <input type="number" id="harvest-raw-weight" oninput="calculateNetWeight()" class="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
             </div>
             <div>
               <label class="block text-xs text-slate-400 mb-2">Nedvesség (%)</label>
-              <input type="number" step="0.1" id="harvest-moisture" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
+              <input type="number" step="0.1" id="harvest-moisture" class="w-full bg-slate-955 border border-slate-800 rounded-xl px-4 py-2.5 text-white">
             </div>
           </div>
-          <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 flex justify-between items-center">
+          <div class="p-4 bg-slate-955 rounded-2xl border border-slate-800 flex justify-between items-center">
             <div>
               <h4 class="text-sm font-semibold text-amber-400">Szárítási Levonás</h4>
               <p class="text-xs text-slate-500">Mérlegjegyi százalék érvényesítése?</p>
             </div>
             <input type="checkbox" id="harvest-need-drying" onchange="toggleDryingPanel()" class="w-5 h-5 accent-green-500 rounded">
           </div>
-          <div id="harvest-drying-panel" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-950 rounded-xl border border-slate-850">
+          <div id="harvest-drying-panel" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-955 rounded-xl border border-slate-850">
             <div>
               <label class="block text-xs text-slate-400 mb-1">Levonási veszteség (%)</label>
               <input type="number" step="0.01" id="harvest-deduction-rate" oninput="calculateNetWeight()" value="0.00" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white">
@@ -442,18 +445,184 @@
               <span id="harvest-net-display" class="text-lg font-bold text-green-400">0 kg</span>
             </div>
           </div>
-          <button onclick="executeHarvest()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition">Betakarítás Mentése</button>
+          <button onclick="executeHarvest()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg">Betakarítás Mentése</button>
         </div>
       </section>
 
-      <!-- ==================== TAB 7: KÖNYVELÉS ÉS PDF EXPORT ==================== -->
+      <!-- ==================== TAB 7: NEW WEATHER & AGRI-OPERATIONS ADVISORY TAB ==================== -->
+      <section id="tab-weather" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Live Location & Forecast Card -->
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-xl">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] text-slate-500 block uppercase font-mono font-bold tracking-wider">Agrár-Meteorológia</span>
+                <h3 id="adv-city-name" class="text-2xl font-black text-white">Sellye</h3>
+                <p id="adv-last-updated" class="text-[10px] text-slate-400 font-mono">Aktualizálva: Valós időben</p>
+              </div>
+              <div class="bg-slate-955 p-3.5 rounded-xl border border-slate-800 text-sky-400" id="adv-weather-icon">
+                <i class="fa-solid fa-cloud-sun text-2xl"></i>
+              </div>
+            </div>
+            
+            <div class="flex items-baseline space-x-2">
+              <span id="adv-temperature" class="text-4xl font-black text-white">20°C</span>
+              <span id="adv-humidity" class="text-sm font-semibold text-slate-400">/ 61% rH</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2 text-xs pt-2">
+              <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-850">
+                <span class="text-slate-500 block text-[9px] uppercase font-bold">Szélirány</span>
+                <span class="font-bold text-slate-300">Északnyugat (ÉNY)</span>
+              </div>
+              <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-850">
+                <span class="text-slate-500 block text-[9px] uppercase font-bold">Szélsebesség</span>
+                <span id="adv-wind" class="font-bold text-slate-300">7 km/h</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Agri-Operations Suitability Indices -->
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-xl lg:col-span-2">
+            <div>
+              <div class="flex justify-between items-center">
+                <span class="text-[10px] text-slate-500 block uppercase font-mono tracking-wider font-semibold">Többtényezős Agrár-Értékelés</span>
+                <span class="text-[10px] bg-green-950 text-green-400 border border-green-900/40 px-2.5 py-0.5 rounded-md font-mono font-bold">Operatív Indexek</span>
+              </div>
+              <h3 class="text-lg font-bold text-white mt-1">Mezőgazdasági Munkaalkalmasság</h3>
+              <p class="text-xs text-slate-400 mt-1">Az aktuális meteorológiai adatok komplex hatása az operatív munkákra:</p>
+            </div>
+
+            <!-- Operations Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="p-3 bg-slate-955 rounded-xl border border-slate-850 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Permetezés</span>
+                  <span id="op-permet-lbl" class="text-xs text-slate-500 block mt-1">Szél és Delta-T függő</span>
+                </div>
+                <span id="op-permet-badge" class="px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider bg-emerald-950 text-green-400 border border-emerald-900/60">Kiváló</span>
+              </div>
+
+              <div class="p-3 bg-slate-955 rounded-xl border border-slate-850 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Műtrágyázás</span>
+                  <span id="op-tragy-lbl" class="text-xs text-slate-500 block mt-1">Szél és könnyű eső kedvező</span>
+                </div>
+                <span id="op-tragy-badge" class="px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider bg-emerald-950 text-green-400 border border-emerald-900/60">Kiváló</span>
+              </div>
+
+              <div class="p-3 bg-slate-955 rounded-xl border border-slate-850 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Talajmunka & Vetés</span>
+                  <span id="op-vetes-lbl" class="text-xs text-slate-500 block mt-1">Csapadékmentes talaj</span>
+                </div>
+                <span id="op-vetes-badge" class="px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider bg-emerald-950 text-green-400 border border-emerald-900/60">Kiváló</span>
+              </div>
+
+              <div class="p-3 bg-slate-955 rounded-xl border border-slate-850 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 uppercase font-mono block">Betakarítás</span>
+                  <span id="op-arat-lbl" class="text-xs text-slate-500 block mt-1">Száraz levegő igény</span>
+                </div>
+                <span id="op-arat-badge" class="px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider bg-emerald-950 text-green-400 border border-emerald-900/60">Kiváló</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Agricultural Weather Simulator -->
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 shadow-xl">
+            <h4 class="font-bold text-white text-base flex items-center">
+              <i class="fa-solid fa-sliders text-green-400 mr-2"></i> Interaktív Agrár-Időjárás Szimulátor
+            </h4>
+            <p class="text-xs text-slate-400">Változtassa a meteorológiai mutatókat a csúszkákkal az elvégezhetőség ellenőrzéséhez.</p>
+
+            <div class="space-y-4 pt-2">
+              <div>
+                <div class="flex justify-between text-xs text-slate-300 font-semibold mb-1">
+                  <span>Hőmérséklet (°C):</span>
+                  <span id="sim-temp-lbl" class="text-green-400 font-bold">20 °C</span>
+                </div>
+                <input type="range" id="sim-temp" min="0" max="40" value="20" oninput="simCalculate()" class="w-full h-1.5 bg-slate-955 rounded-lg appearance-none cursor-pointer accent-green-500">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs text-slate-300 font-semibold mb-1">
+                  <span>Relatív Páratartalom (% rH):</span>
+                  <span id="sim-hum-lbl" class="text-green-400 font-bold">60 %</span>
+                </div>
+                <input type="range" id="sim-hum" min="15" max="100" value="60" oninput="simCalculate()" class="w-full h-1.5 bg-slate-955 rounded-lg appearance-none cursor-pointer accent-green-500">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs text-slate-300 font-semibold mb-1">
+                  <span>Szélsebesség (km/h):</span>
+                  <span id="sim-wind-lbl" class="text-sky-400 font-bold">7 km/h</span>
+                </div>
+                <input type="range" id="sim-wind" min="0" max="50" value="7" oninput="simCalculate()" class="w-full h-1.5 bg-slate-955 rounded-lg appearance-none cursor-pointer accent-green-500">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs text-slate-300 font-semibold mb-1">
+                  <span>Eső valószínűség (%):</span>
+                  <span id="sim-rain-lbl" class="text-blue-400 font-bold">10 %</span>
+                </div>
+                <input type="range" id="sim-rain" min="0" max="100" value="10" oninput="simCalculate()" class="w-full h-1.5 bg-slate-955 rounded-lg appearance-none cursor-pointer accent-green-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Work Planner Form -->
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between shadow-xl">
+            <div class="space-y-4">
+              <h4 class="font-bold text-white text-base flex items-center">
+                <i class="fa-solid fa-calendar-check text-sky-400 mr-2"></i> Agrár Munkatervező & Ellenőrző
+              </h4>
+              <p class="text-xs text-slate-400">Válasszon ki egy dűlőt és műveletet! A rendszer automatikusan kiértékeli a megvalósíthatóságot.</p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label for="adv-op-select" class="block text-[10px] uppercase font-bold text-slate-500 mb-1">Művelet</label>
+                  <select id="adv-op-select" onchange="advUpdateFields()" class="w-full bg-slate-955 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none">
+                    <option value="permetezes">Permetezés</option>
+                    <option value="mutragyazas">Műtrágyaszórás</option>
+                    <option value="talajmunka">Talajmunka & Vetés</option>
+                    <option value="betakaritas">Betakarítás</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="adv-field-select" class="block text-[10px] uppercase font-bold text-slate-500 mb-1">Cél dűlő</label>
+                  <select id="adv-field-select" onchange="advUpdateFields()" class="w-full bg-slate-955 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none"></select>
+                </div>
+                <div>
+                  <label for="adv-prod-select" class="block text-[10px] uppercase font-bold text-slate-500 mb-1">Hatóanyag</label>
+                  <select id="adv-prod-select" onchange="advUpdateFields()" class="w-full bg-slate-955 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none"></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Planner Suitability Verdict Box -->
+            <div id="adv-planner-verdict" class="my-4 p-4 rounded-xl border bg-slate-955 flex flex-col justify-center text-center">
+              <span class="text-xs font-bold text-slate-400 uppercase">Művelet Ellenőrzési Eredmény</span>
+              <p class="text-sm font-black text-green-400 mt-1 uppercase tracking-wider">A művelet elvégezhető!</p>
+            </div>
+
+            <button id="adv-action-btn" onclick="advTransferToTransactions()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg">
+              <i class="fa-solid fa-arrows-turn-to-dots mr-1"></i> Tranzakció kitöltése &rarr;
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 8: KÖNYVELÉS ÉS PDF EXPORT ==================== -->
       <section id="tab-bookkeeping" class="space-y-6 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 justify-between items-center non-printable">
-          <h3 class="font-bold text-sm text-slate-400 uppercase">Könyvelési Napló és Tranzakciók</h3>
+          <h3 class="font-bold text-sm text-slate-400 uppercase">Könyvelési Napló</h3>
           <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-            <button onclick="printReport()" class="bg-green-700 hover:bg-green-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg shadow-green-900/20">
+            <button onclick="printReport()" class="bg-green-700 hover:bg-green-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg">
               <i class="fa-solid fa-file-pdf"></i>
-              <span>Nyomtatás / Mentés PDF-ként</span>
+              <span>Nyomtatás / PDF</span>
             </button>
             <button onclick="exportBookkeepingToCSV()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5">
               <i class="fa-solid fa-file-csv text-green-400"></i>
@@ -475,10 +644,10 @@
           <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
             <div class="flex flex-col min-w-[160px]">
               <label for="filter-tx-type" class="text-xs text-slate-400 mb-1.5 font-semibold">Típus szűrése</label>
-              <select id="filter-tx-type" onchange="renderBookkeeping()" class="bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-1 focus:ring-green-500 focus:outline-none">
+              <select id="filter-tx-type" onchange="renderBookkeeping()" class="bg-slate-955 border border-slate-800 text-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-1 focus:ring-green-500 focus:outline-none">
                 <option value="ALL">Összes mozgástípus</option>
                 <option value="BEVÉTEL">Bevételezések</option>
-                <option value="KIVÉTELEZÉS">Kivételezések (Kijuttatások)</option>
+                <option value="KIVÉTELEZÉS">Kivételezések</option>
                 <option value="BETAKARÍTÁS">Betakarítások</option>
                 <option value="ELADÁS">Termény eladások</option>
                 <option value="TERMÉNY_KORREKCIÓ">Magtár korrekciók</option>
@@ -486,7 +655,7 @@
             </div>
             <div class="flex flex-col min-w-[160px]">
               <label for="filter-row-limit" class="text-xs text-slate-400 mb-1.5 font-semibold">Megjelenített sorok</label>
-              <select id="filter-row-limit" onchange="renderBookkeeping()" class="bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-1 focus:ring-green-500 focus:outline-none">
+              <select id="filter-row-limit" onchange="renderBookkeeping()" class="bg-slate-955 border border-slate-800 text-slate-200 rounded-xl px-3.5 py-2.5 text-xs focus:ring-1 focus:ring-green-500 focus:outline-none">
                 <option value="10">Legutóbbi 10 sor</option>
                 <option value="25">Legutóbbi 25 sor</option>
                 <option value="50">Legutóbbi 50 sor</option>
@@ -494,7 +663,7 @@
               </select>
             </div>
           </div>
-          <div class="bg-slate-950 border border-slate-800 px-4 py-2.5 rounded-xl font-mono text-xs text-slate-400">
+          <div class="bg-slate-955 border border-slate-800 px-4 py-2.5 rounded-xl font-mono text-xs text-slate-400">
             Találatok: <span id="filter-stats-badge" class="text-green-400 font-bold">0</span> tétel
           </div>
         </div>
@@ -521,7 +690,7 @@
 
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-300 id-report-table">
-              <thead class="text-xs uppercase bg-slate-950/80 text-slate-400 border-b border-slate-800">
+              <thead class="text-xs uppercase bg-slate-955 text-slate-400 border-b border-slate-800">
                 <tr>
                   <th class="p-4">Dátum</th>
                   <th class="p-4">Típus</th>
@@ -553,14 +722,14 @@
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
         <h3 class="text-lg font-bold text-white flex items-center">
-          <i class="fa-solid fa-sliders text-amber-500 mr-2.5"></i> Készlet Korrekció / Manuális Írás
+          <i class="fa-solid fa-sliders text-amber-500 mr-2.5"></i> Készlet Korrekció
         </h3>
         <button onclick="closeCropAdjustmentModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
       </div>
       <div class="p-6 space-y-4">
         <div>
           <label for="adj-crop-select" class="block text-xs font-semibold text-slate-400 mb-2">Válaszd ki a terményt</label>
-          <select id="adj-crop-select" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none">
+          <select id="adj-crop-select" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none">
             <option value="Szója">Szója</option>
             <option value="Őszi búza">Őszi búza</option>
             <option value="Kukorica">Kukorica</option>
@@ -571,23 +740,23 @@
         </div>
         <div>
           <label for="adj-type-select" class="block text-xs font-semibold text-slate-400 mb-2">Művelet típusa</label>
-          <select id="adj-type-select" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none">
+          <select id="adj-type-select" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none">
             <option value="PLUS">Készlet növelése (Manuális bevételezés)</option>
-            <option value="MINUS">Készlet csökkentése (Selejt, fogyás, korrekció)</option>
+            <option value="MINUS">Készlet csökkentése (Selejt, fogyás)</option>
           </select>
         </div>
         <div>
           <label for="adj-qty" class="block text-xs font-semibold text-slate-400 mb-2">Korrekciós súly (kg)</label>
-          <input type="number" id="adj-qty" placeholder="pl. 1500" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="number" id="adj-qty" placeholder="pl. 1500" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
         <div>
-          <label for="adj-reason" class="block text-xs font-semibold text-slate-400 mb-2">Művelet indoka (Megjegyzés)</label>
-          <input type="text" id="adj-reason" placeholder="pl. Év végi leltár korrekció" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <label for="adj-reason" class="block text-xs font-semibold text-slate-400 mb-2">Művelet indoka</label>
+          <input type="text" id="adj-reason" placeholder="pl. Év végi leltár" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
       </div>
-      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+      <div class="px-6 py-4 bg-slate-955/50 border-t border-slate-800 flex justify-end space-x-3">
         <button onclick="closeCropAdjustmentModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm">Mégsem</button>
-        <button onclick="saveCropAdjustment()" class="px-5 py-2 bg-amber-600 text-white rounded-xl text-sm font-semibold">Korrekció mentése</button>
+        <button onclick="saveCropAdjustment()" class="px-5 py-2 bg-amber-600 text-white rounded-xl text-sm font-semibold">Mentés</button>
       </div>
     </div>
   </div>
@@ -596,7 +765,7 @@
   <div id="weather-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-white flex items-center"><i class="fa-solid fa-cloud-sun text-green-400 mr-2.5"></i> Részletes Agrár-Időjárás adatok</h3>
+        <h3 class="text-lg font-bold text-white flex items-center"><i class="fa-solid fa-cloud-sun text-green-400 mr-2.5"></i> Részletes Agrár-Időjárás</h3>
         <button onclick="closeWeatherModal()" class="text-slate-400 hover:text-white text-2xl leading-none">&times;</button>
       </div>
       <div class="p-6 space-y-4">
@@ -645,7 +814,7 @@
           </div>
         </div>
       </div>
-      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end">
+      <div class="px-6 py-4 bg-slate-955/50 border-t border-slate-800 flex justify-end">
         <button onclick="closeWeatherModal()" class="px-5 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm font-semibold">Bezárás</button>
       </div>
     </div>
@@ -660,14 +829,14 @@
       </div>
       <div class="p-6 space-y-4">
         <input type="hidden" id="modal-field-id">
-        <input type="text" id="field-modal-name" placeholder="Tábla megnevezése (pl. Kovács-dűlő)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+        <input type="text" id="field-modal-name" placeholder="Tábla megnevezése (pl. Kovács-dűlő)" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         <div class="grid grid-cols-2 gap-4">
-          <input type="text" id="field-modal-number" placeholder="Sorszám (pl. T-01)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
-          <input type="text" id="field-modal-block" placeholder="Blokk ID (MePAR)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="text" id="field-modal-number" placeholder="Sorszám (pl. T-01)" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="text" id="field-modal-block" placeholder="Blokk ID (MePAR)" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <input type="number" step="0.01" id="field-modal-size" placeholder="Terület (ha)" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
-          <select id="field-modal-culture" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+          <input type="number" step="0.01" id="field-modal-size" placeholder="Terület (ha)" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <select id="field-modal-culture" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
             <option value="Ugar / Nincs">Ugar / Nincs</option>
             <option value="Szója">Szója</option>
             <option value="Őszi búza">Őszi búza</option>
@@ -678,7 +847,7 @@
           </select>
         </div>
       </div>
-      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+      <div class="px-6 py-4 bg-slate-955 border-t border-slate-800 flex justify-end space-x-3">
         <button onclick="closeFieldModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm">Mégsem</button>
         <button onclick="saveField()" class="px-5 py-2 bg-brand-600 text-white rounded-xl text-sm font-semibold">Mentés</button>
       </div>
@@ -686,7 +855,7 @@
   </div>
 
   <!-- MODAL: ÚJ/SZERKESZTETT INPUT ANYAG -->
-  <div id="product-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
+  <div id="product-modal" class="hidden fixed inset-0 bg-slate-955/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
         <h3 id="product-modal-title" class="text-lg font-bold text-white">Új Input Anyag</h3>
@@ -697,7 +866,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-xs text-slate-400 mb-1">Kategória</label>
-            <select id="modal-category" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+            <select id="modal-category" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
               <option value="Műtrágya">Műtrágya</option>
               <option value="Gombaölő szer">Gombaölő szer</option>
               <option value="Gyomirtó szer">Gyomirtó szer</option>
@@ -709,7 +878,7 @@
           </div>
           <div>
             <label class="block text-xs text-slate-400 mb-1">Mértékegység</label>
-            <select id="modal-unit" onchange="toggleUnitExtraFields()" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
+            <select id="modal-unit" onchange="toggleUnitExtraFields()" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none">
               <option value="kg">kg</option>
               <option value="gr">gr</option>
               <option value="liter">liter</option>
@@ -719,14 +888,14 @@
         </div>
         <div>
           <label class="block text-xs text-slate-400 mb-1">Készítmény neve</label>
-          <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP" class="w-full bg-slate-950 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+          <input type="text" id="modal-name" placeholder="pl. Pledge 50 WP" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
         <div id="seed-count-wrapper" class="hidden space-y-1">
           <label class="block text-xs text-slate-400 mb-1">Magok száma zsákonként (szemszám)</label>
           <input type="number" id="modal-seed-count" placeholder="pl. 50000" class="w-full bg-slate-955 border border-slate-700/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
         </div>
       </div>
-      <div class="px-6 py-4 bg-slate-950/50 border-t border-slate-800 flex justify-end space-x-3">
+      <div class="px-6 py-4 bg-slate-955 border-t border-slate-800 flex justify-end space-x-3">
         <button onclick="closeProductModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-sm">Mégsem</button>
         <button onclick="saveProduct()" class="px-5 py-2 bg-brand-600 text-white rounded-xl text-sm font-semibold">Mentés</button>
       </div>
@@ -734,7 +903,7 @@
   </div>
 
   <!-- CONFIRM MODAL -->
-  <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-955/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
       <h3 id="confirm-modal-title" class="text-lg font-bold text-white">Megerősítés</h3>
       <p id="confirm-modal-text" class="text-sm text-slate-300"></p>
@@ -746,7 +915,7 @@
   </div>
 
   <!-- CUSTOM ALERT MODAL -->
-  <div id="alert-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
+  <div id="alert-modal" class="hidden fixed inset-0 bg-slate-955/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 non-printable">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
       <h3 id="alert-modal-title" class="text-lg font-bold text-white">Rendszerüzenet</h3>
       <p id="alert-modal-text" class="text-sm text-slate-300"></p>
@@ -768,7 +937,7 @@
       </div>
       <div class="p-6 space-y-4 max-h-[50vh] overflow-y-auto">
         <div class="grid grid-cols-2 gap-4">
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+          <div class="bg-slate-955 p-4 rounded-xl border border-slate-850">
             <span class="text-[10px] text-green-400 font-bold uppercase">Kijuttatott Anyagok</span>
             <div id="history-total-applied" class="text-xs text-slate-200 mt-2 space-y-1"></div>
           </div>
@@ -782,7 +951,7 @@
           <div id="history-logs-container" class="space-y-2"></div>
         </div>
       </div>
-      <div class="px-6 py-4 bg-slate-950 border-t border-slate-800 flex justify-end">
+      <div class="px-6 py-4 bg-slate-955 border-t border-slate-800 flex justify-end">
         <button onclick="closeFieldHistoryModal()" class="px-5 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold">Bezárás</button>
       </div>
     </div>
@@ -794,8 +963,9 @@
     <p id="toast-message" class="text-xs font-medium text-slate-200"></p>
   </div>
 
-  <!-- ENGINE LOGIC -->
-  <script>
+  <!-- ALKALMAZÁS MOTOR -->
+  <script type="module">
+    // Reaktiv belső állapot
     let state = {
       products: [],
       fields: [],
@@ -805,14 +975,13 @@
 
     let activeTxType = 'BEVÉTEL';
     let selectedCategory = null;
+    let isFirebaseActive = false;
 
+    // Agrar weather forecasting database
     const weatherDatabase = {
-      "sellye": { temp: "20°C", feels: "21°C", wind: "7 km/h", humidity: "61%", precip: "10%", status: "IDEÁLIS", title: "Optimális feltételek permetezéshez", text: "A szélsebesség alacsony, a csapadék esélye elenyésző. Kiváló idő áll rendelkezésre a kijuttatások elvégzéséhez.", uv: "Alacsony" },
-      "pécs": { temp: "22°C", feels: "24°C", wind: "13 km/h", humidity: "54%", precip: "15%", status: "FIGYELMEZTETÉS", title: "Szeles permetezési időszak", text: "A szélsebesség határérték közelében van. Gondosan állítsa be a szórófejeket az elsodródás minimalizálása érdekében.", uv: "Mérsékelt" },
-      "szigetvár": { temp: "15°C", feels: "13°C", wind: "24 km/h", humidity: "82%", precip: "75%", status: "VESZÉLYES", title: "Eső & Erős szél! Kijuttatás Tilos!", text: "A viharos erejű szél és a csapadék miatt a permetszer kimosódása és elsodródása elkerülhetetlen. Halassza el a munkát!", uv: "Alacsony" },
-      "budapest": { temp: "25°C", feels: "26°C", wind: "5 km/h", humidity: "42%", precip: "0%", status: "IDEÁLIS", title: "Tökéletes meteorológiai ablak", text: "Minden feltétel ideális a precíziós szántóföldi munkákhoz és betakarításhoz.", uv: "Nagyon Erős" },
-      "kaposvár": { temp: "19°C", feels: "19°C", wind: "9 km/h", humidity: "63%", precip: "20%", status: "IDEÁLIS", title: "Megfelelő munkakörülmények", text: "A szél és csapadékelőrejelzés kedvező a gombaölő és gyomirtó szerek biztonságos kihelyezéséhez.", uv: "Mérsékelt" },
-      "baja": { temp: "28°C", feels: "30°C", wind: "11 km/h", humidity: "31%", precip: "5%", status: "FIGYELMEZTETÉS", title: "Magas párolgási veszteség veszélye", text: "A rendkívül sivatagi páratartalom és magas hőmérséklet miatt javasolt a permetezést a kora reggeli vagy esti órákra ütemezni.", uv: "Nagyon Erős" }
+      "sellye": { temp: "20°C", feels: "21°C", wind: "7 km/h", humidity: "61%", precip: "10%", status: "IDEÁLIS", title: "Optimális feltételek a gazdaságban", text: "A szélsebesség és csapadék alacsony. Kiváló idő áll rendelkezésre szántóföldi kijuttatásokhoz és vetési munkákhoz.", uv: "Alacsony" },
+      "pécs": { temp: "22°C", feels: "24°C", wind: "13 km/h", humidity: "54%", precip: "15%", status: "FIGYELMEZTETÉS", title: "Mérsékelten szeles időszak", text: "A szélsebesség növekedése miatt a finompermetezésnél elsodródási veszély áll fenn. Műtrágyázás és vetés korlátozás nélkül végezhető.", uv: "Mérsékelt" },
+      "szigetvár": { temp: "15°C", feels: "13°C", wind: "24 km/h", humidity: "82%", precip: "75%", status: "VESZÉLYES", title: "Eső & Erős szél! Szántóföldi munka korlátozva!", text: "Viharos szél és jelentős csapadék. Permetezés és aratás letiltva (kimosódás/elázás). Talajmunka a sár miatt nem javasolt.", uv: "Alacsony" }
     };
 
     let activeWeatherData = weatherDatabase["sellye"];
@@ -821,22 +990,94 @@
       { id: "Műtrágya", name: "Műtrágyák", icon: `<i class="fa-solid fa-leaf text-2xl text-emerald-400"></i>` },
       { id: "Gombaölő szer", name: "Gombaölő szerek", icon: `<i class="fa-solid fa-flask text-2xl text-blue-400"></i>` },
       { id: "Gyomirtó szer", name: "Gyomirtó szerek", icon: `<i class="fa-solid fa-droplet-slash text-2xl text-amber-500"></i>` },
-      { id: "Rovarölő szer", name: "Rovarölő szerek", icon: `<i class="fa-solid fa-bug text-2xl text-red-450"></i>` },
+      { id: "Rovarölő szer", name: "Rovarölő szerek", icon: `<i class="fa-solid fa-bug text-2xl text-red-400"></i>` },
       { id: "Növénykondicionáló szer", name: "Növénykondicionálók", icon: `<i class="fa-solid fa-shield-halved text-2xl text-yellow-400"></i>` },
       { id: "Vetőmag", name: "Vetőmagok", icon: `<i class="fa-solid fa-seedling text-2xl text-green-400"></i>` },
       { id: "Egyéb", name: "Egyéb anyagok", icon: `<i class="fa-solid fa-boxes-stacked text-2xl text-slate-400"></i>` }
     ];
 
-    function loadLocalData() {
-      const saved = localStorage.getItem('prk_agrosync_state');
-      if (saved) { try { state = JSON.parse(saved); } catch (e) { console.error(e); } }
+    // INICIALIZÁLÁS: Automatikus Firebase felderítés & zökkenőmentes helyi fallback
+    async function initApp() {
+      try {
+        loadLocalFallback();
+      } catch (e) {
+        console.error("Hiba az inicializáláskor:", e);
+      }
+      document.getElementById('weather-city-input').value = "Sellye";
+      updateWeather();
     }
 
-    function saveLocalData() {
+    function loadLocalFallback() {
+      isFirebaseActive = false;
+      const saved = localStorage.getItem('prk_agrosync_state');
+      if (saved) {
+        try {
+          state = JSON.parse(saved);
+        } catch (e) {
+          console.error("Nem sikerült visszaállítani a mentést:", e);
+          clearState();
+        }
+      } else {
+        clearState();
+      }
+      updateStatusUI(false);
+      renderAll();
+    }
+
+    function clearState() {
+      state = {
+        products: [],
+        fields: [],
+        grainStock: { "Szója": 0, "Őszi búza": 0, "Cirok": 0, "Kukorica": 0, "Napraforgó": 0, "Árpa": 0 },
+        logs: []
+      };
+    }
+
+    async function saveLocalData() {
       localStorage.setItem('prk_agrosync_state', JSON.stringify(state));
     }
 
-    window.updateWeather = function() {
+    function updateStatusUI(isCloud) {
+      const statusText = document.getElementById('status-cloud-text');
+      const statusDot = document.getElementById('status-cloud-dot');
+      const sidebarDot = document.getElementById('sidebar-db-dot');
+      const sidebarText = document.getElementById('sidebar-db-text');
+
+      if (isCloud) {
+        if (statusText) statusText.innerText = "PRK AgroSync — Online (Felhő)";
+        if (statusDot) statusDot.className = "h-2 w-2 rounded-full bg-emerald-400 animate-pulse";
+        if (sidebarDot) sidebarDot.className = "h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block animate-pulse";
+        if (sidebarText) sidebarText.innerText = "SaaS Felhő SQL";
+      } else {
+        if (statusText) statusText.innerText = "PRK AgroSync — Online (Helyi)";
+        if (statusDot) statusDot.className = "h-2 w-2 rounded-full bg-emerald-500 animate-pulse";
+        if (sidebarDot) sidebarDot.className = "h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block";
+        if (sidebarText) sidebarText.innerText = "Helyi Tároló";
+      }
+    }
+
+    // Mintaadatok betöltése a tiszta indulási felületről
+    async function loadDemoData() {
+      state = {
+        products: [
+          { id: "p1", name: "Pledge 50 WP", category: "Gyomirtó szer", unit: "gr", quantity: 1500, seedCount: null },
+          { id: "p2", name: "YaraMila Complex NPK", category: "Műtrágya", unit: "kg", quantity: 4500, seedCount: null },
+          { id: "p3", name: "KWS Amicello Vetőkukorica", category: "Vetőmag", unit: "zsák", quantity: 35, seedCount: 50000 }
+        ],
+        fields: [
+          { id: "f1", name: "Kovács-dűlő", number: "T-01", blockId: "MePAR-4432", size: 45.2, culture: "Szója" },
+          { id: "f2", name: "Alsó-tábla", number: "T-02", blockId: "MePAR-8921", size: 12.4, culture: "Kukorica" }
+        ],
+        grainStock: { "Szója": 145000, "Őszi búza": 0, "Cirok": 0, "Kukorica": 0, "Napraforgó": 0, "Árpa": 0 },
+        logs: [{ id: "l1", timestamp: "2026. 05. 24. 14:32", type: "BEVÉTEL", productName: "Pledge 50 WP", unit: "gr", qty: 1500, reason: "Kezdő készlet" }]
+      };
+      await saveLocalData();
+      renderAll();
+      showToast("Mintaadatok betöltve!");
+    }
+
+    // Időjárási motor
+    function updateWeather() {
       const input = document.getElementById('weather-city-input').value.trim().toLowerCase();
       if (!input) {
         showToast("Kérjük, írjon be egy települést!", "error");
@@ -858,16 +1099,16 @@
         const randPrecip = hash % 90;
         let randStatus = "IDEÁLIS";
         let randTitle = "Megfelelő munkakörülmények";
-        let randText = "A szél és csapadék adatok alapján a tábla permetezése biztonságosan megkezdhető.";
+        let randText = "A meteorológiai paraméterek kedvezőek a legtöbb szántóföldi munka elvégzéséhez.";
 
-        if (randWind > 15 || randPrecip > 30) {
+        if (randWind > 15 || randPrecip > 35) {
           randStatus = "VESZÉLYES";
-          randTitle = "Kijuttatás Nem Ajánlott!";
-          randText = "A túl erős lokális szél vagy a csapadék valószínűsége elmossa a kijuttatott készítményt.";
+          randTitle = "Szántóföldi munkák korlátozva!";
+          randText = "Az erős lokális szél vagy a csapadék ellehetetleníti a permetezést és a betakarítást.";
         } else if (randTemp > 26) {
           randStatus = "FIGYELMEZTETÉS";
-          randTitle = "Magas párolgási kockázat";
-          randText = "Kérjük, a permetezést kora reggelre vagy késő estére időzítse a hatásfok megőrzése érdekében.";
+          randTitle = "Meleg, száraz levegő";
+          randText = "A magas hőmérséklet miatt a permetezésnél gyors párolgási kockázat áll fenn. Talajmunka és vetés optimális.";
         }
 
         wData = {
@@ -886,25 +1127,53 @@
       activeWeatherData = wData;
       activeWeatherData.city = input.charAt(0).toUpperCase() + input.slice(1);
 
-      labelLoc.innerText = activeWeatherData.city;
-      labelTemp.innerText = wData.temp;
-      labelFeels.innerText = `(Érzet: ${wData.feels})`;
+      if (labelLoc) labelLoc.innerText = activeWeatherData.city;
+      if (labelTemp) labelTemp.innerText = wData.temp;
+      if (labelFeels) labelFeels.innerText = `(Érzet: ${wData.feels})`;
 
-      if (wData.status === 'IDEÁLIS') {
-        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-400";
-        iconMain.innerHTML = `<i class="fa-solid fa-sun text-xl animate-pulse"></i>`;
-      } else if (wData.status === 'FIGYELMEZTETÉS') {
-        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-yellow-500";
-        iconMain.innerHTML = `<i class="fa-solid fa-cloud-sun text-xl"></i>`;
-      } else {
-        iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-sky-400";
-        iconMain.innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-xl"></i>`;
+      if (iconMain) {
+        if (wData.status === 'IDEÁLIS') {
+          iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-amber-400";
+          iconMain.innerHTML = `<i class="fa-solid fa-sun text-xl animate-pulse"></i>`;
+        } else if (wData.status === 'FIGYELMEZTETÉS') {
+          iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-yellow-500";
+          iconMain.innerHTML = `<i class="fa-solid fa-cloud-sun text-xl"></i>`;
+        } else {
+          iconMain.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 text-sky-400";
+          iconMain.innerHTML = `<i class="fa-solid fa-cloud-showers-heavy text-xl"></i>`;
+        }
       }
 
-      showToast("Időjárás lekérve: " + activeWeatherData.city);
+      const advCity = document.getElementById('adv-city-name');
+      const advTemp = document.getElementById('adv-temperature');
+      const advHum = document.getElementById('adv-humidity');
+      const advWind = document.getElementById('adv-wind');
+
+      if (advCity) advCity.innerText = activeWeatherData.city;
+      if (advTemp) advTemp.innerText = activeWeatherData.temp;
+      if (advHum) advHum.innerText = "/ " + activeWeatherData.humidity + " rH";
+      if (advWind) advWind.innerText = activeWeatherData.wind;
+
+      const parsedTemp = parseFloat(activeWeatherData.temp);
+      const parsedHum = parseFloat(activeWeatherData.humidity);
+      const parsedWind = parseFloat(activeWeatherData.wind);
+      const parsedRain = parseFloat(activeWeatherData.precip);
+      
+      const simTempEl = document.getElementById('sim-temp');
+      const simHumEl = document.getElementById('sim-hum');
+      const simWindEl = document.getElementById('sim-wind');
+      const simRainEl = document.getElementById('sim-rain');
+      
+      if (simTempEl && simHumEl && simWindEl && simRainEl) {
+        simTempEl.value = Math.round(parsedTemp);
+        simHumEl.value = Math.round(parsedHum);
+        simWindEl.value = Math.round(parsedWind);
+        simRainEl.value = Math.round(parsedRain);
+        simCalculate();
+      }
     }
 
-    window.openWeatherModal = function() {
+    function openWeatherModal() {
       document.getElementById('weather-modal-city').innerText = activeWeatherData.city || "Sellye";
       document.getElementById('weather-modal-temp').innerText = activeWeatherData.temp;
       document.getElementById('weather-modal-feels').innerText = "Érzet: " + activeWeatherData.feels;
@@ -925,7 +1194,7 @@
         boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-emerald-950/20 border-emerald-900/40";
         iconAlert.innerHTML = `<i class="fa-solid fa-circle-check text-green-400"></i>`;
       } else if (activeWeatherData.status === 'FIGYELMEZTETÉS') {
-        boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-amber-950/20 border-amber-900/40";
+        boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-amber-955/20 border-amber-900/40";
         iconAlert.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>`;
       } else {
         boxAlert.className = "p-4 rounded-xl border flex items-start space-x-3 bg-rose-950/20 border-red-900/40";
@@ -935,34 +1204,8 @@
       document.getElementById('weather-modal').classList.remove('hidden');
     }
 
-    window.closeWeatherModal = function() {
+    function closeWeatherModal() {
       document.getElementById('weather-modal').classList.add('hidden');
-    }
-
-    window.loadDemoData = function() {
-      state = {
-        products: [
-          { id: "p1", name: "Pledge 50 WP", category: "Gyomirtó szer", unit: "gr", quantity: 1500, seedCount: null },
-          { id: "p2", name: "YaraMila Complex NPK", category: "Műtrágya", unit: "kg", quantity: 4500, seedCount: null },
-          { id: "p3", name: "KWS Amicello Vetőkukorica", category: "Vetőmag", unit: "zsák", quantity: 35, seedCount: 50000 }
-        ],
-        fields: [
-          { id: "f1", name: "Kovács-dűlő", number: "T-01", blockId: "MePAR-4432", size: 45.2, culture: "Szója" },
-          { id: "f2", name: "Alsó-tábla", number: "T-02", blockId: "MePAR-8921", size: 12.4, culture: "Kukorica" }
-        ],
-        grainStock: { "Szója": 145000, "Őszi búza": 0, "Cirok": 0, "Kukorica": 0, "Napraforgó": 0, "Árpa": 0 },
-        logs: [{ id: "l1", timestamp: "2026. 05. 24. 14:32", type: "BEVÉTEL", productName: "Pledge 50 WP", unit: "gr", qty: 1500, reason: "Kezdő készlet" }]
-      };
-      saveLocalData();
-      renderAll();
-      showToast("Mintaadatok sikeresen betöltve!");
-    }
-
-    function initLocalApp() {
-      loadLocalData();
-      document.getElementById('weather-city-input').value = "Sellye";
-      updateWeather();
-      renderAll();
     }
 
     function renderAll() {
@@ -975,6 +1218,7 @@
       populateTxProductSelect();
       populateTxFieldSelect();
       populateHarvestFieldSelect();
+      populateWeatherPlannerSelects();
     }
 
     function renderDashboard() {
@@ -992,7 +1236,7 @@
         if(subtext) subtext.innerText = "A gazdaság adatai és raktárkészletei naprakészek.";
         if(actionBtns) actionBtns.classList.add('hidden'); 
       } else {
-        if(subtext) subtext.innerText = "A szoftver készen áll a saját dűlőid és anyagaid biztonságos fogadására.";
+        if(subtext) subtext.innerText = "A szoftver készen áll a dűlők és anyagok biztonságos kezelésére.";
         if(actionBtns) actionBtns.classList.remove('hidden');
       }
 
@@ -1023,7 +1267,7 @@
       grid.innerHTML = '';
       categoriesList.forEach(cat => {
         const count = state.products.filter(p => p.category === cat.id).length;
-        grid.innerHTML += `<div onclick="openCategoryDetails('${cat.id}')" class="bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded-2xl p-5 flex items-center space-x-4 cursor-pointer transition shadow-md"><div class="bg-slate-950 p-3 rounded-xl border border-slate-800">${cat.icon}</div><div class="min-w-0 flex-1"><h4 class="font-bold text-white break-words leading-snug text-sm sm:text-base">${cat.name}</h4><p class="text-xs text-slate-400 mt-1"><span class="text-green-400 font-bold font-mono">${count}</span> tétel</p></div></div>`;
+        grid.innerHTML += `<div onclick="openCategoryDetails('${cat.id}')" class="bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded-2xl p-5 flex items-center space-x-4 cursor-pointer transition shadow-md"><div class="bg-slate-955 p-3 rounded-xl border border-slate-800">${cat.icon}</div><div class="min-w-0 flex-1"><h4 class="font-bold text-white break-words leading-snug text-sm sm:text-base">${cat.name}</h4><p class="text-xs text-slate-400 mt-1"><span class="text-green-400 font-bold font-mono">${count}</span> tétel</p></div></div>`;
       });
     }
 
@@ -1050,7 +1294,7 @@
       });
     }
 
-    window.openCategoryDetails = function(catId) {
+    function openCategoryDetails(catId) {
       selectedCategory = catId;
       document.getElementById('inventory-categories-grid').classList.add('hidden');
       document.getElementById('inventory-details-title').innerText = categoriesList.find(c => c.id === catId).name;
@@ -1058,102 +1302,25 @@
       renderInventoryTable();
     }
 
-    window.closeInventoryDetails = function() {
+    function closeInventoryDetails() {
       selectedCategory = null;
       document.getElementById('inventory-details-panel').classList.add('hidden');
       document.getElementById('inventory-categories-grid').classList.remove('hidden');
       renderInventoryCategories();
     }
 
-    // DINAMIKUS TERMÉNYEK & MAGTÁR MEGJELENÍTÉS (PRECÍZ EGYEDI EGYSÉGESÍTETT IKONOKKAL)
     function renderCrops() {
       const grid = document.getElementById('crops-grid');
       if (!grid) return;
       grid.innerHTML = '';
 
-      // Tervezett, színharmonikus és részletgazdag SVG minták
       const cropIcons = {
-        "Szója": `<svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Hüvelytermés ívelt körvonala -->
-          <path d="M3 11.5c2.5-3.5 8-5 13-3 3.5 1.5 5 5 5 5s-3.5-.8-6.5-1.8c-3-1-7.5-.5-10 1.8-1 .7-1.5-2-1.5-2z" fill="currentColor" fill-opacity="0.25" />
-          <path d="M3 11.5c-1-1-1.5-2.5-1.5-2.5" stroke-width="2.5" />
-          <!-- Szójabab szemek a hüvelyen belül -->
-          <circle cx="7.5" cy="11" r="1.8" fill="currentColor" stroke="none" />
-          <circle cx="12.5" cy="11.5" r="1.8" fill="currentColor" stroke="none" />
-          <circle cx="17" cy="12.5" r="1.8" fill="currentColor" stroke="none" />
-        </svg>`,
-        
-        "Őszi búza": `<svg class="w-8 h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Középső szár -->
-          <path d="M12 22V2" stroke-width="2.2" />
-          <!-- Kalász magvak (Spikelets) -->
-          <path d="M12 4c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 4c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 8c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 8c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 12c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 12c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 16c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 16c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <!-- Szálkák (Awns) -->
-          <path d="M15.8 4.5l2-2.5" stroke-width="1.2" />
-          <path d="M8.2 4.5l-2-2.5" stroke-width="1.2" />
-          <path d="M15.8 8.5l2-2.5" stroke-width="1.2" />
-          <path d="M8.2 8.5l-2-2.5" stroke-width="1.2" />
-          <path d="M15.8 12.5l2-2.5" stroke-width="1.2" />
-          <path d="M8.2 12.5l-2-2.5" stroke-width="1.2" />
-          <path d="M15.8 16.5l2-2.5" stroke-width="1.2" />
-          <path d="M8.2 16.5l-2-2.5" stroke-width="1.2" />
-        </svg>`,
-        
-        "Árpa": `<svg class="w-8 h-8 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <!-- Középső szár -->
-          <path d="M12 22V2" stroke-width="2.2" />
-          <!-- Kalász magvak (Spikelets) meleg aranybarna árnyalatban -->
-          <path d="M12 4c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 4c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 8c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 8c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 12c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 12c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 16c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <path d="M12 16c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" />
-          <!-- Jellegzetes, hosszú árpa szálkák -->
-          <path d="M15.8 4.5l2.5-3.5" stroke-width="1" />
-          <path d="M8.2 4.5l-2.5-3.5" stroke-width="1" />
-          <path d="M15.8 8.5l2.5-3.5" stroke-width="1" />
-          <path d="M8.2 8.5l-2.5-3.5" stroke-width="1" />
-          <path d="M15.8 12.5l2.5-3.5" stroke-width="1" />
-          <path d="M8.2 12.5l-2.5-3.5" stroke-width="1" />
-          <path d="M15.8 16.5l2.5-3.5" stroke-width="1" />
-          <path d="M8.2 16.5l-2.5-3.5" stroke-width="1" />
-        </svg>`,
-        
-        "Kukorica": `<svg class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="3" width="6" height="15" rx="3" fill="currentColor" fill-opacity="0.25" />
-          <path d="M12 22v-4" stroke="#16a34a" stroke-width="2.5" />
-          <path d="M6 16c0-4.5 2.5-9 6-12" stroke="#22c55e" stroke-width="1.5" />
-          <path d="M18 16c0-4.5-2.5-9-6-12" stroke="#22c55e" stroke-width="1.5" />
-          <path d="M11 6h2M10 9h4M10 12h4M11 15h2" stroke="currentColor" stroke-width="1.5" />
-        </svg>`,
-        
-        "Cirok": `<svg class="w-8 h-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22V12" stroke-width="2" />
-          <path d="M12 12c-2-1.5-3-3.5-3-5.5s1-4 3-5.5" />
-          <path d="M12 12c2-1.5 3-3.5 3-5.5s-1-4-3-5.5" />
-          <circle cx="12" cy="4" r="1.5" fill="currentColor" />
-          <circle cx="10" cy="7" r="1.5" fill="currentColor" />
-          <circle cx="14" cy="7" r="1.5" fill="currentColor" />
-          <circle cx="11" cy="10" r="1.5" fill="currentColor" />
-          <circle cx="13" cy="10" r="1.5" fill="currentColor" />
-        </svg>`,
-        
-        "Napraforgó": `<svg class="w-8 h-8 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 14v8" stroke="#16a34a" stroke-width="2" />
-          <path d="M12 17c2-1 4-1.5 5-3" stroke="#16a34a" stroke-width="1.5" />
-          <circle cx="12" cy="7" r="6" stroke="currentColor" stroke-dasharray="3 1.5" stroke-width="3" fill="none" />
-          <circle cx="12" cy="7" r="3" fill="#78350f" stroke="#78350f" />
-        </svg>`
+        "Szója": `<svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5c2.5-3.5 8-5 13-3 3.5 1.5 5 5 5 5s-3.5-.8-6.5-1.8c-3-1-7.5-.5-10 1.8-1 .7-1.5-2-1.5-2z" fill="currentColor" fill-opacity="0.25" /><path d="M3 11.5c-1-1-1.5-2.5-1.5-2.5" stroke-width="2.5" /><circle cx="7.5" cy="11" r="1.8" fill="currentColor" stroke="none" /><circle cx="12.5" cy="11.5" r="1.8" fill="currentColor" stroke="none" /><circle cx="17" cy="12.5" r="1.8" fill="currentColor" stroke="none" /></svg>`,
+        "Őszi búza": `<svg class="w-8 h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V2" stroke-width="2.2" /><path d="M12 4c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 4c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 8c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 8c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 12c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 12c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 16c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 16c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M15.8 4.5l2-2.5" stroke-width="1.2" /><path d="M8.2 4.5l-2-2.5" stroke-width="1.2" /><path d="M15.8 8.5l2-2.5" stroke-width="1.2" /><path d="M8.2 8.5l-2-2.5" stroke-width="1.2" /><path d="M15.8 12.5l2-2.5" stroke-width="1.2" /><path d="M8.2 12.5l-2-2.5" stroke-width="1.2" /><path d="M15.8 16.5l2-2.5" stroke-width="1.2" /><path d="M8.2 16.5l-2-2.5" stroke-width="1.2" /></svg>`,
+        "Árpa": `<svg class="w-8 h-8 text-yellow-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V2" stroke-width="2.2" /><path d="M12 4c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 4c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 8c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 8c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 12c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 12c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 16c1.5-1 3.2-1 3.8.5s-.5 2-3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M12 16c-1.5-1-3.2-1-3.8.5s.5 2 3.8 3" fill="currentColor" fill-opacity="0.3" /><path d="M15.8 4.5l2.5-3.5" stroke-width="1" /><path d="M8.2 4.5l-2.5-3.5" stroke-width="1" /><path d="M15.8 8.5l2.5-3.5" stroke-width="1" /><path d="M8.2 8.5l-2.5-3.5" stroke-width="1" /><path d="M15.8 12.5l2.5-3.5" stroke-width="1" /><path d="M8.2 12.5l-2.5-3.5" stroke-width="1" /><path d="M15.8 16.5l2.5-3.5" stroke-width="1" /><path d="M8.2 16.5l-2.5-3.5" stroke-width="1" /></svg>`,
+        "Kukorica": `<svg class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="15" rx="3" fill="currentColor" fill-opacity="0.25" /><path d="M12 22v-4" stroke="#16a34a" stroke-width="2.5" /><path d="M6 16c0-4.5 2.5-9 6-12" stroke="#22c55e" stroke-width="1.5" /><path d="M18 16c0-4.5-2.5-9-6-12" stroke="#22c55e" stroke-width="1.5" /><path d="M11 6h2M10 9h4M10 12h4M11 15h2" stroke="currentColor" stroke-width="1.5" /></svg>`,
+        "Cirok": `<svg class="w-8 h-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12" stroke-width="2" /><path d="M12 12c-2-1.5-3-3.5-3-5.5s1-4 3-5.5" /><path d="M12 12c2-1.5 3-3.5 3-5.5s-1-4-3-5.5" /><circle cx="12" cy="4" r="1.5" fill="currentColor" /><circle cx="10" cy="7" r="1.5" fill="currentColor" /><circle cx="14" cy="7" r="1.5" fill="currentColor" /><circle cx="11" cy="10" r="1.5" fill="currentColor" /><circle cx="13" cy="10" r="1.5" fill="currentColor" /></svg>`,
+        "Napraforgó": `<svg class="w-8 h-8 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14v8" stroke="#16a34a" stroke-width="2" /><path d="M12 17c2-1 4-1.5 5-3" stroke="#16a34a" stroke-width="1.5" /><circle cx="12" cy="7" r="6" stroke="currentColor" stroke-dasharray="3 1.5" stroke-width="3" fill="none" /><circle cx="12" cy="7" r="3" fill="#78350f" stroke="#78350f" /></svg>`
       };
 
       for (const [crop, qty] of Object.entries(state.grainStock)) {
@@ -1168,13 +1335,13 @@
             <div class="mt-4">
               <h4 class="font-bold text-white text-base">${crop}</h4>
               <p class="text-2xl font-black text-amber-400 mt-2 font-mono">${qty.toLocaleString('hu-HU')} <span class="text-xs font-normal text-slate-400">kg</span></p>
-              <p class="text-xs text-slate-500 mt-1 font-mono">${tonnes} tonna (t)</p>
+              <p class="text-xs text-slate-500 mt-1 font-mono">${tonnes} t</p>
             </div>
             <div class="mt-4 pt-3 border-t border-slate-800/60 flex justify-between gap-2">
               <button onclick="quickCropSale('${crop}')" class="flex-1 bg-slate-950 hover:bg-slate-850 text-sky-400 border border-blue-900/30 text-xs font-bold py-2 rounded-xl transition">
                 <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Eladás
               </button>
-              <button onclick="quickCropAdjustment('${crop}')" class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 text-xs font-bold py-2 rounded-xl transition">
+              <button onclick="quickCropAdjustment('${crop}')" class="flex-1 bg-slate-955 hover:bg-slate-850 text-slate-300 border border-slate-800 text-xs font-bold py-2 rounded-xl transition">
                 <i class="fa-solid fa-sliders mr-1"></i> Korrekció
               </button>
             </div>
@@ -1182,22 +1349,22 @@
       }
     }
 
-    window.openCropAdjustmentModal = function() {
+    function openCropAdjustmentModal() {
       document.getElementById('adj-qty').value = '';
       document.getElementById('adj-reason').value = '';
       document.getElementById('crop-adjustment-modal').classList.remove('hidden');
     }
 
-    window.quickCropAdjustment = function(crop) {
+    function quickCropAdjustment(crop) {
       document.getElementById('adj-crop-select').value = crop;
-      window.openCropAdjustmentModal();
+      openCropAdjustmentModal();
     }
 
-    window.closeCropAdjustmentModal = function() {
+    function closeCropAdjustmentModal() {
       document.getElementById('crop-adjustment-modal').classList.add('hidden');
     }
 
-    window.quickCropSale = function(crop) {
+    function quickCropSale(crop) {
       switchTab('transactions');
       setTransactionType('ELADÁS');
       setTimeout(() => {
@@ -1205,7 +1372,7 @@
       }, 50);
     }
 
-    window.saveCropAdjustment = function() {
+    async function saveCropAdjustment() {
       const crop = document.getElementById('adj-crop-select').value;
       const type = document.getElementById('adj-type-select').value;
       const qty = parseFloat(document.getElementById('adj-qty').value) || 0;
@@ -1218,11 +1385,9 @@
 
       const finalQty = type === 'PLUS' ? qty : -qty;
 
-      // Készlet frissítése a memóriában
       state.grainStock[crop] = (state.grainStock[crop] || 0) + finalQty;
       if (state.grainStock[crop] < 0) state.grainStock[crop] = 0;
 
-      // Bejegyzés a zárt könyvelési naplóba
       state.logs.push({
         id: "l_" + Math.random().toString(36).substr(2, 5),
         timestamp: new Date().toLocaleString('hu-HU'),
@@ -1234,7 +1399,7 @@
         reason: reason
       });
 
-      saveLocalData();
+      await saveLocalData();
       closeCropAdjustmentModal();
       renderAll();
       showToast(`${crop} készlet sikeresen korrigálva!`);
@@ -1248,7 +1413,7 @@
         g.innerHTML += `
           <div onclick="openFieldHistoryModal('${f.id}', event)" class="bg-slate-900 border border-slate-800 hover:border-green-500/50 rounded-2xl p-5 flex flex-col justify-between cursor-pointer transition shadow-lg">
             <div class="flex justify-between items-center mb-2">
-              <span class="text-xs bg-green-950 text-green-400 px-2 py-0.5 rounded font-mono font-bold">${f.number}</span>
+              <span class="text-xs bg-green-955 text-green-400 px-2 py-0.5 rounded font-mono font-bold">${f.number}</span>
               <button onclick="event.stopPropagation(); deleteField('${f.id}')" class="p-1 text-slate-500 hover:text-red-500 transition text-xs">🗑️</button>
             </div>
             <h4 class="text-xl font-bold text-white leading-tight">${f.name}</h4>
@@ -1257,7 +1422,7 @@
             </div>
             <p class="text-lg font-extrabold text-green-400 mt-2">${f.size} <span class="text-xs font-normal text-slate-400">ha</span></p>
             <div class="pt-3 mt-3 border-t border-slate-800/60 flex justify-end">
-              <button onclick="event.stopPropagation(); startTxOnField('${f.id}')" class="text-xs text-green-400 hover:underline font-bold transition">Kivételezés indítása &rarr;</button>
+              <button onclick="event.stopPropagation(); startTxOnField('${f.id}')" class="text-xs text-green-400 hover:underline font-bold transition">Kijuttatás indítása &rarr;</button>
             </div>
           </div>`;
       });
@@ -1292,7 +1457,26 @@
       });
     }
 
-    window.setTransactionType = function(type) {
+    function populateWeatherPlannerSelects() {
+      const fieldSelect = document.getElementById('adv-field-select');
+      const prodSelect = document.getElementById('adv-prod-select');
+      
+      if (fieldSelect && state.fields) {
+        fieldSelect.innerHTML = '';
+        state.fields.forEach(f => {
+          fieldSelect.innerHTML += `<option value="${f.id}">${f.name} (${f.size} ha)</option>`;
+        });
+      }
+      
+      if (prodSelect && state.products) {
+        prodSelect.innerHTML = '';
+        state.products.forEach(p => {
+          prodSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.unit})</option>`;
+        });
+      }
+    }
+
+    function setTransactionType(type) {
       activeTxType = type;
       document.getElementById('btn-tx-in').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
       document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-slate-950 border-slate-800 text-slate-400";
@@ -1303,13 +1487,13 @@
       const app = document.getElementById('tx-application-panel');
 
       if (type === 'BEVÉTEL') {
-        document.getElementById('btn-tx-in').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-green-950/40 border-green-500 text-green-400";
+        document.getElementById('btn-tx-in').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-green-955 border-green-500 text-green-400";
         std.classList.remove('hidden'); sale.classList.add('hidden'); app.classList.add('hidden');
       } else if (type === 'KIVÉTELEZÉS') {
-        document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-red-950/40 border-red-500 text-red-400";
+        document.getElementById('btn-tx-out').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-red-955 border-red-500 text-red-400";
         std.classList.remove('hidden'); sale.classList.add('hidden'); app.classList.remove('hidden');
       } else {
-        document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-blue-950/40 border-blue-500 text-blue-400";
+        document.getElementById('btn-tx-sale').className = "py-3 rounded-xl border font-bold text-sm text-center transition bg-blue-955 border-blue-500 text-blue-400";
         std.classList.add('hidden'); sale.classList.remove('hidden'); app.classList.add('hidden');
       }
       updateTxQtyLabel();
@@ -1328,13 +1512,13 @@
       }
     }
 
-    window.onTxFieldSelectChange = function() {
+    function onTxFieldSelectChange() {
       const f = state.fields.find(field => field.id === document.getElementById('tx-field-select').value);
       if(f) document.getElementById('tx-hectares').value = f.size;
       calculateApplicationRate();
     }
 
-    window.calculateApplicationRate = function() {
+    function calculateApplicationRate() {
       const pId = document.getElementById('tx-product-select').value;
       const ha = parseFloat(document.getElementById('tx-hectares').value) || 0;
       const qty = parseFloat(document.getElementById('tx-qty').value) || 0;
@@ -1350,7 +1534,7 @@
       }
     }
 
-    window.executeTransaction = function() {
+    async function executeTransaction() {
       if (activeTxType === 'ELADÁS') {
         const grain = document.getElementById('tx-grain-select').value;
         const qty = parseFloat(document.getElementById('tx-sale-qty').value) || 0;
@@ -1385,7 +1569,7 @@
           id: "l_" + Math.random().toString(36).substr(2, 5),
           timestamp: new Date().toLocaleString('hu-HU'),
           type: activeTxType,
-          productId: pId, // Mentjük az id-t a megfordíthatósághoz
+          productId: pId,
           productName: p.name + labelSuffix,
           unit: p.unit,
           qty: activeTxType === 'KIVÉTELEZÉS' ? -qty : qty,
@@ -1410,7 +1594,7 @@
         }
         state.logs.push(log);
       }
-      saveLocalData();
+      await saveLocalData();
       renderAll();
       
       document.getElementById('tx-qty').value = '10';
@@ -1422,18 +1606,18 @@
       showToast("Tranzakció sikeresen végrehajtva!");
     }
 
-    window.onHarvestFieldChange = function() {
+    function onHarvestFieldChange() {
       const f = state.fields.find(field => field.id === document.getElementById('harvest-field-select').value);
       document.getElementById('harvest-detected-culture').innerText = f ? f.culture : 'Válassz táblát...';
       calculateNetWeight();
     }
 
-    window.toggleDryingPanel = function() {
+    function toggleDryingPanel() {
       document.getElementById('harvest-drying-panel').classList.toggle('hidden', !document.getElementById('harvest-need-drying').checked);
       calculateNetWeight();
     }
 
-    window.calculateNetWeight = function() {
+    function calculateNetWeight() {
       const raw = parseFloat(document.getElementById('harvest-raw-weight').value) || 0;
       const rate = parseFloat(document.getElementById('harvest-deduction-rate').value) || 0;
       let net = document.getElementById('harvest-need-drying').checked ? raw * (1 - (rate / 100)) : raw;
@@ -1441,7 +1625,7 @@
       return Math.round(net);
     }
 
-    window.executeHarvest = function() {
+    async function executeHarvest() {
       const f = state.fields.find(field => field.id === document.getElementById('harvest-field-select').value);
       const raw = parseFloat(document.getElementById('harvest-raw-weight').value) || 0;
       if (!f || raw <= 0) {
@@ -1461,7 +1645,7 @@
         unit: "kg",
         reason: `Aratás. Nyers: ${raw} kg. Nedvesség: ${document.getElementById('harvest-moisture').value || '-'}%`
       });
-      saveLocalData();
+      await saveLocalData();
       renderAll();
       
       document.getElementById('harvest-raw-weight').value = '';
@@ -1473,7 +1657,7 @@
       showToast("Betakarítás rögzítve!");
     }
 
-    window.openAddFieldModal = function() {
+    function openAddFieldModal() {
       document.getElementById('field-modal-title').innerText = "Új Tábla Felvétele";
       document.getElementById('modal-field-id').value = "";
       document.getElementById('field-modal-name').value = "";
@@ -1483,11 +1667,11 @@
       document.getElementById('field-modal').classList.remove('hidden');
     }
 
-    window.closeFieldModal = function() {
+    function closeFieldModal() {
       document.getElementById('field-modal').classList.add('hidden');
     }
 
-    window.saveField = function() {
+    async function saveField() {
       const name = document.getElementById('field-modal-name').value.trim();
       const number = document.getElementById('field-modal-number').value.trim();
       const blockId = document.getElementById('field-modal-block').value.trim();
@@ -1504,21 +1688,21 @@
         name, number, blockId, size, culture
       });
 
-      saveLocalData();
+      await saveLocalData();
       closeFieldModal();
       renderAll();
       showToast("Tábla sikeresen rögzítve!");
     }
 
-    window.deleteField = function(id) {
-      customConfirm("Tábla törlése", "Biztosan törölni szeretné ezt a termőtáblát?", () => {
+    async function deleteField(id) {
+      customConfirm("Tábla törlése", "Biztosan törölni szeretné ezt a termőtáblát?", async () => {
         state.fields = state.fields.filter(f => f.id !== id);
-        saveLocalData();
+        await saveLocalData();
         renderAll();
       });
     }
 
-    window.openAddProductModal = function() {
+    function openAddProductModal() {
       document.getElementById('product-modal-title').innerText = "Új Anyag Bevételezése";
       document.getElementById('modal-product-id').value = '';
       document.getElementById('modal-name').value = '';
@@ -1528,7 +1712,7 @@
       document.getElementById('product-modal').classList.remove('hidden');
     }
 
-    window.openEditProductModal = function(id) {
+    function openEditProductModal(id) {
       const p = state.products.find(prod => prod.id === id);
       if(!p) return;
 
@@ -1543,11 +1727,11 @@
       document.getElementById('product-modal').classList.remove('hidden');
     }
 
-    window.closeProductModal = function() {
+    function closeProductModal() {
       document.getElementById('product-modal').classList.add('hidden');
     }
 
-    window.toggleUnitExtraFields = function() {
+    function toggleUnitExtraFields() {
       const unit = document.getElementById('modal-unit').value;
       const wrapper = document.getElementById('seed-count-wrapper');
       if (unit === 'zsák') {
@@ -1558,7 +1742,7 @@
       }
     }
 
-    window.saveProduct = function() {
+    async function saveProduct() {
       const id = document.getElementById('modal-product-id').value;
       const name = document.getElementById('modal-name').value.trim();
       const category = document.getElementById('modal-category').value;
@@ -1588,21 +1772,21 @@
         showToast("Input anyag rögzítve!");
       }
 
-      saveLocalData();
+      await saveLocalData();
       closeProductModal();
       renderAll();
     }
 
-    window.deleteProduct = function(id) {
-      customConfirm("Anyag törlése", "Biztosan törli ezt az anyagot a raktárból?", () => {
+    async function deleteProduct(id) {
+      customConfirm("Anyag törlése", "Biztosan törli ezt az anyagot a raktárból?", async () => {
         state.products = state.products.filter(p => p.id !== id);
-        saveLocalData();
+        await saveLocalData();
         renderAll();
         closeInventoryDetails();
       });
     }
 
-    window.openFieldHistoryModal = function(id, event) {
+    function openFieldHistoryModal(id, event) {
       if (event && event.target.closest('button')) return;
       const f = state.fields.find(field => field.id === id);
       if (!f) return;
@@ -1630,7 +1814,7 @@
         logs.forEach(l => {
           const displayType = (l.type === 'KIADÁS' || l.type === 'KIVÉTELEZÉS') ? 'KIVÉTELEZÉS' : l.type;
           container.innerHTML += `
-            <div class="bg-slate-950 p-2.5 rounded border border-slate-850 flex justify-between text-xs">
+            <div class="bg-slate-955 p-2.5 rounded border border-slate-850 flex justify-between text-xs">
               <span><strong>${displayType}</strong>: ${l.productName}</span>
               <span class="text-slate-500 font-mono">${l.timestamp.slice(0, 10)}</span>
             </div>`;
@@ -1640,8 +1824,210 @@
       document.getElementById('field-history-modal').classList.remove('hidden');
     }
 
-    window.closeFieldHistoryModal = function() {
+    function closeFieldHistoryModal() {
       document.getElementById('field-history-modal').classList.add('hidden');
+    }
+
+    function simCalculate() {
+      const temp = parseFloat(document.getElementById('sim-temp').value);
+      const hum = parseFloat(document.getElementById('sim-hum').value);
+      const wind = parseFloat(document.getElementById('sim-wind').value);
+      const rain = parseFloat(document.getElementById('sim-rain').value);
+
+      document.getElementById('sim-temp-lbl').innerText = `${temp} °C`;
+      document.getElementById('sim-hum-lbl').innerText = `${hum} %`;
+      document.getElementById('sim-wind-lbl').innerText = `${wind} km/h`;
+      document.getElementById('sim-rain-lbl').innerText = `${rain} %`;
+
+      const tw = temp * Math.atan(0.151977 * Math.sqrt(hum + 8.313765)) + Math.atan(temp + hum) - Math.atan(hum - 1.676331) + 0.00391838 * Math.pow(hum, 1.5) * Math.atan(0.023101 * hum) - 4.686035;
+      const deltaT = parseFloat((temp - tw).toFixed(1));
+
+      let scorePermet = "Kiváló";
+      let classPermet = "bg-emerald-950 text-green-400 border border-emerald-900/60";
+      let notePermet = `Delta-T: ${deltaT} °C • Szélcsend`;
+      if (wind > 15 || rain > 15 || deltaT > 10 || deltaT < 2) {
+        scorePermet = "Nem ajánlott";
+        classPermet = "bg-rose-950 text-red-400 border border-rose-900/60";
+        notePermet = wind > 15 ? "Erős elsodródás" : (rain > 15 ? "Kimosódás veszély" : "Kedvezőtlen párolgás");
+      } else if (wind > 10 || deltaT > 8) {
+        scorePermet = "Határeset";
+        classPermet = "bg-amber-950 text-yellow-500 border border-amber-900/60";
+        notePermet = "Fokozott párolgás";
+      }
+
+      let scoreTragy = "Kiváló";
+      let classTragy = "bg-emerald-950 text-green-400 border border-emerald-900/60";
+      let noteTragy = "Optimális talajbeépülés";
+      if (wind > 20 || rain > 70) {
+        scoreTragy = "Nem ajánlott";
+        classTragy = "bg-rose-950 text-red-400 border border-rose-900/60";
+        noteTragy = wind > 20 ? "Kritikus szóráskép" : "Kimosódás veszély";
+      } else if (rain > 30 || wind > 12) {
+        scoreTragy = "Határeset";
+        classTragy = "bg-amber-950 text-yellow-500 border border-amber-900/60";
+        noteTragy = rain > 30 ? "Gyors oldódás / Erős eső" : "Szélérzékeny eloszlás";
+      } else if (rain > 0) {
+        noteTragy = "Könnyű eső: kiváló bemosódás!";
+      }
+
+      let scoreVetes = "Kiváló";
+      let classVetes = "bg-emerald-950 text-green-400 border border-emerald-900/60";
+      let noteVetes = "Optimális talajszerkezet";
+      if (rain > 40) {
+        scoreVetes = "Nem ajánlott";
+        classVetes = "bg-rose-950 text-red-400 border border-rose-900/60";
+        noteVetes = "Sárképződés / Vetés fulladás";
+      } else if (rain > 10 || temp < 8) {
+        scoreVetes = "Határeset";
+        classVetes = "bg-amber-950 text-yellow-500 border border-amber-900/60";
+        noteVetes = temp < 8 ? "Túl hideg talaj" : "Nedves talajfelszín";
+      }
+
+      let scoreArat = "Kiváló";
+      let classArat = "bg-emerald-950 text-green-400 border border-emerald-900/60";
+      let noteArat = "Száraz szemnedvesség";
+      if (rain > 0 || hum > 80) {
+        scoreArat = "Nem ajánlott";
+        classArat = "bg-rose-950 text-red-400 border border-rose-900/60";
+        noteArat = rain > 0 ? "Aratási leállás (Eső)" : "Magas relatív pára";
+      } else if (hum > 70) {
+        scoreArat = "Határeset";
+        classArat = "bg-amber-950 text-yellow-500 border border-amber-900/60";
+        noteArat = "Esti harmatképződés";
+      }
+
+      document.getElementById('op-permet-badge').innerText = scorePermet;
+      document.getElementById('op-permet-badge').className = `px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider ${classPermet}`;
+      document.getElementById('op-permet-lbl').innerText = notePermet;
+
+      document.getElementById('op-tragy-badge').innerText = scoreTragy;
+      document.getElementById('op-tragy-badge').className = `px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider ${classTragy}`;
+      document.getElementById('op-tragy-lbl').innerText = noteTragy;
+
+      document.getElementById('op-vetes-badge').innerText = scoreVetes;
+      document.getElementById('op-vetes-badge').className = `px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider ${classVetes}`;
+      document.getElementById('op-vetes-lbl').innerText = noteVetes;
+
+      document.getElementById('op-arat-badge').innerText = scoreArat;
+      document.getElementById('op-arat-badge').className = `px-2.5 py-1 text-[10px] font-bold rounded-lg uppercase tracking-wider ${classArat}`;
+      document.getElementById('op-arat-lbl').innerText = noteArat;
+
+      advUpdateFields();
+    }
+
+    function advUpdateFields() {
+      const opSelect = document.getElementById('adv-op-select');
+      const fSelect = document.getElementById('adv-field-select');
+      const pSelect = document.getElementById('adv-prod-select');
+      const verdictText = document.getElementById('adv-planner-verdict');
+      const actionBtn = document.getElementById('adv-action-btn');
+
+      if (!opSelect || !fSelect || !pSelect || !verdictText || !actionBtn) return;
+
+      const op = opSelect.value;
+      const fId = fSelect.value;
+      const pId = pSelect.value;
+
+      const temp = parseFloat(document.getElementById('sim-temp').value);
+      const hum = parseFloat(document.getElementById('sim-hum').value);
+      const wind = parseFloat(document.getElementById('sim-wind').value);
+      const rain = parseFloat(document.getElementById('sim-rain').value);
+
+      let isAllowed = true;
+      let statusLabel = "A művelet elvégezhető!";
+      let safetyColor = "text-green-400";
+      let reasonLabel = "Minden szántóföldi feltétel megfelelő.";
+
+      if (op === 'permetezes') {
+        const tw = temp * Math.atan(0.151977 * Math.sqrt(hum + 8.313765)) + Math.atan(temp + hum) - Math.atan(hum - 1.676331) + 0.00391838 * Math.pow(hum, 1.5) * Math.atan(0.023101 * hum) - 4.686035;
+        const deltaT = parseFloat((temp - tw).toFixed(1));
+
+        if (wind > 15 || rain > 15 || deltaT > 10 || deltaT < 2) {
+          isAllowed = false;
+          statusLabel = "Permetezés ellenjavallt!";
+          safetyColor = "text-red-400";
+          reasonLabel = `Elsodródás és kimosódás kockázata magas (Szél: ${wind} km/h, Eső: ${rain}%, Delta-T: ${deltaT}°C).`;
+        } else if (wind > 10 || deltaT > 8) {
+          statusLabel = "Permetezés óvatosan!";
+          safetyColor = "text-yellow-500";
+          reasonLabel = `Fokozott párolgásveszély vagy mérsékelt szél elsodródás.`;
+        }
+        actionBtn.innerText = "Kijuttatás indítása (Kivételezés) &rarr;";
+      } else if (op === 'mutragyazas') {
+        if (wind > 20 || rain > 70) {
+          isAllowed = false;
+          statusLabel = "Műtrágyázás nem javasolt!";
+          safetyColor = "text-red-400";
+          reasonLabel = `A szélvihar teljesen felborítja a szórásképet, a túlzott eső pedig kimossa a tápanyagot.`;
+        } else if (rain > 0 && rain <= 30) {
+          statusLabel = "Kiváló körülmények!";
+          safetyColor = "text-green-400";
+          reasonLabel = `A gyenge csapadék segíti a szemcsék beoldódását.`;
+        }
+        actionBtn.innerText = "Tápanyag-bevitel indítása &rarr;";
+      } else if (op === 'talajmunka') {
+        if (rain > 40) {
+          isAllowed = false;
+          statusLabel = "Talajmunka korlátozva!";
+          safetyColor = "text-red-400";
+          reasonLabel = `A sárképződés miatt a gépek nem tudnak a dűlőre lépni.`;
+        } else if (temp < 8) {
+          statusLabel = "Vetés határeset!";
+          safetyColor = "text-yellow-500";
+          reasonLabel = `A talajhőmérséklet alacsony lehet a csírázáshoz (${temp}°C).`;
+        }
+        actionBtn.innerText = "Vetés / Talajmunka indítása &rarr;";
+      } else if (op === 'betakaritas') {
+        if (rain > 0 || hum > 80) {
+          isAllowed = false;
+          statusLabel = "Aratás letiltva!";
+          safetyColor = "text-red-400";
+          reasonLabel = `Csapadék vagy túl párás levegő esetén a szemnedvesség megemelkedik.`;
+        }
+        actionBtn.innerText = "Mérlegjegy kitöltése &rarr;";
+      }
+
+      verdictText.innerHTML = `
+        <span class="text-xs font-bold text-slate-400 uppercase">Művelet Ellenőrzési Eredmény</span>
+        <p class="text-sm font-black ${safetyColor} mt-1 uppercase tracking-wider">${statusLabel}</p>
+        <span class="text-[10px] text-slate-300 mt-1 leading-relaxed">${reasonLabel}</span>
+      `;
+    }
+
+    function advTransferToTransactions() {
+      const op = document.getElementById('adv-op-select').value;
+      const fId = document.getElementById('adv-field-select').value;
+      const pId = document.getElementById('adv-prod-select').value;
+
+      if (!fId) {
+        customAlert("Hiba", "Kérjük, jelöljön ki egy táblát az átvitelhez!");
+        return;
+      }
+
+      const f = state.fields.find(field => field.id === fId);
+
+      if (op === 'betakaritas') {
+        switchTab('harvest');
+        setTimeout(() => {
+          document.getElementById('harvest-field-select').value = fId;
+          onHarvestFieldChange();
+          showToast("Munkaterv sikeresen betöltve az Aratási Mérlegjegybe!");
+        }, 50);
+      } else {
+        switchTab('transactions');
+        setTransactionType('KIVÉTELEZÉS');
+
+        setTimeout(() => {
+          document.getElementById('tx-field-select').value = fId;
+          document.getElementById('tx-hectares').value = f.size;
+          if (pId) {
+            document.getElementById('tx-product-select').value = pId;
+          }
+          updateTxQtyLabel();
+          calculateApplicationRate();
+          showToast("Munkaterv átvéve a készletmozgásos bizonylatba!");
+        }, 50);
+      }
     }
 
     function renderBookkeeping() {
@@ -1651,8 +2037,8 @@
       const filterType = document.getElementById('filter-tx-type')?.value || 'ALL';
       const filterTypeText = {
         'ALL': 'Teljes Főkönyvi Kivonat',
-        'BEVÉTEL': 'Beszállított Input Anyagok (Bevételezés)',
-        'KIVÉTELEZÉS': 'Szántóföldi Kijuttatások (Kivételezés)',
+        'BEVÉTEL': 'Input Anyagok Bevételezése',
+        'KIVÉTELEZÉS': 'Szántóföldi Kijuttatások',
         'BETAKARÍTÁS': 'Betakarítási Mérlegjegyek',
         'ELADÁS': 'Termény Értékesítések',
         'TERMÉNY_KORREKCIÓ': 'Manuális Magtári Korrekciók'
@@ -1711,26 +2097,25 @@
             <td class="p-3 text-center font-bold">${l.qty.toLocaleString('hu-HU')} ${l.unit}</td>
             <td class="p-3 text-right text-slate-400 italic">${l.reason || '-'}</td>
             <td class="p-3 text-center non-printable">
-              <button onclick="deleteLog('${l.id}')" class="text-red-400 text-xs">🗑️</button>
+              <button onclick="deleteLog('${l.id}')" class="text-red-400 text-xs hover:text-red-300 transition">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
             </td>
           </tr>`;
       });
     }
 
-    window.printReport = function() {
+    function printReport() {
       renderBookkeeping();
       window.print();
     }
 
-    // INTUÍTIV ÉS BIZTONSÁGOS KÉSZLET VISSZAÁLLÍTÓ LOGIKÁVAL ELLÁTOTT TÖRLÉS
-    window.deleteLog = function(id) {
-      customConfirm("Bizonylat törlése", "Biztosan törölni szeretné ezt a bejegyzést? A készletek ennek megfelelően visszaállnak a korábbi szintre.", () => {
+    function deleteLog(id) {
+      customConfirm("Bizonylat törlése", "Biztosan törölni szeretné ezt a bejegyzést? A készletek visszaállnak.", async () => {
         const log = state.logs.find(l => l.id === id);
         if (!log) return;
 
-        // VISSZAÁLLÍTÁSI MATEMATIKAI MODELL
         if (log.type === 'ELADÁS' || log.type === 'BETAKARÍTÁS' || log.type === 'TERMÉNY_KORREKCIÓ') {
-          // Ha eladás volt (negatív érték), a kivonás hozzáadja. Ha betakarítás (pozitív), levonja belőle.
           state.grainStock[log.productName] = (state.grainStock[log.productName] || 0) - log.qty;
           if (state.grainStock[log.productName] < 0) state.grainStock[log.productName] = 0;
         } else if (log.type === 'BEVÉTEL' && log.productId) {
@@ -1742,21 +2127,19 @@
         } else if (log.type === 'KIVÉTELEZÉS' && log.productId) {
           const p = state.products.find(prod => prod.id === log.productId);
           if (p) {
-            // log.qty negatív kijuttatásként van tárolva, így a levonással visszakapjuk a pozitív értéket
             p.quantity -= log.qty;
             if (p.quantity < 0) p.quantity = 0;
           }
         }
 
-        // Tényleges törlés a zárt naplóból
         state.logs = state.logs.filter(l => l.id !== id);
-        saveLocalData();
+        await saveLocalData();
         renderAll();
-        showToast("Bizonylat törölve, a készletek sikeresen visszaálltak!");
+        showToast("Bizonylat törölve, a készletek visszaálltak!");
       });
     }
 
-    window.exportBookkeepingToCSV = function() {
+    function exportBookkeepingToCSV() {
       if(state.logs.length === 0) return;
       let csv = "data:text/csv;charset=utf-8,\uFEFFDátum,Típus,Helyszín,Anyag_Kultúra,Mennyiség,Egység,Megjegyzés\r\n";
       state.logs.forEach(l => {
@@ -1771,7 +2154,7 @@
       document.body.removeChild(link);
     }
 
-    window.exportStateBackup = function() {
+    function exportStateBackup() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
@@ -1782,7 +2165,7 @@
       showToast("Adatbázis exportálva fájlba!");
     }
 
-    window.importStateBackup = function() {
+    function importStateBackup() {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.accept = '.json';
@@ -1790,12 +2173,12 @@
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = readerEvent => {
+        reader.onload = async readerEvent => {
           try {
             const parsed = JSON.parse(readerEvent.target.result);
             if (parsed && (parsed.fields || parsed.products || parsed.logs)) {
               state = parsed;
-              saveLocalData();
+              await saveLocalData();
               renderAll();
               showToast("Biztonsági mentés visszaállítva!");
             } else {
@@ -1810,13 +2193,17 @@
       fileInput.click();
     }
 
-    window.switchTab = function(tabId) {
-      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'bookkeeping', 'crops'].forEach(id => {
-        document.getElementById('tab-' + id)?.classList.add('hidden');
-        document.getElementById('nav-' + id).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 border-l-4 border-transparent hover:bg-slate-800 hover:text-white";
+    function switchTab(tabId) {
+      ['dashboard', 'inventory', 'fields', 'transactions', 'harvest', 'weather', 'bookkeeping', 'crops'].forEach(id => {
+        const el = document.getElementById('tab-' + id);
+        if (el) el.classList.add('hidden');
+        const navEl = document.getElementById('nav-' + id);
+        if (navEl) navEl.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition text-slate-400 border-l-4 border-transparent hover:bg-slate-800 hover:text-white";
       });
-      document.getElementById('tab-' + tabId)?.classList.remove('hidden');
-      document.getElementById('nav-' + tabId).className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition bg-slate-800 text-white border-l-4 border-green-500 font-bold";
+      const elTab = document.getElementById('tab-' + tabId);
+      if (elTab) elTab.classList.remove('hidden');
+      const navActive = document.getElementById('nav-' + tabId);
+      if (navActive) navActive.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition bg-slate-800 text-white border-l-4 border-green-500 font-bold";
 
       const titleNode = document.getElementById('view-title');
       if (tabId === 'dashboard') { titleNode.innerText = "Műszerfal & Operatív Időjárás"; renderDashboard(); }
@@ -1824,56 +2211,129 @@
       if (tabId === 'fields') { titleNode.innerText = "Gazdasági Parcellák"; renderFieldsGrid(); }
       if (tabId === 'transactions') { titleNode.innerText = "Készlet Mozgatás"; }
       if (tabId === 'harvest') { titleNode.innerText = "Mérlegjegy Rögzítése"; }
+      if (tabId === 'weather') { titleNode.innerText = "Időjárás & Munkaterv"; simCalculate(); }
       if (tabId === 'bookkeeping') { titleNode.innerText = "Zárt Könyvelési Napló"; renderBookkeeping(); }
       if (tabId === 'crops') { titleNode.innerText = "Termények & Magtár"; renderCrops(); }
     }
 
-    window.toggleMobileMenu = function() {
+    function toggleMobileMenu() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
     }
 
-    window.showToast = function(m, type = "success") {
-      document.getElementById('toast-message').innerText = m;
-      const t = document.getElementById('toast');
-      const w = document.getElementById('toast-icon-wrapper');
-      w.className = type === "success" ? "p-1 px-2.5 rounded-xl text-white font-bold bg-green-500" : "p-1 px-2.5 rounded-xl text-white font-bold bg-red-500";
-      w.innerHTML = type === "success" ? `&checkmark;` : `!`;
-      t.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
-    }
-
-    window.customConfirm = function(title, msg, cb) {
-      const m = document.getElementById('confirm-modal');
-      m.classList.remove('hidden');
-      document.getElementById('confirm-modal-title').innerText = title;
-      document.getElementById('confirm-modal-text').innerText = msg;
-      document.getElementById('confirm-ok-btn').onclick = () => { m.classList.add('hidden'); cb(); };
-      document.getElementById('confirm-cancel-btn').onclick = () => m.classList.add('hidden');
-    }
-
-    window.customAlert = function(title, text) {
-      const modal = document.getElementById('alert-modal');
-      document.getElementById('alert-modal-title').innerText = title;
-      document.getElementById('alert-modal-text').innerText = text;
-      modal.classList.remove('hidden');
-    }
-
-    window.closeAlertModal = function() {
-      document.getElementById('alert-modal').classList.add('hidden');
-    }
-
-    window.startTxOnField = function(id) {
-      const f = state.fields.find(field => field.id === id);
-      if(!f) return;
+    function startTxOnField(fieldId) {
       switchTab('transactions');
       setTransactionType('KIVÉTELEZÉS');
       setTimeout(() => {
-        document.getElementById('tx-field-select').value = f.id;
-        document.getElementById('tx-hectares').value = f.size;
-        updateTxQtyLabel();
-        calculateApplicationRate();
+        document.getElementById('tx-field-select').value = fieldId;
+        onTxFieldSelectChange();
       }, 50);
     }
+
+    // Modal helpers
+    function customAlert(title, text) {
+      document.getElementById('alert-modal-title').innerText = title;
+      document.getElementById('alert-modal-text').innerText = text;
+      document.getElementById('alert-modal').classList.remove('hidden');
+    }
+
+    function closeAlertModal() {
+      document.getElementById('alert-modal').classList.add('hidden');
+    }
+
+    function customConfirm(title, text, onConfirm) {
+      document.getElementById('confirm-modal-title').innerText = title;
+      document.getElementById('confirm-modal-text').innerText = text;
+      const modal = document.getElementById('confirm-modal');
+      
+      const cancelBtn = document.getElementById('confirm-cancel-btn');
+      const okBtn = document.getElementById('confirm-ok-btn');
+
+      const cleanup = () => {
+        modal.classList.add('hidden');
+      };
+
+      cancelBtn.onclick = cleanup;
+      okBtn.onclick = () => {
+        cleanup();
+        onConfirm();
+      };
+
+      modal.classList.remove('hidden');
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById('toast');
+      const msgNode = document.getElementById('toast-message');
+      const wrapper = document.getElementById('toast-icon-wrapper');
+
+      if (!toast || !msgNode || !wrapper) return;
+
+      msgNode.innerText = message;
+      if (type === 'error') {
+        wrapper.className = "p-1 px-2.5 rounded-xl text-white font-bold bg-red-600";
+        wrapper.innerHTML = "&times;";
+      } else {
+        wrapper.className = "p-1 px-2.5 rounded-xl text-white font-bold bg-green-500";
+        wrapper.innerHTML = "&checkmark;";
+      }
+
+      toast.className = "fixed bottom-5 right-5 z-50 transform translate-y-0 opacity-100 transition duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-3";
+      
+      setTimeout(() => {
+        toast.className = "fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-3";
+      }, 3500);
+    }
+
+    // Inicializáló eseménykezelők bekötése
+    window.addEventListener('DOMContentLoaded', () => {
+      initApp();
+    });
+
+    // Ablak szintű exportok a HTML inline hívásokhoz
+    window.toggleMobileMenu = toggleMobileMenu;
+    window.switchTab = switchTab;
+    window.openAddFieldModal = openAddFieldModal;
+    window.closeFieldModal = closeFieldModal;
+    window.saveField = saveField;
+    window.deleteField = deleteField;
+    window.loadDemoData = loadDemoData;
+    window.updateWeather = updateWeather;
+    window.openWeatherModal = openWeatherModal;
+    window.closeWeatherModal = closeWeatherModal;
+    window.openCropAdjustmentModal = openCropAdjustmentModal;
+    window.quickCropAdjustment = quickCropAdjustment;
+    window.closeCropAdjustmentModal = closeCropAdjustmentModal;
+    window.quickCropSale = quickCropSale;
+    window.saveCropAdjustment = saveCropAdjustment;
+    window.closeInventoryDetails = closeInventoryDetails;
+    window.openCategoryDetails = openCategoryDetails;
+    window.deleteProduct = deleteProduct;
+    window.openEditProductModal = openEditProductModal;
+    window.closeProductModal = closeProductModal;
+    window.toggleUnitExtraFields = toggleUnitExtraFields;
+    window.saveProduct = saveProduct;
+    window.openFieldHistoryModal = openFieldHistoryModal;
+    window.closeFieldHistoryModal = closeFieldHistoryModal;
+    window.printReport = printReport;
+    window.deleteLog = deleteLog;
+    window.exportBookkeepingToCSV = exportBookkeepingToCSV;
+    window.exportStateBackup = exportStateBackup;
+    window.importStateBackup = importStateBackup;
+    window.renderBookkeeping = renderBookkeeping;
+    window.closeAlertModal = closeAlertModal;
+    window.startTxOnField = startTxOnField;
+    window.setTransactionType = setTransactionType;
+    window.onTxFieldSelectChange = onTxFieldSelectChange;
+    window.calculateApplicationRate = calculateApplicationRate;
+    window.updateTxQtyLabel = updateTxQtyLabel;
+    window.calculateNetWeight = calculateNetWeight;
+    window.executeTransaction = executeTransaction;
+    window.onHarvestFieldChange = onHarvestFieldChange;
+    window.toggleDryingPanel = toggleDryingPanel;
+    window.executeHarvest = executeHarvest;
+    window.simCalculate = simCalculate;
+    window.advUpdateFields = advUpdateFields;
+    window.advTransferToTransactions = advTransferToTransactions;
   </script>
 </body>
 </html>
