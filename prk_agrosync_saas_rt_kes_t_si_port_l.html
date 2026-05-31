@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="hu" class="scroll-smooth h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRK AgroSync — Értékesítési & SaaS Portál</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glow-effect {
+      box-shadow: 0 0 40px -10px rgba(34, 197, 94, 0.2);
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col justify-between overflow-x-hidden">
+
+  <!-- FELSŐ FEJLÉC ÉS NAVIGÁCIÓ -->
+  <nav class="sticky top-0 z-50 glass-panel border-b border-slate-900 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="bg-brand-600 p-2.5 rounded-xl text-white shadow-lg shadow-green-950/40">
+        <i class="fa-solid fa-wheat-awn text-xl"></i>
+      </div>
+      <div>
+        <span class="font-extrabold text-lg tracking-wider text-green-400">PRK<span class="text-white"> AGROSYNC</span></span>
+        <span class="block text-[9px] text-slate-400 uppercase font-bold tracking-widest">SaaS Partner Platform</span>
+      </div>
+    </div>
+    
+    <!-- DESKTOP MENÜ -->
+    <div class="hidden md:flex items-center space-x-8">
+      <a href="#features" class="text-sm font-medium text-slate-300 hover:text-green-400 transition">Szoftver funkciók</a>
+      <a href="#database" class="text-sm font-medium text-slate-300 hover:text-green-400 transition">Adatbiztonság (SQL)</a>
+      <a href="#pricing" class="text-sm font-medium text-slate-300 hover:text-green-400 transition">Csomagok & Árak</a>
+      <a href="#faq" class="text-sm font-medium text-slate-300 hover:text-green-400 transition">Gyakori Kérdések</a>
+    </div>
+
+    <div class="hidden md:flex items-center space-x-4">
+      <a href="#order" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg shadow-green-950/30">
+        <i class="fa-solid fa-rocket mr-1.5"></i>Gazdaság Létrehozása
+      </a>
+    </div>
+
+    <!-- MOBIL MENÜ GOMB -->
+    <button onclick="toggleMobileMenu()" class="md:hidden text-slate-400 hover:text-white transition">
+      <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+  </nav>
+
+  <!-- MOBIL MENÜ PANEL -->
+  <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-slate-950/98 backdrop-blur-md flex flex-col justify-center p-8 space-y-6 text-center">
+    <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-3xl">&times;</button>
+    <a href="#features" onclick="toggleMobileMenu()" class="text-xl font-bold text-white hover:text-green-400">Szoftver funkciók</a>
+    <a href="#database" onclick="toggleMobileMenu()" class="text-xl font-bold text-white hover:text-green-400">Adatbiztonság (SQL)</a>
+    <a href="#pricing" onclick="toggleMobileMenu()" class="text-xl font-bold text-white hover:text-green-400">Csomagok & Árak</a>
+    <a href="#faq" onclick="toggleMobileMenu()" class="text-xl font-bold text-white hover:text-green-400">Gyakori Kérdések</a>
+    <a href="#order" onclick="toggleMobileMenu()" class="bg-brand-600 text-white font-bold py-3.5 rounded-xl block shadow-lg">Gazdaság Létrehozása</a>
+  </div>
+
+  <!-- HERO: SAAS SALES FOCUS -->
+  <header class="relative overflow-hidden py-24 px-6 md:px-12 flex flex-col items-center text-center space-y-8 bg-gradient-to-b from-green-950/10 via-transparent to-transparent">
+    <div class="inline-flex items-center space-x-2 bg-green-950/40 border border-green-500/20 px-4 py-1.5 rounded-full text-xs text-green-400 font-semibold mb-2">
+      <i class="fa-solid fa-cloud-bolt text-xs animate-pulse"></i>
+      <span>Azonnal indítható, felhőalapú mezőgazdasági ERP rendszer</span>
+    </div>
+    
+    <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight max-w-4xl leading-tight">
+      Irányítsa mezőgazdasági vállalkozását <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">precízen, papírmunka nélkül</span>
+    </h1>
+    
+    <p class="text-base md:text-lg text-slate-400 max-w-2xl leading-relaxed">
+      A PRK AgroSync segítségével a raktárkészlet, a vetésterv, az aratási bizonylatok és a növényvédelmi kijuttatások egyetlen zárt, szigorúan ellenőrzött rendszerben futnak. Regisztrálja gazdaságát, és indítsa el saját felhőbázisát 5 perc alatt!
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 w-full justify-center max-w-md pt-4">
+      <a href="#order" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-8 py-4 rounded-xl text-sm transition text-center shadow-lg shadow-green-900/30">
+        30 napos ingyenes próba indítása
+      </a>
+      <a href="#pricing" class="bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 font-bold px-8 py-4 rounded-xl text-sm transition text-center">
+        Csomagok összehasonlítása
+      </a>
+    </div>
+
+    <!-- ELŐNÉZETI MOCKUP ILLUSZTRÁCIÓ -->
+    <div class="w-full max-w-4xl pt-12">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2 shadow-2xl glow-effect">
+        <div class="bg-slate-950 rounded-xl overflow-hidden border border-slate-900 aspect-[16/9] flex flex-col justify-between p-4 md:p-6 text-left">
+          <!-- ERP Mockup Fejléc -->
+          <div class="flex justify-between items-center border-b border-slate-900 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+              <span class="text-[10px] text-slate-500 font-mono pl-2">demo_agrosync.prkagrar.hu</span>
+            </div>
+            <span class="text-[10px] bg-green-950/40 text-green-400 border border-green-900/30 px-2.5 py-0.5 rounded-full font-bold">SQL Felhő Szinkron Aktív</span>
+          </div>
+          <!-- ERP Mockup Dashboard -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+              <span class="text-[10px] text-slate-400 block uppercase font-bold">Kovács-dűlő (T-01)</span>
+              <span class="text-lg font-bold text-white mt-1 block">Szója kultúra</span>
+              <span class="text-xs text-green-400 block mt-2 font-mono">45.2 ha • Kezelt terület</span>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 border-l-4 border-l-amber-500">
+              <span class="text-[10px] text-slate-400 block uppercase font-bold">Magtári Nettó Készlet</span>
+              <span class="text-lg font-black text-amber-400 mt-1 block">145.000 kg</span>
+              <span class="text-xs text-slate-500 block mt-2 font-mono">Mérlegjeggyel hitelesítve</span>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+              <span class="text-[10px] text-slate-400 block uppercase font-bold">Operatív Időjárás</span>
+              <span class="text-lg font-bold text-white mt-1 block">Sellye: 20°C</span>
+              <span class="text-xs text-green-400 block mt-2 font-mono flex items-center"><i class="fa-solid fa-circle-check mr-1"></i>Permetezésre ideális</span>
+            </div>
+          </div>
+          <!-- ERP Mockup Lábléc -->
+          <div class="flex justify-between items-center text-[10px] text-slate-500 border-t border-slate-900 pt-3">
+            <span>&copy; PRK AgroSync szoftverfelület</span>
+            <span>Felhasználó: demo_gazda_01</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- FUNKCIÓK BEMUTATÁSA (FEATURES SECTION) -->
+  <section id="features" class="py-24 px-6 md:px-12 max-w-7xl mx-auto space-y-16">
+    <div class="text-center max-w-3xl mx-auto space-y-4">
+      <span class="text-xs text-green-400 font-bold uppercase tracking-widest">Minden egyetlen zárt rendszerben</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-white">Eszközök, amelyekkel nyereségesebbé és átláthatóbbá válik a gazdálkodás</h2>
+      <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+        A PRK AgroSync nem csupán egy digitális táblázat. Ez egy olyan integrált rendszer, ahol a raktárba bevételezett növényvédő szer fogyása közvetlenül összekapcsolódik a szántóföldi kijuttatással és az önköltséggel.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- 1. Funkció: Raktár -->
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-4 hover:border-green-500/30 transition">
+        <div class="bg-slate-950 p-3.5 rounded-2xl w-14 h-14 flex items-center justify-center text-green-400 text-xl border border-slate-800">
+          <i class="fa-solid fa-warehouse"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Anyagraktár & Vetőmagok</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Kövesse nyomon műtrágyáit, növényvédő szereit és vetőmagjait. A rendszer külön kezeli a szemszám alapú zsákos vetőmagokat a pontos tőszámtervezés érdekében.
+        </p>
+      </div>
+
+      <!-- 2. Funkció: Táblák -->
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-4 hover:border-green-500/30 transition">
+        <div class="bg-slate-950 p-3.5 rounded-2xl w-14 h-14 flex items-center justify-center text-green-400 text-xl border border-slate-800">
+          <i class="fa-solid fa-map-location-dot"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Táblatörzskönyv és Történet</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Rögzítse parcelláit a MePAR Blokk ID-kkal együtt. Minden táblánál egy kattintással megtekintheti az oda kijuttatott összes anyagot és a betakarított termésmennyiséget.
+        </p>
+      </div>
+
+      <!-- 3. Funkció: Időjárás -->
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-4 hover:border-green-500/30 transition">
+        <div class="bg-slate-950 p-3.5 rounded-2xl w-14 h-14 flex items-center justify-center text-green-400 text-xl border border-slate-800">
+          <i class="fa-solid fa-cloud-sun"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Agrár-Időjárás Elemzés</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Intelligens lokális meteorológiai ellenőrzés. A rendszer elemzi a szélsebességet és a csapadékot, és azonnali javaslatot ad a permetezési munkák biztonságos megkezdésére.
+        </p>
+      </div>
+
+      <!-- 4. Funkció: Mérlegjegyek -->
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-4 hover:border-green-500/30 transition">
+        <div class="bg-slate-950 p-3.5 rounded-2xl w-14 h-14 flex items-center justify-center text-green-400 text-xl border border-slate-800">
+          <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Betakarítási Mérlegjegyek</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Kezelje a beérkező szállítmányokat precízen. A rendszer a nedvességtartalom és tisztaság alapján automatikusan kiszámolja a nettó magtári beszállított súlyokat.
+        </p>
+      </div>
+
+      <!-- 5. Funkció: Könyvelés -->
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-4 hover:border-green-500/30 transition">
+        <div class="bg-slate-950 p-3.5 rounded-2xl w-14 h-14 flex items-center justify-center text-green-400 text-xl border border-slate-800">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Zárt Könyvelési Napló</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Visszakövethető bizonylat-nyilvántartás. A hibás tételek törlésekor a beépített matematikai korrekciós motor automatikusan visszaállítja a készleteket a valós szintre.
+        </p>
+      </div>
+
+      <!-- 6. Funkció: Exportok -->
+      <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl space-y-4 hover:border-green-500/30 transition">
+        <div class="bg-slate-950 p-3.5 rounded-2xl w-14 h-14 flex items-center justify-center text-green-400 text-xl border border-slate-800">
+          <i class="fa-solid fa-file-pdf"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">PDF jelentések & CSV Export</h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Generáljon hivatalos könyvelési kivonatokat aláírási blokkal ellátva, vagy töltse le a teljes adattárat Excel-kompatibilis CSV, illetve biztonsági JSON formátumban.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADATBÁZIS ISOLATION ÉS SQL ARCHITEKTÚRA (DATABASE SECTION) -->
+  <section id="database" class="py-24 px-6 md:px-12 bg-slate-900/40 border-y border-slate-900">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <span class="text-xs text-green-400 font-bold uppercase tracking-widest block">Szigorúan izolált adatstruktúra</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">Minden gazdaságnak saját, dedikált adatbázis hozzáférést biztosítunk</h2>
+        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+          Mi nem egyetlen óriási adatbázisba öntjük az összes magyar gazdaság adatait. Az Ön dűlőinek, vegyszereinek és pénzügyeinek adatai szigorúan bizalmasak. 
+        </p>
+        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+          A PRK AgroSync SaaS architektúrájában a regisztráció pillanatában a rendszer **automatikusan létrehoz egy egyedi, fizikailag izolált hozzáférési token-t és adatbázis-területet** az Ön gazdasága számára. Ez garantálja, hogy:
+        </p>
+        <div class="space-y-3 pt-2 text-xs">
+          <div class="flex items-center space-x-3 text-slate-300">
+            <i class="fa-solid fa-shield-halved text-green-400"></i>
+            <span>Nincs adatátfedés: Más gazdaságok még véletlenül sem láthatnak rá az Ön dűlőire vagy áraira.</span>
+          </div>
+          <div class="flex items-center space-x-3 text-slate-300">
+            <i class="fa-solid fa-cloud-arrow-up text-green-400"></i>
+            <span>Valós idejű multi-user szinkronizáció: Traktorosai, könyvelője és Ön is egyszerre, akár különböző eszközökről láthatják a valós adatokat.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERAKTÍV SQL ARCHITEKTÚRA GRAFIKA -->
+      <div class="bg-slate-950 p-8 rounded-3xl border border-slate-850 space-y-6">
+        <h4 class="font-bold text-white text-sm flex items-center">
+          <i class="fa-solid fa-database text-green-400 mr-2.5"></i> PRK AgroSync Multi-Tenant SQL Felépítés
+        </h4>
+        
+        <div class="space-y-4 text-xs">
+          <!-- Felhő szerver -->
+          <div class="bg-slate-900 p-4 rounded-2xl border border-green-500/20 text-center">
+            <span class="font-mono text-[10px] text-green-400 uppercase font-bold block">Központi PRK SaaS Elosztó</span>
+            <span class="text-white font-bold mt-1 block">Azonosítás és Hitelesítés API</span>
+          </div>
+
+          <div class="flex justify-center my-2 text-slate-600"><i class="fa-solid fa-arrows-down-to-line text-lg"></i></div>
+
+          <!-- Különálló dűlő-adatbázisok -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-850 text-center">
+              <span class="font-mono text-[9px] text-slate-500 block">Sellye Agrár Kft.</span>
+              <span class="font-semibold text-white mt-1 block text-xs">Isolated DB #1</span>
+              <span class="text-[9px] text-green-400 mt-1 block font-mono">Token: SECURE_1</span>
+            </div>
+            <div class="bg-slate-900 border border-green-500/30 p-3.5 rounded-xl text-center glow-effect">
+              <span class="font-mono text-[9px] text-green-400 block font-bold">AZ ÖN GAZDASÁGA</span>
+              <span class="font-bold text-white mt-1 block text-xs">Isolated DB #2</span>
+              <span class="text-[9px] text-green-400 mt-1 block font-mono">Token: PROVISIONED</span>
+            </div>
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-850 text-center">
+              <span class="font-mono text-[9px] text-slate-500 block">Kovács Családi Gazd.</span>
+              <span class="font-semibold text-white mt-1 block text-xs">Isolated DB #3</span>
+              <span class="text-[9px] text-green-400 mt-1 block font-mono">Token: SECURE_3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERAKTÍV ÁRKALKULÁTOR ÉS CSOMAGOK (PRICING SECTION) -->
+  <section id="pricing" class="py-24 px-6 md:px-12 max-w-7xl mx-auto space-y-16">
+    <div class="text-center max-w-3xl mx-auto space-y-4">
+      <span class="text-xs text-green-400 font-bold uppercase tracking-widest">Átlátható árazás rejtett költségek nélkül</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-white">Válassza ki a gazdasága méretéhez illő konstrukciót</h2>
+      <p class="text-slate-400 text-sm">Húzza el a csúszkát a gazdasága méretének beállításához, és a rendszerünk automatikusan kijelöli az Önnek leginkább megfelelő csomagot!</p>
+    </div>
+
+    <!-- CSÚSZKÁS INTERAKTÍV KALKULÁTOR -->
+    <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-2xl mx-auto space-y-6">
+      <div class="flex justify-between items-center text-sm">
+        <span class="font-bold text-white">Művelt terület nagysága (Hektár):</span>
+        <span class="text-xl font-black text-green-400 font-mono"><span id="hectare-display-val">120</span> ha</span>
+      </div>
+      
+      <input type="range" id="hectare-slider" min="10" max="1000" step="10" value="120" oninput="updatePricingCalculator()" 
+             class="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-green-500">
+      
+      <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+        <span>10 ha</span>
+        <span>250 ha</span>
+        <span>500 ha</span>
+        <span>750 ha</span>
+        <span>1000 ha+</span>
+      </div>
+    </div>
+
+    <!-- CSOMAG KÁRTYÁK -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- 1. Csomag: Starter -->
+      <div id="plan-starter" class="bg-slate-900 border border-slate-800 rounded-3xl p-8 flex flex-col justify-between transition duration-300">
+        <div>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Kisbirtok</span>
+          <h4 class="text-2xl font-black text-white">Családi Gazdaság</h4>
+          <p class="text-xs text-slate-400 mt-2">Ideális magántermelőknek és kistermelőknek a kötelező naplók vezetéséhez.</p>
+          
+          <div class="mt-6 border-t border-slate-800 pt-6">
+            <span class="text-3xl font-black text-white font-mono">9.900 Ft</span>
+            <span class="text-xs text-slate-500"> / hó + ÁFA</span>
+          </div>
+
+          <ul class="mt-6 space-y-3 text-xs text-slate-300">
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Max. 50 hektárig</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> 1 felhasználós hozzáférés</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Alapértelmezett offline tárolás</li>
+            <li class="text-slate-500"><i class="fa-solid fa-circle-xmark mr-2 text-slate-600"></i> SQL felhő alapú többeszközös szinkron</li>
+            <li class="text-slate-500"><i class="fa-solid fa-circle-xmark mr-2 text-slate-600"></i> Automatikus MePAR ellenőrzések</li>
+          </ul>
+        </div>
+        <button onclick="selectPlan('Családi Gazdaság', '9.900')" class="w-full mt-8 bg-slate-950 hover:bg-slate-850 text-white font-bold py-3 rounded-xl text-xs transition border border-slate-800">
+          Megrendelés
+        </button>
+      </div>
+
+      <!-- 2. Csomag: Pro (Kiemelt) -->
+      <div id="plan-pro" class="bg-slate-900 border-2 border-brand-500 rounded-3xl p-8 flex flex-col justify-between transition duration-300 relative glow-effect">
+        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-brand-600 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">
+          Legnépszerűbb
+        </div>
+        <div>
+          <span class="text-xs font-bold text-green-400 uppercase tracking-widest block mb-1">Középbirtok</span>
+          <h4 class="text-2xl font-black text-white">Profi Gazda</h4>
+          <p class="text-xs text-slate-400 mt-2">Komplett raktár- és vetésterv-kezelés, többeszközös szinkronnal és automatikus kalkulációkkal.</p>
+          
+          <div class="mt-6 border-t border-slate-850 pt-6">
+            <span class="text-4xl font-black text-green-400 font-mono">19.900 Ft</span>
+            <span class="text-xs text-slate-500"> / hó + ÁFA</span>
+          </div>
+
+          <ul class="mt-6 space-y-3 text-xs text-slate-300">
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Max. 500 hektárig</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> 5 felhasználós hozzáférés</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> **Dedikált SQL Felhő adatbázis**</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Automatikus MePAR és Mezőgazdasági naplók</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Intelligens időjárás monitoring</li>
+          </ul>
+        </div>
+        <button onclick="selectPlan('Profi Gazda', '19.900')" class="w-full mt-8 bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl text-xs transition shadow-lg shadow-green-950/40">
+          Megrendelés
+        </button>
+      </div>
+
+      <!-- 3. Csomag: Enterprise / Integrátor -->
+      <div id="plan-enterprise" class="bg-slate-900 border border-slate-800 rounded-3xl p-8 flex flex-col justify-between transition duration-300">
+        <div>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Nagybirtok & Integráció</span>
+          <h4 class="text-2xl font-black text-white">Integrátor Plus</h4>
+          <p class="text-xs text-slate-400 mt-2">Teljesen testreszabható ERP rendszer dedikált szerverrel, korlátlan parcellával és integrátori funkciókkal.</p>
+          
+          <div class="mt-6 border-t border-slate-800 pt-6">
+            <span class="text-3xl font-black text-white font-mono">Egyedi árazás</span>
+            <span class="text-xs text-slate-500"> / egyedi megállapodás</span>
+          </div>
+
+          <ul class="mt-6 space-y-3 text-xs text-slate-300">
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Korlátlan termőterület</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Korlátlan felhasználó</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Önálló, dedikált felhő szerverpéldány</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> Integrátori felvásárlási modul</li>
+            <li><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> 24/7 Kiemelt telefonos ügyfélszolgálat</li>
+          </ul>
+        </div>
+        <button onclick="selectPlan('Integrátor Plus', 'Egyedi megállapodás')" class="w-full mt-8 bg-slate-950 hover:bg-slate-850 text-white font-bold py-3 rounded-xl text-xs transition border border-slate-800">
+          Kapcsolatfelvétel
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEGRENDELŐ ÉS GAZDASÁG LÉTREHOZÓ LAP (ORDER SECTION) -->
+  <section id="order" class="py-24 px-6 md:px-12 max-w-5xl mx-auto space-y-12">
+    <div class="text-center space-y-3">
+      <span class="text-xs text-green-400 font-bold uppercase tracking-widest">Hozza létre gazdaságát ma</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-white">Regisztrálja mezőgazdasági vállalkozását</h2>
+      <p class="text-sm text-slate-400">Az adatok megadása után rendszerünk azonnal legenerálja az egyedi hozzáférési kódot és az izolált adatbázis-területet.</p>
+    </div>
+
+    <!-- INTEGRÁLT SaaS REGISZTRÁCIÓ -->
+    <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl shadow-2xl">
+      <form id="saas-setup-form" onsubmit="provisionTenant(event)" class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-2">Választott Csomag</label>
+            <select id="saas-plan-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none">
+              <option value="Családi Gazdaság">Családi Gazdaság (Starter)</option>
+              <option value="Profi Gazda" selected>Profi Gazda (Pro - Kiemelt)</option>
+              <option value="Integrátor Plus">Integrátor Plus (Egyedi áras)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-2">Gazdaság / Cég hivatalos neve</label>
+            <input type="text" id="saas-farm-name" required placeholder="pl. Sellyei Mezőgazdasági Zrt." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-2">Cégvezető / Tulajdonos neve</label>
+            <input type="text" id="saas-owner" required placeholder="pl. Kovács János" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-2">Hivatalos e-mail cím</label>
+            <input type="email" id="saas-email" required placeholder="pl. janos.kovacs@sellyeagrar.hu" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-2">Elsődleges kapcsolattartó telefonszáma</label>
+            <input type="tel" id="saas-phone" required placeholder="pl. +36 30 123 4567" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-2">Tervezett dűlők száma (becsült)</label>
+            <input type="number" id="saas-fields-count" value="5" min="1" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-950 rounded-2xl border border-slate-850 flex items-start space-x-3 text-xs text-slate-400">
+          <input type="checkbox" required id="saas-terms" class="mt-1 w-4 h-4 accent-green-500 rounded">
+          <label for="saas-terms" class="leading-relaxed">
+            Kijelentem, hogy megismertem a PRK AgroSync SaaS platform adatvédelmi irányelveit, és hozzájárulok ahhoz, hogy a megadott adatok alapján a rendszer elindítsa az önálló felhőalapú SQL bázis telepítését.
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-4 rounded-xl text-sm transition shadow-lg shadow-green-900/30">
+          Gazdaság Létrehozása & Telepítési Folyamat Indítása
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- GYAKORI KÉRDÉSEK (FAQ SECTION) -->
+  <section id="faq" class="py-24 px-6 md:px-12 max-w-4xl mx-auto space-y-12">
+    <div class="text-center space-y-3">
+      <span class="text-xs text-green-400 font-bold uppercase tracking-widest">Kérdése van?</span>
+      <h2 class="text-3xl font-extrabold text-white">Gyakori Kérdések és Válaszok</h2>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+        <h4 class="font-bold text-white text-sm">Hogyan történik a szoftver elérése a megrendelés után?</h4>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+          A regisztráció után a rendszerünk azonnal kiküld egy aktiváló e-mailt, amely tartalmazza az Ön egyedi aldomain elérési linkjét (pl. *sellyeagrar.prkagrar.hu*) és az SQL adatbázis hozzáférési tokent. Bármilyen eszköz böngészőjéből azonnal használható.
+        </p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+        <h4 class="font-bold text-white text-sm">Mi történik az adataimmal, ha offline (térerő nélkül) dolgozom a dűlőn?</h4>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+          A szoftver fejlett szinkronmotorral rendelkezik. Ha kint a szántóföldön nincs térerő, az adatok a mobil/tablet belső memóriájába rögzülnek, majd amint a jármű visszatér a telephely Wi-Fi hatókörébe, automatikusan felszinkronizálódnak az izolált SQL bázisba.
+        </p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
+        <h4 class="font-bold text-white text-sm">Biztonságban vannak a dűlőim és raktárkészlet-adataim a versenytársaktól?</h4>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+          Teljes mértékben. Minden regisztrált gazdaságnak fizikailag elkülönített adatbázis-szegmenst hozunk létre a felhős szerverünkön. Semmilyen közös lekérdezés vagy adatátfedés nem lehetséges.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LÁBLÉC -->
+  <footer class="bg-slate-950 border-t border-slate-900 px-6 py-12 text-center md:text-left">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+      <div class="space-y-3">
+        <div class="flex items-center justify-center md:justify-start space-x-3">
+          <div class="bg-brand-600 p-2 rounded-xl text-white">
+            <i class="fa-solid fa-wheat-awn text-lg"></i>
+          </div>
+          <span class="font-extrabold text-lg text-white">PRK AGROSYNC SaaS</span>
+        </div>
+        <p class="text-xs text-slate-500 max-w-sm">
+          Az agrárium digitális jövője — Felhőalapú gazdaságirányítás, precíziós SQL háttérrel.
+        </p>
+      </div>
+
+      <div class="space-y-2 text-xs text-slate-400">
+        <p class="font-bold text-white">Központi Kapcsolattartás:</p>
+        <p><i class="fa-solid fa-location-dot text-green-400 mr-2"></i> PRK AgroSync Fejlesztési Iroda, Baranya megye, Magyarország</p>
+        <p><i class="fa-solid fa-phone text-green-400 mr-2"></i> +36 (72) 999-888</p>
+        <p><i class="fa-solid fa-envelope text-green-400 mr-2"></i> sales@prkagrosync.hu</p>
+      </div>
+
+      <div class="text-xs text-slate-500 space-y-2 md:text-right">
+        <p>&copy; 2026 PRK AgroSync. Minden jog fenntartva.</p>
+        <div class="flex justify-center md:justify-end space-x-4">
+          <span class="text-[10px] bg-slate-900 px-2.5 py-1 rounded-md text-slate-400 border border-slate-800">ISO 27001 Sec.</span>
+          <span class="text-[10px] bg-slate-900 px-2.5 py-1 rounded-md text-slate-400 border border-slate-800">SaaS Platform</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- DEDIKÁLT SaaS TELEPÍTÉSI INDÍTÓ MODAL -->
+  <div id="saas-success-modal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl p-8 space-y-6 text-center">
+      
+      <!-- SQL TELEPÍTÉS ANIMÁCIÓ (MOCKUP LOADER) -->
+      <div id="provision-loader" class="space-y-4">
+        <div class="w-16 h-16 border-4 border-green-500/30 border-t-green-500 rounded-full animate-spin mx-auto"></div>
+        <div>
+          <h3 class="text-xl font-bold text-white">Saját adatbázis létrehozása folyamatban...</h3>
+          <p class="text-xs text-slate-400 mt-1">Dedikált SQL táblák inicializálása és egyedi token generálása.</p>
+        </div>
+        <div class="p-3 bg-slate-950 rounded-xl font-mono text-[10px] text-green-400 text-left space-y-1">
+          <p id="log-step-1">&rsaquo; Kapcsolódás a PRK felhős szervercsoporthoz... [OK]</p>
+          <p id="log-step-2" class="opacity-0">&rsaquo; Új gazdaság-id és virtuális terület lefoglalása... [OK]</p>
+          <p id="log-step-3" class="opacity-0">&rsaquo; Biztonsági SQL tokenek inicializálása... [OK]</p>
+        </div>
+      </div>
+
+      <!-- KÉSZ ÁLLAPOT (AUTOMATIKUSAN BETÖLTŐDIK AZ ANIMÁCIÓ UTÁN) -->
+      <div id="provision-complete" class="hidden space-y-6">
+        <div class="w-16 h-16 bg-green-950/40 border border-green-500/30 rounded-full flex items-center justify-center mx-auto text-green-400 text-3xl">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        
+        <div class="space-y-2">
+          <h3 class="text-2xl font-bold text-white">Gazdaság Sikeresen Inicializálva!</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            A rendszer elkészült. A gazdasága számára teljesen zárt, izolált SQL felhőtárhelyet hoztunk létre.
+          </p>
+        </div>
+
+        <div class="p-5 bg-slate-950 rounded-2xl border border-slate-850 text-left text-xs space-y-2 text-slate-300">
+          <p><strong>Gazdaság neve:</strong> <span id="modal-farm-name" class="text-white font-semibold"></span></p>
+          <p><strong>Csomag:</strong> <span id="modal-plan-name" class="text-green-400 font-bold"></span></p>
+          <p><strong>Egyedi Hozzáférési Token:</strong> <span id="modal-token-key" class="font-mono text-green-400 font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800"></span></p>
+          <p class="text-[10px] text-slate-500 mt-2 italic">* A fenti Tokent másolja ki, ezzel tudja majd hitelesíteni az AgroSync ERP-t az első bejelentkezéskor!</p>
+        </div>
+
+        <button onclick="closeSaaSModal()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl text-sm transition">
+          Indítás és Belépés a Gazdaságba
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition duration-300 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-3">
+    <div id="toast-icon-wrapper" class="p-1 px-2.5 rounded-xl text-white font-bold bg-green-500">&checkmark;</div>
+    <p id="toast-message" class="text-xs font-medium text-slate-200"></p>
+  </div>
+
+  <!-- ENGINE LOGIC -->
+  <script>
+    // DYNAMIC ARKALKULÁTOR ÉS CSOMAG-HIGHLIGHTER
+    window.updatePricingCalculator = function() {
+      const hectares = parseInt(document.getElementById('hectare-slider').value);
+      document.getElementById('hectare-display-val').innerText = hectares;
+
+      const planStarter = document.getElementById('plan-starter');
+      const planPro = document.getElementById('plan-pro');
+      const planEnterprise = document.getElementById('plan-enterprise');
+
+      // Alapértelmezett keret- és árnyékstílusok visszaállítása
+      [planStarter, planPro, planEnterprise].forEach(card => {
+        card.className = "bg-slate-900 border border-slate-800 rounded-3xl p-8 flex flex-col justify-between transition duration-300";
+      });
+
+      // Dinamikus kijelölés dűlőméret alapján
+      if (hectares <= 50) {
+        planStarter.className = "bg-slate-900 border-2 border-brand-500 rounded-3xl p-8 flex flex-col justify-between transition duration-300 relative glow-effect scale-[1.02]";
+      } else if (hectares > 50 && hectares <= 500) {
+        planPro.className = "bg-slate-900 border-2 border-brand-500 rounded-3xl p-8 flex flex-col justify-between transition duration-300 relative glow-effect scale-[1.02]";
+      } else {
+        planEnterprise.className = "bg-slate-900 border-2 border-brand-500 rounded-3xl p-8 flex flex-col justify-between transition duration-300 relative glow-effect scale-[1.02]";
+      }
+    }
+
+    window.selectPlan = function(planName, price) {
+      document.getElementById('saas-plan-select').value = planName;
+      document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+      showToast(`${planName} csomag kiválasztva!`);
+    }
+
+    // SAAS PROVISIONING MOCK ENGINE (SQL PROVISIONING SZIMULÁCIÓ)
+    window.provisionTenant = function(e) {
+      e.preventDefault();
+
+      const farmName = document.getElementById('saas-farm-name').value.trim();
+      const plan = document.getElementById('saas-plan-select').value;
+      const owner = document.getElementById('saas-owner').value.trim();
+
+      if (!farmName || !owner) {
+        showToast("Minden mezőt töltsön ki!", "error");
+        return;
+      }
+
+      // Megjelenítjük a telepítési folyamat modal-t
+      document.getElementById('saas-success-modal').classList.remove('hidden');
+      document.getElementById('provision-loader').classList.remove('hidden');
+      document.getElementById('provision-complete').classList.add('hidden');
+
+      // Animált telepítési log-bejegyzések
+      setTimeout(() => {
+        document.getElementById('log-step-2').classList.remove('opacity-0');
+      }, 1000);
+
+      setTimeout(() => {
+        document.getElementById('log-step-3').classList.remove('opacity-0');
+      }, 2200);
+
+      // Kész állapot betöltése (mintha az SQL adatbázis tényleg létrejött volna)
+      setTimeout(() => {
+        document.getElementById('provision-loader').classList.add('hidden');
+        document.getElementById('provision-complete').classList.remove('hidden');
+
+        // Generálunk egy egyedi, hiteles SQL hozzáférési tokent
+        const uniqueToken = "PRK-" + Math.random().toString(36).substr(2, 9).toUpperCase() + "-SQL";
+
+        document.getElementById('modal-farm-name').innerText = farmName;
+        document.getElementById('modal-plan-name').innerText = plan;
+        document.getElementById('modal-token-key').innerText = uniqueToken;
+      }, 3500);
+    }
+
+    window.closeSaaSModal = function() {
+      document.getElementById('saas-success-modal').classList.add('hidden');
+      document.getElementById('saas-setup-form').reset();
+      showToast("Gazdaság sikeresen elindítva!");
+    }
+
+    // UTILS
+    window.toggleMobileMenu = function() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    window.showToast = function(m, type = "success") {
+      document.getElementById('toast-message').innerText = m;
+      const t = document.getElementById('toast');
+      const w = document.getElementById('toast-icon-wrapper');
+      w.className = type === "success" ? "p-1 px-2.5 rounded-xl text-white font-bold bg-green-500" : "p-1 px-2.5 rounded-xl text-white font-bold bg-red-500";
+      w.innerHTML = type === "success" ? `&checkmark;` : `!`;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+    }
+  </script>
+</body>
+</html>
